@@ -1,0 +1,17 @@
+# Use a multi-stage build to reduce the image size
+# Stage 1: Build the application
+FROM node:latest as builder
+
+ENV NODE_ENV=development
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm ci --no-fund --no-audit --silent --prefer-offline
+
+COPY . .
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "start:dev"]

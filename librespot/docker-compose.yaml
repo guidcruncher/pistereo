@@ -1,0 +1,23 @@
+name: pistereo-librespot-dev
+
+services:
+  pistereo-librespot-dev:
+    dns:
+      - 192.168.1.201
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    network_mode: host
+    environment:
+      - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
+    volumes:
+      - ./tmp:/librespot/tmp
+    container_name: pistereo-librespot_dev
+    hostname: pistereo-librespot-dev
+    restart: unless-stopped
+    devices:
+      - /dev/snd:/dev/snd:rw
+    privileged: true
+
