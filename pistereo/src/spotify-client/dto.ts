@@ -32,6 +32,15 @@ export class ApiResult {
   }
 }
 
+export class PlaybackRequest {
+  @ApiProperty()
+  deviceId: string;
+  @ApiProperty()
+  contextUri: string;
+  @ApiProperty()
+  positionMs: number = 0;
+}
+
 export class AuthorisationUrl {
   @ApiProperty()
   @IsUrl()

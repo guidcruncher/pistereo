@@ -36,10 +36,16 @@ export class SpotifyResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         if (data) {
-          this.log.log('Incoming data => ' + JSON.stringify(data));
-          context.switchToHttp().getResponse().status(data.status);
-          return data.result;
+          if (data.status) {
+            this.log.log('Incoming data');
+            context.switchToHttp().getResponse().status(data.status);
+            return data.result;
+          } else {
+            this.log.warn('Incoming data in unexpected format.');
+            return data;
+          }
         }
+        this.log.warn('No incoming data');
         return data;
       }),
     );

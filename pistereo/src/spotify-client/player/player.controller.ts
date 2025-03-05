@@ -48,12 +48,60 @@ export class PlayerController {
     return await this.playerService.getPlaybackState(token);
   }
 
-  @Put('transfer')
+  @Put()
   @ApiOperation({ summary: 'Transfer playback to a device' })
   async transferPlayback(
     @AuthToken() token: string,
     @Body() deviceIds: string[],
   ) {
     return await this.playerService.transferPlayback(token, deviceIds);
+  }
+
+  @Get('devices')
+  @ApiOperation({ summary: 'Get available playback devices' })
+  async getAvailableDevices(@AuthToken() token: string) {
+    return await this.playerService.getAvailableDevices(token);
+  }
+
+  @Get('current-playing')
+  @ApiOperation({ summary: 'Get current playing track' })
+  async getCurrentPlayingTrack(@AuthToken() token: string) {
+    return await this.playerService.getCurrentPlayingTrack(token);
+  }
+
+  @Put('play')
+  @ApiOperation({ summary: 'Start playback on a device' })
+  async startResumePlayback(
+    @AuthToken() token: string,
+    @Body() formData: dto.PlaybackRequest,
+  ) {
+    return await this.playerService.startResumePlayback(
+      token,
+      formData.deviceId,
+      formData.contextUri,
+      formData.positionMs,
+    );
+  }
+
+  @Put('volume')
+  @ApiOperation({ summary: 'Set playback volume' })
+  async setPlaybackVolume(
+    @AuthToken() token: string,
+    deviceId: string,
+    level: number,
+  ) {
+    return await this.playerService.setPlaybackVolume(token, deviceId, level);
+  }
+
+  @Put('next')
+  @ApiOperation({ summary: 'Skip to next track' })
+  async skipNext(@AuthToken() token: string, deviceId: string) {
+    return await this.playerService.skipNext(token, deviceId);
+  }
+
+  @Put('previous')
+  @ApiOperation({ summary: 'Skip havk to previous track' })
+  async skipPrevious(@AuthToken() token: string, deviceId: string) {
+    return await this.playerService.skipPrevious(token, deviceId);
   }
 }

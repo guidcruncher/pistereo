@@ -56,6 +56,7 @@ export class PlayerService {
     token: string,
     deviceId: string,
     contextUri: string,
+    positionMs: number,
   ): Promise<any> {
     const result = await fetch(
       'https://api.spotify.com/v1/me/player/play?device_id=' +
@@ -64,7 +65,7 @@ export class PlayerService {
         method: 'PUT',
         body: JSON.stringify({
           context_uri: contextUri,
-          position_ms: 0,
+          position_ms: positionMs ?? 0,
         }),
         headers: {
           'Content-Type': 'application/json',
