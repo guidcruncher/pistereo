@@ -9,6 +9,29 @@ export interface oAuthResponse {
   redirect_uri: string;
 }
 
+export class ApiResult {
+  status: number;
+  result: any;
+
+  public render(res) {
+    if (this.status == 204) {
+      res.status(this.status).send();
+    } else {
+      res.status(this.status).send(this.result);
+    }
+  }
+
+  public static async create(result) {
+    let res: ApiResult = new ApiResult();
+    res.status = result.status;
+    if (res.status != 204) {
+      res.result = await result.json();
+    }
+
+    return res;
+  }
+}
+
 export class AuthorisationUrl {
   @ApiProperty()
   @IsUrl()

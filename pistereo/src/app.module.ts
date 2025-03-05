@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -6,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SpotifyClientModule } from './spotify-client/spotify-client.module';
 import configuration from './config/configuration';
+import { SpotifyResponseInterceptor } from './spotify-client/spotify.decorator';
 
 @Global()
 @Module({
@@ -26,6 +28,12 @@ import configuration from './config/configuration';
     SpotifyClientModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SpotifyResponseInterceptor,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}

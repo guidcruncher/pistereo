@@ -14,7 +14,8 @@ export class PlayerService {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` },
     });
-    return await result.json();
+
+    return await dto.ApiResult.create(result);
   }
 
   public async transferPlayback(
@@ -29,7 +30,7 @@ export class PlayerService {
         Authorization: `Bearer ${token}`,
       },
     });
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 
   public async getAvailableDevices(token: string): Promise<any> {
@@ -37,7 +38,7 @@ export class PlayerService {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` },
     });
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 
   public async getCurrentPlayingTrack(token: string): Promise<any> {
@@ -48,7 +49,7 @@ export class PlayerService {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 
   public async startResumePlayback(
@@ -71,7 +72,7 @@ export class PlayerService {
         },
       },
     );
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 
   public async setPlaybackVolume(
@@ -92,7 +93,7 @@ export class PlayerService {
         },
       },
     );
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 
   public async skipNext(token: string, deviceId: string): Promise<any> {
@@ -107,7 +108,7 @@ export class PlayerService {
         },
       },
     );
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 
   public async skipPrevious(token: string, deviceId: string): Promise<any> {
@@ -122,6 +123,6 @@ export class PlayerService {
         },
       },
     );
-    return await result.json();
+    return await dto.ApiResult.create(result);
   }
 }
