@@ -100,7 +100,7 @@ export class PlayerController {
   }
 
   @Put('previous')
-  @ApiOperation({ summary: 'Skip havk to previous track' })
+  @ApiOperation({ summary: 'Skip back to previous track' })
   async skipPrevious(@AuthToken() token: string, deviceId: string) {
     return await this.playerService.skipPrevious(token, deviceId);
   }
