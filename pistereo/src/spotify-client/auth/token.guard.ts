@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { Public } from './public.decorator';
+import { Public, PublicKey } from './public.decorator';
 
 @Injectable()
 export class TokenGuard implements CanActivate {
@@ -17,7 +17,7 @@ export class TokenGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>('public', [
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PublicKey, [
       context.getHandler(),
       context.getClass(),
     ]);
@@ -32,7 +32,7 @@ export class TokenGuard implements CanActivate {
     const authToken = authType === 'Bearer' ? token : undefined;
 
     if (authToken) {
-      this.log.debug('Token found = ' + authType + ' ' + authToken);
+      this.log.debug('Token found = ' + authType + ' ****');
       return true;
     }
 

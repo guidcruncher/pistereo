@@ -1,4 +1,4 @@
-import { SetMetadata } from '@nestjs/common';
+import { Logger, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import {
   CallHandler,
@@ -8,18 +8,24 @@ import {
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 
-export const SpotifyKey = 'SpotifyKey';
+export const SpotifyKey = 'IsSpotifyKey';
 export const Spotify = () => SetMetadata(SpotifyKey, true);
 
 @Injectable()
-export class SpotifyResponseInterceptor
-  implements NestInterceptor
-{
+export class SpotifyResponseInterceptor implements NestInterceptor {
   constructor(private reflector: Reflector) {}
 
-intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-let isSpotify=   this.reflector.get<boolean>(SpotifyKey, context.getHandler()) ?? false;
-console.log(isSpotify);
+  private readonly log = new Logger(SpotifyResponseInterceptor.name);
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const isSpotify =
+      this.reflector.getAllAndOverride<boolean>(SpotifyKey, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? false;
+
+    this.log.log('isSpotify flag is ' + isSpotify);
+
     if (!isSpotify) {
       return next.handle();
     }
@@ -29,12 +35,13 @@ console.log(isSpotify);
 
     return next.handle().pipe(
       map((data) => {
-console.log(data);
-        context.switchToHttp().getResponse().status(data.status);
-        return data.result;
+        if (data) {
+          this.log.log('Incoming data => ' + JSON.stringify(data));
+          context.switchToHttp().getResponse().status(data.status);
+          return data.result;
+        }
+        return data;
       }),
-
     );
   }
 }
-
