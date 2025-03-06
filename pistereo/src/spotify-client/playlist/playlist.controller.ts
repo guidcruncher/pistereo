@@ -49,7 +49,7 @@ export class PlaylistController {
   }
 
   @Get(':playlist_id')
-  @ApiOperation({ summary: 'Get playlist fetails' })
+  @ApiOperation({ summary: 'Get playlist details' })
   @ApiParam({ name: 'playlist_id', type: String })
   async getPlaylist(
     @AuthToken() token,
