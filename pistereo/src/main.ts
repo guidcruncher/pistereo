@@ -10,6 +10,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import secureSession from '@fastify/secure-session';
+import { scopes } from './spotify-client/scopes';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

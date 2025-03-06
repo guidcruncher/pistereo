@@ -3,22 +3,13 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import * as dto from '../dto';
+import { scopes } from '../scopes';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly config: ConfigService) {}
 
   private readonly log = new Logger(AuthService.name);
-
-  scopes: string[] = [
-    'streaming',
-    'user-read-private',
-    'user-read-email',
-    'user-read-playback-state',
-    'user-modify-playback-state',
-    'playlist-read-private',
-    'user-read-recently-played',
-  ];
 
   public async getAuthorisationUrl(
     clientId: string,
@@ -32,7 +23,7 @@ export class AuthService {
     params.append('response_type', 'code');
     params.append('redirect_uri', redirectUrl);
 
-    params.append('scope', this.scopes.join(' '));
+    params.append('scope', scopes.join(' '));
     params.append('state', verifier);
 
     const result: dto.AuthorisationUrl = {

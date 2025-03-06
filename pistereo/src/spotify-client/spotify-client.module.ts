@@ -10,6 +10,8 @@ import { PlayerController } from './player/player.controller';
 import { SpotifyResponseInterceptor } from './spotify.decorator';
 import { SearchService } from './search/search.service';
 import { SearchController } from './search/search.controller';
+import { PlaylistService } from './playlist/playlist.service';
+import { PlaylistController } from './playlist/playlist.controller';
 
 @Module({
   providers: [
@@ -25,12 +27,14 @@ import { SearchController } from './search/search.controller';
     ProfileService,
     PlayerService,
     SearchService,
+    PlaylistService,
   ],
   controllers: [
     AuthController,
     ProfileController,
     PlayerController,
     SearchController,
+    PlaylistController,
   ],
 })
 export class SpotifyClientModule {}
