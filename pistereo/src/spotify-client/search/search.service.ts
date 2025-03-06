@@ -19,7 +19,7 @@ export class SearchService {
   ) {
     const params = new URLSearchParams();
     params.append('q', q);
-    params.append('types', types.join(','));
+    params.append('type', types.join(','));
     params.append('market', market);
     params.append('limit', limit.toString());
     params.append('offset', offset.toString());
