@@ -32,6 +32,8 @@ async function bootstrap() {
   const nodeEnv: string = process.env.NODE_ENV ?? 'development';
   log.log('Running in ' + nodeEnv + ' mode.');
 
+  app.enableShutdownHooks();
+
   await app.register(secureSession, {
     secret: appService.generateRandomString(64),
     salt: appService.generateRandomString(16),

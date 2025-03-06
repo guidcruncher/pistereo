@@ -17,6 +17,15 @@ export class AppService {
     return this.app;
   }
 
+  onApplicationShutdown(signal: string) {
+    this.log.log('**** SIGNAL: ' + signal + ', Shutting down. ****');
+    this.getApp().close();
+  }
+  onApplicationBootstrap() {
+    this.log.log('Running post bootstrap initialization services.');
+    this.log.log('Finished running post bootstrap initialization services.');
+  }
+
   public hashPassword(password: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const salt = this.config.get('host.secret');
