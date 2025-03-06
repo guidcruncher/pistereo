@@ -1,4 +1,5 @@
 import {
+  ApiQuery,
   ApiTags,
   ApiOperation,
   ApiResponse,
@@ -26,7 +27,11 @@ import { Spotify } from '../spotify.decorator';
 
 @Spotify()
 @ApiOAuth2(
-  ['user-read-playback-state', 'user-modify-playback-state'],
+  [
+    'user-read-playback-state',
+    'user-modify-playback-state',
+    'user-read-recently-played',
+  ],
   'Access Token',
 )
 @Controller('api/player')
@@ -69,6 +74,22 @@ export class PlayerController {
     return await this.playerService.getCurrentPlayingTrack(token);
   }
 
+  @Get('queue')
+  @ApiOperation({ summary: 'Get playback queue' })
+  async getPlaybackQueue(@AuthToken() token: string) {
+    return await this.playerService.getPlaybackQueue(token);
+  }
+
+  @Post('queue')
+  @ApiOperation({ summary: 'Append to end of playback queue' })
+  async addToPlaybackQueue(
+    @AuthToken() token: string,
+    @Query('uri') uri: string,
+    @Query('device_id') deviceId: string,
+  ) {
+    return await this.playerService.addToPlaybackQueue(token, uri, deviceId);
+  }
+
   @Put('play')
   @ApiOperation({ summary: 'Start playback on a device' })
   async startResumePlayback(
@@ -87,21 +108,46 @@ export class PlayerController {
   @ApiOperation({ summary: 'Set playback volume' })
   async setPlaybackVolume(
     @AuthToken() token: string,
-    deviceId: string,
-    level: number,
+    @Query('device_id') deviceId: string,
+    @Query('volume_percent') level: number,
   ) {
     return await this.playerService.setPlaybackVolume(token, deviceId, level);
   }
 
   @Put('next')
   @ApiOperation({ summary: 'Skip to next track' })
-  async skipNext(@AuthToken() token: string, deviceId: string) {
+  async skipNext(
+    @AuthToken() token: string,
+    @Query('device_id') deviceId: string,
+  ) {
     return await this.playerService.skipNext(token, deviceId);
   }
 
   @Put('previous')
   @ApiOperation({ summary: 'Skip back to previous track' })
-  async skipPrevious(@AuthToken() token: string, deviceId: string) {
+  async skipPrevious(
+    @AuthToken() token: string,
+    @Query('device_id') deviceId: string,
+  ) {
     return await this.playerService.skipPrevious(token, deviceId);
+  }
+
+  @Get('recently-played')
+  @ApiOperation({ summary: 'Get recently played  tracks' })
+  @ApiQuery({ name: 'limit', type: Number, required: true, default: 20 })
+  @ApiQuery({ name: 'after', type: Number, required: false })
+  @ApiQuery({ name: 'before', type: Number, required: false })
+  async getRecentlyPlayed(
+    @AuthToken() token: string,
+    @Query('limit') limit: number = 20,
+    @Query('after') after: number = 0,
+    @Query('before') before: number = 0,
+  ) {
+    return await this.playerService.getRecentlyPlayed(
+      token,
+      limit,
+      after,
+      before,
+    );
   }
 }

@@ -11,6 +11,7 @@ export interface oAuthResponse {
 
 export class ApiResult {
   status: number;
+  statusText: string;
   result: any;
 
   public render(res) {
@@ -24,6 +25,8 @@ export class ApiResult {
   public static async create(result) {
     let res: ApiResult = new ApiResult();
     res.status = result.status;
+    res.statusText = result.statusText;
+
     if (res.status != 204) {
       try {
         res.result = await result.json();

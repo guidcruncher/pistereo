@@ -126,4 +126,63 @@ export class PlayerService {
     );
     return await dto.ApiResult.create(result);
   }
+
+  public async getRecentlyPlayed(
+    token: string,
+    limit: number = 20,
+    after: number = 0,
+    before: number = 0,
+  ): Promise<any> {
+    const params = new URLSearchParams();
+    params.append('limit', limit.toString());
+    if (before && before > 0) {
+      params.append('before', before.toString());
+    } else {
+      if (after && after > 0) {
+        params.append('after', after.toString());
+      }
+    }
+    const result = await fetch(
+      'https://api.spotify.com/v1/me/player/recently-played?' +
+        params.toString(),
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return await dto.ApiResult.create(result);
+  }
+
+  public async getPlaybackQueue(token: string): Promise<any> {
+    const result = await fetch('https://api.spotify.com/v1/me/player/queue', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return await dto.ApiResult.create(result);
+  }
+
+  public async addToPlaybackQueue(
+    token: string,
+    uri: string,
+    deviceId: string,
+  ) {
+    const params = new URLSearchParams();
+    params.append('uri', uri);
+    params.append('device_id', deviceId);
+
+    const result = await fetch(
+      'https://api.spotify.com/v1/me/player/queue?' + params.toString(),
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return await dto.ApiResult.create(result);
+  }
 }

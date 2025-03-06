@@ -63,6 +63,7 @@ async function bootstrap() {
               'user-read-playback-state': 'user-read-playback-state',
               'user-modify-playback-state': 'user-modify-playback-state',
               'playlist-read-private': 'playlist-read-private',
+              'user-read-recently-played': 'user-read-recently-played',
             },
           },
         },
