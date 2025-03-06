@@ -4,10 +4,16 @@ import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import * as dto from '../dto';
 import { scopes } from '../scopes';
+import { PlayerService } from '../player/player.service';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly config: ConfigService) {}
+  constructor(
+    private readonly config: ConfigService,
+    private readonly playerService: PlayerService,
+  ) {}
 
   private readonly log = new Logger(AuthService.name);
 
@@ -64,6 +70,7 @@ export class AuthService {
     });
 
     const body = await result.json();
+    await this.postAuthTokenProcesses(body.access_token, body.refresh_token);
     return body;
   }
 
@@ -87,7 +94,28 @@ export class AuthService {
 
     const body = await fetch(url, payload);
     const response = await body.json();
+    await this.postAuthTokenProcesses(
+      response.access_token,
+      response.refresh_token,
+    );
     return response;
+  }
+
+  private async postAuthTokenProcesses(token: string, refreshToken: string) {
+    let settings: dto.PlayerSettings = new dto.PlayerSettings();
+    let deviceName = this.config.get('spotify.playbackdevice');
+    settings.accessToken = token;
+    settings.refreshToken = refreshToken;
+    settings.deviceId = await this.playerService.getDeviceIdByName(
+      token,
+      deviceName,
+    );
+    let filename = path.join(
+      process.env.NODE_CONFIG_DIR ?? __dirname,
+      'playbacksettings.json',
+    );
+    fs.writeFileSync(filename, JSON.stringify(settings));
+    return settings;
   }
 
   private generateCodeVerifier(length: number) {

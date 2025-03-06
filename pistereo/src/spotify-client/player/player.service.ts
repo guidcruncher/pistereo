@@ -41,6 +41,25 @@ export class PlayerService {
     return await dto.ApiResult.create(result);
   }
 
+  public async getDeviceIdByName(token: string, name: string): Promise<any> {
+    let result = await this.getAvailableDevices(token);
+    if (!result) {
+      return '';
+    }
+
+    console.log(JSON.stringify(result));
+
+    let device = result.result.devices.find((device) => {
+      return device.name == name;
+    });
+
+    if (!device) {
+      return '';
+    }
+
+    return device.id;
+  }
+
   public async getCurrentPlayingTrack(token: string): Promise<any> {
     const result = await fetch(
       'https://api.spotify.com/v1/me/player/currently-playing',

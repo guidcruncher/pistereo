@@ -123,3 +123,14 @@ export class Image {
   @ApiProperty()
   width: number;
 }
+
+export class PlayerSettings {
+  @ApiProperty()
+  accessToken: string;
+
+  @ApiProperty()
+  refreshToken: string;
+
+  @ApiProperty()
+  deviceId: string;
+}

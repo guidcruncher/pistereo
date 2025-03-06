@@ -12,6 +12,8 @@ RUN npm ci --no-fund --no-audit --silent --prefer-offline
 
 COPY . .
 
+ENV NODE_CONFIG_DIR=../config
+
 EXPOSE 3000
 
 CMD [ "npm", "run", "start:dev"]
