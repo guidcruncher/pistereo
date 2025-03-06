@@ -48,6 +48,29 @@ export class PlaybackRequest {
   positionMs: number = 0;
 }
 
+export class SearchRequest {
+  @ApiProperty()
+  q: string;
+
+  @ApiProperty({
+    example: [
+      'album',
+      'artist',
+      'playlist',
+      'track',
+      'show',
+      'episode',
+      'audiobook',
+    ],
+    type: Array,
+    required: true,
+  })
+  types: string[];
+
+  @ApiProperty()
+  market: string;
+}
+
 export class AuthorisationUrl {
   @ApiProperty()
   @IsUrl()
