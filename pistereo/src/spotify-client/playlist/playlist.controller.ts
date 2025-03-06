@@ -48,6 +48,16 @@ export class PlaylistController {
     return await this.playlistService.getMyPlaylists(token, limit, offset);
   }
 
+  @Get(':playlist_id')
+  @ApiOperation({ summary: 'Get playlist fetails' })
+  @ApiParam({ name: 'playlist_id', type: String })
+  async getPlaylist(
+    @AuthToken() token,
+    @Param('playlist_id') playlistId: string,
+  ) {
+    return await this.playlistService.getPlaylist(token, playlistId);
+  }
+
   @Get(':playlist_id/tracks')
   @ApiOperation({ summary: 'Get playlist tracks' })
   @ApiParam({ name: 'playlist_id', type: String })

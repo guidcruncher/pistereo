@@ -36,4 +36,16 @@ export class PlaylistService {
 
     return await dto.ApiResult.create(result);
   }
+
+  public async getPlaylist(token: string, playlistId: string) {
+    const result = await fetch(
+      'https://api.spotify.com/v1/playlists/' + playlistId,
+      {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+
+    return await dto.ApiResult.create(result);
+  }
 }
