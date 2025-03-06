@@ -22,6 +22,7 @@ import { Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PlayerService } from './player.service';
 import { AuthToken } from '../auth/auth-token.decorator';
+import { Public } from '../auth/public.decorator';
 import * as dto from '../dto';
 import { Spotify } from '../spotify.decorator';
 
@@ -131,6 +132,29 @@ export class PlayerController {
     @Query('device_id') deviceId: string,
   ) {
     return await this.playerService.skipPrevious(token, deviceId);
+  }
+
+  @Public()
+  @Get('web-player')
+  @ApiQuery({ name: 'access_token', required: false })
+  @ApiOperation({
+    summary: 'Returns an embedded page with a HTML player inside it ',
+  })
+  async getWebPlayer(
+    @Session() session,
+    @AuthToken() accessToken: string,
+    @Query('access_token') token,
+    @Res() res,
+  ) {
+    let html = await this.playerService.getWebPlayer(
+      token ?? accessToken ?? session.get('access_token') ?? '',
+    );
+
+    if (html == '') {
+      res.status(404).send();
+    } else {
+      res.status(200).type('text/html').send(html);
+    }
   }
 
   @Get('recently-played')

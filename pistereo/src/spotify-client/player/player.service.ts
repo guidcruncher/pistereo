@@ -213,4 +213,23 @@ export class PlayerService {
     );
     return await dto.ApiResult.create(result);
   }
+
+  public getWebPlayer(accessToken: string): string {
+    if (!accessToken || accessToken == '') {
+      return '';
+    }
+
+    let html =
+      '<!DOCTYPE html><html><head><title>Spotify Web Playback</title></head><body>';
+    html +=
+      '<h1>Spotify Web Playback</h1><script src="https://sdk.scdn.co/spotify-player.js"></script>';
+    html += '<script type="text/javascript">';
+    html += 'window.onSpotifyWebPlaybackSDKReady = () => {';
+    html += 'const token = ' + JSON.stringify(accessToken) + ';';
+    html +=
+      'const player = new Spotify.Player({name: "Web Player", getOAuthToken: cb => { cb(token); }, volume: 1}); }';
+    html += '</script></body></html>';
+
+    return html;
+  }
 }

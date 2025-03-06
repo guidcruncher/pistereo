@@ -73,6 +73,8 @@ export class AuthController {
       clientId,
       refreshToken,
     );
+
+    session.set('access_token', result.access_token);
     session.set('refresh_token', result.refresh_token);
     return result;
   }
@@ -97,7 +99,9 @@ export class AuthController {
       verifier,
     );
 
-    session.set('refresh_token', result.refresh_token);
+    session
+      .set('access_token', result.access_token)
+      .session.set('refresh_token', result.refresh_token);
     return result;
   }
 
@@ -127,8 +131,8 @@ export class AuthController {
       formData.redirect_uri,
     );
 
+    session.set('access_token', result.access_token);
     session.set('refresh_token', result.refresh_token);
     res.status(200).send(result);
-    //  res.status(302).redirect(formData.redirect_uri + "?code="+ result.access_token+"&state="+verifier+"&refresh_token="+result.refresh_token);
   }
 }
