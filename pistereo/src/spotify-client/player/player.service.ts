@@ -47,8 +47,6 @@ export class PlayerService {
       return '';
     }
 
-    console.log(JSON.stringify(result));
-
     let device = result.result.devices.find((device) => {
       return device.name == name;
     });
