@@ -1,4 +1,5 @@
 import {
+  ApiQuery,
   ApiTags,
   ApiOperation,
   ApiResponse,
@@ -37,6 +38,8 @@ export class AuthController {
     status: 302,
     description: 'Redirect to Spotify Authentication flow.',
   })
+@ApiQuery({ name: 'redirect_uri', type: String, required: false, default: "" })
+@ApiQuery({ name: 'state', type: String, required: false, default: "" })
   async getAuthorisationUrl(
     @Session() session,
     @Query('redirect_uri') redirectUrl: string,
