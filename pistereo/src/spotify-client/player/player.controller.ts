@@ -63,7 +63,7 @@ export class PlayerController {
     return await this.playerService.getAvailableDevices(token);
   }
 
-  @Get('current-playing')
+  @Get('currently-playing')
   @ApiOperation({ summary: 'Get current playing track' })
   async getCurrentPlayingTrack(@AuthToken() token: string) {
     return await this.playerService.getCurrentPlayingTrack(token);

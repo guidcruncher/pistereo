@@ -43,7 +43,7 @@ export class PlayerService {
 
   public async getCurrentPlayingTrack(token: string): Promise<any> {
     const result = await fetch(
-      'https://api.spotify.com/v1/me/player/current-playing',
+      'https://api.spotify.com/v1/me/player/currently-playing',
       {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },

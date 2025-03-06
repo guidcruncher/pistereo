@@ -25,7 +25,11 @@ export class ApiResult {
     let res: ApiResult = new ApiResult();
     res.status = result.status;
     if (res.status != 204) {
-      res.result = await result.json();
+      try {
+        res.result = await result.json();
+      } catch (err) {
+        res.result = { error: { status: res.status, message: res.statusText } };
+      }
     }
 
     return res;
