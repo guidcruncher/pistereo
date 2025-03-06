@@ -100,6 +100,7 @@ export class PlayerController {
       token,
       formData.deviceId,
       formData.contextUri,
+      formData.uris,
       formData.positionMs,
     );
   }

@@ -10,7 +10,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import secureSession from '@fastify/secure-session';
-import { scopes } from './spotify-client/scopes';
+import { scopes, getScopes } from './spotify-client/scopes';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -57,15 +57,7 @@ async function bootstrap() {
             //            authorizationUrl: 'https://accounts.spotify.com/authorize',
             //            tokenUrl: 'https://accounts.spotify.com/api/token',
             //            refreshUrl: 'https://accounts.spotify.com/api/token',
-            scopes: {
-              streaming: 'streaming',
-              'user-read-private': 'user-read-private',
-              'user-read-email': 'user-read-email',
-              'user-read-playback-state': 'user-read-playback-state',
-              'user-modify-playback-state': 'user-modify-playback-state',
-              'playlist-read-private': 'playlist-read-private',
-              'user-read-recently-played': 'user-read-recently-played',
-            },
+            scopes: getScopes(),
           },
         },
       },

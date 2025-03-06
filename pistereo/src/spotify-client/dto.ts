@@ -45,6 +45,8 @@ export class PlaybackRequest {
   @ApiProperty()
   contextUri: string;
   @ApiProperty()
+  uris: string[];
+  @ApiProperty()
   positionMs: number = 0;
 }
 

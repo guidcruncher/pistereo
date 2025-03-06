@@ -15,6 +15,7 @@ import {
   Session,
   Get,
   Query,
+  Param,
   Res,
   Controller,
 } from '@nestjs/common';
@@ -44,10 +45,16 @@ export class PlaylistController {
     @Query('limit') limit: number = 20,
     @Query('offset') offset: number = 0,
   ) {
-    return await this.playlistService.getMyPlaylists(
-      token,
-      limit,
-      offset,
-    );
+    return await this.playlistService.getMyPlaylists(token, limit, offset);
+  }
+
+  @Get(':playlist_id/tracks')
+  @ApiOperation({ summary: 'Get playlist tracks' })
+  @ApiParam({ name: 'playlist_id', type: String })
+  async getPlaylistTracks(
+    @AuthToken() token,
+    @Param('playlist_id') playlistId: string,
+  ) {
+    return await this.playlistService.getPlaylistTracks(token, playlistId);
   }
 }

@@ -56,17 +56,28 @@ export class PlayerService {
     token: string,
     deviceId: string,
     contextUri: string,
+    uris: string[],
     positionMs: number,
   ): Promise<any> {
+    let body: string = JSON.stringify({
+      context_uri: contextUri,
+      position_ms: positionMs ?? 0,
+    });
+
+    if (uris && uris.length > 0) {
+      body = JSON.stringify({
+        context_uri: contextUri,
+        position_ms: positionMs ?? 0,
+        uris: uris,
+      });
+    }
+
     const result = await fetch(
       'https://api.spotify.com/v1/me/player/play?device_id=' +
         encodeURIComponent(deviceId),
       {
         method: 'PUT',
-        body: JSON.stringify({
-          context_uri: contextUri,
-          position_ms: positionMs ?? 0,
-        }),
+        body: body,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

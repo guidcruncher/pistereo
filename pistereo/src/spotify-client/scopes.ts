@@ -8,3 +8,13 @@ export const scopes: string[] = [
   'playlist-read-private',
   'user-read-recently-played',
 ];
+
+export const getScopes = (): Record<string, any> => {
+  let r: Record<string, any> = {};
+
+  scopes.forEach((scope) => {
+    r[scope] = scope;
+  });
+
+  return r;
+};
