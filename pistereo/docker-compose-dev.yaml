@@ -17,6 +17,7 @@ services:
 #      pistereo-internal:
     environment:
       - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
+      - NODE_CONFIG_DIR=/usr/src/app/config
     volumes:
       - ./:/usr/src/app
     container_name: pistereo-dev
