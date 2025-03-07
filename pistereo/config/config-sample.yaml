@@ -16,3 +16,4 @@ spotify:
 librespot:
   configfolder: "PATH TO LIBRESPOT COMFIG FOLDER"
   envfile: "FILENAME OF LIBRESPOT ENV FILE"
+  enableaccesstokenupdate: false

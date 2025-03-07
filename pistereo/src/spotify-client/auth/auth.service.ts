@@ -102,6 +102,11 @@ export class AuthService {
   }
 
   private async updateLibRespotEnv(token: string) {
+    if (this.config.get('librespot.enableaccesstokenupdate') == false) {
+      this.log.log('Updating of librespot token is disabled.');
+      return;
+    }
+
     const filename = this.config.get('librespot.envfile');
 
     if (!fs.existsSync(filename)) {
