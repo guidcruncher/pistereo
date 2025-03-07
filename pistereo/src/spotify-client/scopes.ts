@@ -7,6 +7,8 @@ export const scopes: string[] = [
   'playlist-read-private',
   'playlist-read-private',
   'user-read-recently-played',
+  'user-follow-read',
+  'user-top-read',
 ];
 
 export const getScopes = (): Record<string, any> => {
