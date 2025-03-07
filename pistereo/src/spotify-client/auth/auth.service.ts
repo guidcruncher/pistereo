@@ -115,7 +115,9 @@ export class AuthService {
       input.forEach((line) => {
         var newLine: string = line.trim();
         if (newLine.includes('LIBRESPOT_DISABLE_CREDENTIAL_CACHE=')) {
-          newLine = '# ' + newLine;
+          if (!newLine.startsWith('#')) {
+            newLine = '# ' + newLine;
+          }
           disableFound = true;
         }
 
