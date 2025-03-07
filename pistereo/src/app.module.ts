@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SpotifyClientModule } from './spotify-client/spotify-client.module';
 import configuration from './config/configuration';
@@ -21,6 +23,9 @@ import configuration from './config/configuration';
         uri: config.get('host.mongo.url'),
         dbName: config.get('host.mongo.database') ?? 'pistereo',
       }),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(process.cwd(), 'client', 'dist'),
     }),
     ScheduleModule.forRoot(),
     SpotifyClientModule,

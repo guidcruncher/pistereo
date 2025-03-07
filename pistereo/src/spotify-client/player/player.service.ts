@@ -47,15 +47,19 @@ export class PlayerService {
       return '';
     }
 
-    let device = result.result.devices.find((device) => {
-      return device.name == name;
-    });
+    if (result.result.devices) {
+      let device = result.result.devices.find((device) => {
+        return device.name == name;
+      });
 
-    if (!device) {
-      return '';
+      if (!device) {
+        return '';
+      }
+
+      return device.id;
     }
 
-    return device.id;
+    return '';
   }
 
   public async getCurrentPlayingTrack(token: string): Promise<any> {

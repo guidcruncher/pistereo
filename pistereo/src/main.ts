@@ -26,6 +26,9 @@ async function bootstrap() {
       }),
     },
   );
+
+  app.setGlobalPrefix('api');
+
   const config: ConfigService = app.get(ConfigService);
   const appService: AppService = app.get(AppService);
   const log = new Logger('Bootstrap');

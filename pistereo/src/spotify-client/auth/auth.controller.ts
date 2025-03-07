@@ -22,7 +22,7 @@ import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
 import * as dto from '../dto';
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -99,9 +99,8 @@ export class AuthController {
       verifier,
     );
 
-    session
-      .set('access_token', result.access_token)
-      .session.set('refresh_token', result.refresh_token);
+    session.set('access_token', result.access_token);
+    session.set('refresh_token', result.refresh_token);
     return result;
   }
 

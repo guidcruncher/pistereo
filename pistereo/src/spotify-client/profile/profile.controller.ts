@@ -18,7 +18,7 @@ import * as dto from '../dto';
 
 @Spotify()
 @ApiOAuth2(['user-read-private', 'user-read-email'], 'Access Token')
-@Controller('api/profile')
+@Controller('profile')
 export class ProfileController {
   constructor(
     private readonly profileService: ProfileService,
