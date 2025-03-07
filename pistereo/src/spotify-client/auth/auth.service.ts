@@ -105,7 +105,10 @@ export class AuthService {
     const filename = this.config.get('librespot.envfile');
 
     if (!fs.existsSync(filename)) {
-      this.log.warn("Cannot update librespot token. Environment settings file not found at " + filename);
+      this.log.warn(
+        'Cannot update librespot token. Environment settings file not found at ' +
+          filename,
+      );
       return;
     }
 
@@ -155,8 +158,8 @@ export class AuthService {
   }
 
   private async postAuthTokenProcesses(token: string, refreshToken: string) {
-    if (!token || token == "") {
-      this.log.warn("Token is empty, aborting update of token store.");
+    if (!token || token == '') {
+      this.log.warn('Token is empty, aborting update of token store.');
       return;
     }
 
