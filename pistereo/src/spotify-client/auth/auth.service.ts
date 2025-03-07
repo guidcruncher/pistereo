@@ -101,6 +101,51 @@ export class AuthService {
     return response;
   }
 
+  private async updateLibRespotEnv(token: string) {
+    const filename = this.config.get('librespot.envfile');
+    const data: string[] = [];
+    let input: string[];
+
+    if (fs.existsSync(filename)) {
+      fs.copyFileSync(filename, filename + '.bak');
+      input = fs.readFileSync(filename, 'utf8').toString().split('\n');
+      var found: boolean = false;
+      var disableFound: boolean = false;
+
+      input.forEach((line) => {
+        var newLine: string = line.trim();
+        if (newLine.includes('LIBRESPOT_DISABLE_CREDENTIAL_CACHE=')) {
+          newLine = '# ' + newLine;
+          disableFound = true;
+        }
+
+        if (newLine.includes('LIBRESPOT_ACCESS_TOKEN=')) {
+          found = true;
+          newLine = 'LIBRESPOT_ACCESS_TOKEN=' + token;
+        }
+
+        data.push(newLine);
+      });
+
+      if (!disableFound) {
+        data.push('# Disable caching of credentials.');
+        data.push('# LIBRESPOT_DISABLE_CREDENTIAL_CACHE=on');
+      }
+
+      if (!found) {
+        data.push('# Spotify access token to sign in with.');
+        data.push('LIBRESPOT_ACCESS_TOKEN=' + token);
+      }
+    } else {
+      data.push('# Disable caching of credentials.');
+      data.push('# LIBRESPOT_DISABLE_CREDENTIAL_CACHE=on');
+      data.push('# Spotify access token to sign in with.');
+      data.push('LIBRESPOT_ACCESS_TOKEN=' + token);
+    }
+
+    fs.writeFileSync(filename, data.join('\n'), 'utf8');
+  }
+
   private async postAuthTokenProcesses(token: string, refreshToken: string) {
     let settings: dto.PlayerSettings = new dto.PlayerSettings();
     let deviceName = this.config.get('spotify.playbackdevice');
@@ -115,6 +160,7 @@ export class AuthService {
       'playbacksettings.json',
     );
     fs.writeFileSync(filename, JSON.stringify(settings));
+    this.updateLibRespotEnv(token);
     return settings;
   }
 

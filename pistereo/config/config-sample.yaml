@@ -12,3 +12,7 @@ spotify:
   clientid: "ENTER YOUR SPOTIFY CLIENTID"
   clientsecret: "ENTER YOUR SPOTIFY CLIENT SECRET"
   playbackdevice: PiStereo
+
+librespot:
+  configfolder: "PATH TO LIBRESPOT COMFIG FOLDER"
+  envfile: "FILENAME OF LIBRESPOT ENV FILE"

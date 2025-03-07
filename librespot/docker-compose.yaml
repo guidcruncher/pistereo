@@ -12,6 +12,7 @@ services:
     network_mode: host
     environment:
       - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
+    env_file: settings.env
     volumes:
       - ./tmp:/librespot/tmp
     container_name: pistereo-librespot_dev
