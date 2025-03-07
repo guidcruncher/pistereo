@@ -103,6 +103,12 @@ export class AuthService {
 
   private async updateLibRespotEnv(token: string) {
     const filename = this.config.get('librespot.envfile');
+
+    if (!fs.existsSync(filename)) {
+      this.log.warn("Cannot update librespot token. Environment settings file not found at " + filename);
+      return;
+    }
+
     const data: string[] = [];
     let input: string[];
 
@@ -149,6 +155,11 @@ export class AuthService {
   }
 
   private async postAuthTokenProcesses(token: string, refreshToken: string) {
+    if (!token || token == "") {
+      this.log.warn("Token is empty, aborting update of token store.");
+      return;
+    }
+
     let settings: dto.PlayerSettings = new dto.PlayerSettings();
     let deviceName = this.config.get('spotify.playbackdevice');
     settings.accessToken = token;
@@ -157,6 +168,7 @@ export class AuthService {
       token,
       deviceName,
     );
+
     let filename = path.join(
       process.env.NODE_CONFIG_DIR ?? __dirname,
       'playbacksettings.json',
