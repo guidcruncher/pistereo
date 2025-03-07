@@ -25,7 +25,7 @@ import configuration from './config/configuration';
       }),
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(process.cwd(), 'client', 'dist'),
+      rootPath: path.join(process.cwd(), 'dist', 'client')
     }),
     ScheduleModule.forRoot(),
     SpotifyClientModule,
