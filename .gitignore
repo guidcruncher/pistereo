@@ -1,4 +1,5 @@
 playbacksettings.json
+settings.env.bak
 *.swp
 config.yaml
 tmp
