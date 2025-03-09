@@ -162,6 +162,19 @@ export class AuthService {
     fs.writeFileSync(filename, data.join('\n'), 'utf8');
   }
 
+  private getConfigFolder() {
+    let configFolder: string =
+      process.env.NODE_CONFIG_DIR ?? path.join(process.cwd(), 'config');
+    let configFile: string = path.join(configFolder, 'config.yaml');
+
+    if (!fs.existsSync(configFile)) {
+      configFolder = path.join(process.cwd(), 'config');
+      configFile = path.join(configFolder, 'config.yaml');
+    }
+
+    return configFolder;
+  }
+
   private async postAuthTokenProcesses(token: string, refreshToken: string) {
     if (!token || token == '') {
       this.log.warn('Token is empty, aborting update of token store.');
@@ -177,10 +190,7 @@ export class AuthService {
       deviceName,
     );
 
-    let filename = path.join(
-      process.env.NODE_CONFIG_DIR ?? __dirname,
-      'playbacksettings.json',
-    );
+    let filename = path.join(this.getConfigFolder(), 'playbacksettings.json');
     fs.writeFileSync(filename, JSON.stringify(settings));
     this.updateLibRespotEnv(token);
     return settings;
