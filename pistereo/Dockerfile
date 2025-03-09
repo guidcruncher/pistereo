@@ -25,6 +25,7 @@ COPY --from=builder /usr/app/node_modules ./node_modules
 RUN mkdir -p /usr/app/dist/config
 COPY ./config/config-sample.yaml /usr/app/dist/config/config-sample.yaml 
 ENV NODE_CONFIG_DIR=/usr/app/dist/config
+ENV PISTEREO_CLIENT_BASE=/usr/app/dist/client
 
 EXPOSE 3000
 

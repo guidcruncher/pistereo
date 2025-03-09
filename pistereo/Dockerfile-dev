@@ -13,6 +13,7 @@ RUN npm ci --no-fund --no-audit --silent --prefer-offline
 COPY . .
 
 ENV NODE_CONFIG_DIR=../config
+ENV PISTEREO_CLIENT_BASE=/usr/app/dist/client
 
 EXPOSE 3000
 

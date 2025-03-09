@@ -25,7 +25,7 @@ import configuration from './config/configuration';
       }),
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(process.cwd(), 'dist', 'client'),
+      rootPath: process.env.PISTEREO_CLIENT_BASE,
     }),
     ScheduleModule.forRoot(),
     SpotifyClientModule,

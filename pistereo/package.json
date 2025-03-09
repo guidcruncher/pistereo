@@ -14,7 +14,7 @@
     "docker:stop": "docker compose -f ./docker-compose-dev.yaml rm -f",
     "docker:restart": "docker compose -f ./docker-compose-dev.yaml restart",
     "docker:logs": "docker compose -f ./docker-compose-dev.yaml logs -f",
-    "start:dev": "npm run rimraf && npm run format && concurrently --kill-others --names \"VUE,NEST\" -c \"auto,auto\" \"npm run client-build\" \"nest start --watch\"",
+    "start:dev": "npm run rimraf && npm run format && concurrently --kill-others --names \"VUE,NEST\" -c \"auto,auto\" \"npm run client-dev-build\" \"nest start --watch\"",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/server/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -23,6 +23,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "client-dev-build": "cd ./client && npm run dev-build",
     "client-build": "cd ./client && npm run build",
     "client-lint": "cd ./client && npm run format && npm run lint"
   },
