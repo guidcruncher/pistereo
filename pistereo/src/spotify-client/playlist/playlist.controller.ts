@@ -27,7 +27,7 @@ import * as dto from '../dto';
 
 @Spotify()
 @ApiOAuth2(['playlist-read-private'], 'Access Token')
-@Controller('playlists')
+@Controller('/api/playlists')
 export class PlaylistController {
   constructor(
     private readonly playlistService: PlaylistService,

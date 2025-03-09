@@ -1,7 +1,6 @@
 <template>
-  <v-responsive class="border rounded" max-height="300">
     <v-app :theme="theme">
-      <v-app-bar class="px-3">
+      <v-app-bar title="PiStereo" class="px-3">
         <v-spacer></v-spacer>
 
         <v-btn
@@ -21,7 +20,6 @@
       </v-main>
       <AppFooter />
     </v-app>
-  </v-responsive>
 </template>
 
 <script lang="ts" setup>

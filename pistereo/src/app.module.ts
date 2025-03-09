@@ -24,10 +24,10 @@ import configuration from './config/configuration';
         dbName: config.get('host.mongo.database') ?? 'pistereo',
       }),
     }),
-    ServeStaticModule.forRoot({
-      rootPath: process.env.PISTEREO_CLIENT_BASE,
-      serveStaticOptions: { maxAge: 0 }
-    }),
+    //    ServeStaticModule.forRoot({
+    //      rootPath: process.env.PISTEREO_CLIENT_BASE,
+    //      serveStaticOptions: { maxAge: 0 }
+    //    }),
     ScheduleModule.forRoot(),
     SpotifyClientModule,
   ],

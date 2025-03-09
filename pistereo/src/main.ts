@@ -27,15 +27,15 @@ async function bootstrap() {
     },
   );
 
-  app.setGlobalPrefix('api');
-
   const config: ConfigService = app.get(ConfigService);
   const appService: AppService = app.get(AppService);
   const log = new Logger('Bootstrap');
   const nodeEnv: string = process.env.NODE_ENV ?? 'development';
   log.log('Running in ' + nodeEnv + ' mode.');
-  log.log("Client application running in : " + (process.env.PISTEREO_CLIENT_BASE ?? ""));
-
+  log.log(
+    'Client application running in : ' +
+      (process.env.PISTEREO_CLIENT_BASE ?? ''),
+  );
 
   app.enableShutdownHooks();
 

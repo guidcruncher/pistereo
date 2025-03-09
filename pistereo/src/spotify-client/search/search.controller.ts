@@ -26,7 +26,7 @@ import * as dto from '../dto';
 
 @Spotify()
 @ApiOAuth2(['user-read-private', 'user-read-email'], 'Access Token')
-@Controller('search')
+@Controller('/api/search')
 export class SearchController {
   constructor(
     private readonly searchService: SearchService,

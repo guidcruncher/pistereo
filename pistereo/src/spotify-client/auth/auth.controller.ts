@@ -22,7 +22,7 @@ import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
 import * as dto from '../dto';
 
-@Controller('auth')
+@Controller('/api/auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

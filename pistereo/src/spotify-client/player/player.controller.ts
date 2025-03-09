@@ -35,7 +35,7 @@ import { Spotify } from '../spotify.decorator';
   ],
   'Access Token',
 )
-@Controller('player')
+@Controller('/api/player')
 export class PlayerController {
   constructor(
     private readonly playerService: PlayerService,
