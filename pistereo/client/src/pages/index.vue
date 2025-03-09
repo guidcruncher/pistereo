@@ -1,6 +1,4 @@
-<template>
-  <HelloWorld />
-</template>
+<template>Index</template>
 
 <script lang="ts" setup>
 //

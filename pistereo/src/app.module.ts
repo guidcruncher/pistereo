@@ -26,6 +26,7 @@ import configuration from './config/configuration';
     }),
     ServeStaticModule.forRoot({
       rootPath: process.env.PISTEREO_CLIENT_BASE,
+      serveStaticOptions: { maxAge: 0 }
     }),
     ScheduleModule.forRoot(),
     SpotifyClientModule,
