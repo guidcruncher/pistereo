@@ -2,7 +2,7 @@
   <v-app :theme="theme">
     <v-app-bar color="primary">
       <template v-slot:prepend>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" ></v-app-bar-nav-icon>
       </template>
 
       <v-app-bar-title>PiStereo</v-app-bar-title>
@@ -30,6 +30,16 @@
         </v-menu>
       </template>
     </v-app-bar>
+    <v-navigation-drawer
+        v-model="drawer"
+        temporary
+    >
+      <v-list>
+        <v-list-item @click="onThemeChooserClick">
+          <v-list-item-title>Toggle Theme</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
     <v-main>
       <v-container>
@@ -41,9 +51,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const theme = ref('light');
+const drawer = ref(false);
+const group = ref(null)
+
+  watch(group, () => {
+    drawer.value = false
+  });
 
 function onThemeChooserClick() {
   theme.value = theme.value === 'light' ? 'dark' : 'light';
