@@ -25,7 +25,7 @@ import { AuthToken } from '../auth/auth-token.decorator';
 import * as dto from '../dto';
 
 @Spotify()
-@ApiOAuth2(['user-read-private', 'user-read-email'], 'Access Token')
+@ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
 @Controller('/api/search')
 export class SearchController {
   constructor(

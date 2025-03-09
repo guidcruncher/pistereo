@@ -24,6 +24,13 @@ export class AppController {
     }
 
     let filename = path.join(clientPath, requestPath);
+
+    if (!fs.existsSync(filename)) {
+      this.log.log('404 ' + filename);
+      res.status(404).send();
+      return;
+    }
+
     let fileExtn = path.extname(filename);
     let contentType = this.mimeType.lookup(filename);
 

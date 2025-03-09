@@ -33,7 +33,7 @@ import { Spotify } from '../spotify.decorator';
     'user-modify-playback-state',
     'user-read-recently-played',
   ],
-  'Access Token',
+  'Api',
 )
 @Controller('/api/player')
 export class PlayerController {

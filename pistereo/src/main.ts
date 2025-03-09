@@ -6,7 +6,11 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import {
+  SwaggerCustomOptions,
+  SwaggerModule,
+  DocumentBuilder,
+} from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import secureSession from '@fastify/secure-session';
@@ -49,7 +53,9 @@ async function bootstrap() {
 
   const documentConfig = new DocumentBuilder()
     .setTitle('PiStereo')
-    .setDescription('The PiStereo API description')
+    .setDescription(
+      'The PiStereo API. Click to download OpenAPI Document in <a href="/api/docs-json">JSON</a> or <a href="/api/docs-yaml">YAML</a>.',
+    )
     .setVersion('1.0')
     .addOAuth2(
       {
@@ -68,17 +74,19 @@ async function bootstrap() {
           },
         },
       },
-      'Access Token',
+      'api',
     )
     .build();
   const documentFactory = () =>
     SwaggerModule.createDocument(app, documentConfig);
-  SwaggerModule.setup('api/docs/', app, documentFactory, {
+  SwaggerModule.setup('api/docs', app, documentFactory, {
     swaggerOptions: {
       initOAuth: {
         clientId: config.get('spotify.clientid'),
         clientSecret: config.get('spotify.clientsecret'),
       },
+      ui: true,
+      explorer: true,
     },
   });
 

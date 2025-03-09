@@ -26,7 +26,7 @@ import { AuthToken } from '../auth/auth-token.decorator';
 import * as dto from '../dto';
 
 @Spotify()
-@ApiOAuth2(['playlist-read-private'], 'Access Token')
+@ApiOAuth2(['playlist-read-private'], 'Api')
 @Controller('/api/playlists')
 export class PlaylistController {
   constructor(
