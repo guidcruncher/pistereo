@@ -40,10 +40,11 @@ export class ServiceBase {
         let refreshToken: string = authStore.token.refresh_token ?? '';
         return instance
           .post('/auth/refresh', {
+            access_token: authStore.token.access_token,
             refresh_token: refreshToken,
           })
           .then((response) => {
-            saveToken();
+            authStore.token = {access_token: response.access_token, refresh_token: response.refresh_token};
             error.response.config.headers['Authorization'] =
               'Bearer ' + response.data.access_token;
             return instance(error.response.config);
@@ -51,7 +52,8 @@ export class ServiceBase {
           .catch((error2) => {
             // Retry failed, clean up and reject the promise
             destroyToken();
-            this.router.push('/login');
+            authStore.token = {access_token: '', refresh_token: ''};
+            this.router.push('/');
             return Promise.reject(error2);
           })
           .finally(createAxiosResponseInterceptor(instance)); // Re-attach the interceptor by running the method

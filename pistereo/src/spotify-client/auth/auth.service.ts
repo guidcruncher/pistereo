@@ -76,6 +76,7 @@ export class AuthService {
 
   public async getRefreshToken(
     clientid: string,
+    accessToken: string,
     refreshToken: string,
   ): Promise<any> {
     const url = 'https://accounts.spotify.com/api/token';
@@ -84,6 +85,7 @@ export class AuthService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer ' + accessToken
       },
       body: new URLSearchParams({
         grant_type: 'refresh_token',
