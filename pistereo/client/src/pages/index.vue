@@ -1,4 +1,6 @@
-<template>Index</template>
+<template>
+  <Profile />
+</template>
 
 <script lang="ts" setup>
 //

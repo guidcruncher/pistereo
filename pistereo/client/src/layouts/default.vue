@@ -42,7 +42,6 @@
 
     <v-main>
       <v-container>
-        {{ themeStore.theme }}
         <router-view />
       </v-container>
     </v-main>
