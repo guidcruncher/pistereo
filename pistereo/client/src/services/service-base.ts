@@ -26,7 +26,7 @@ export class ServiceBase {
     return client;
   }
 
-  private createAxiosResponseInterceptor(instance) {
+  private createAxiosResponseInterceptor(instance: any) {
     const interceptor = instance.interceptors.response.use(
       (response) => response,
       (error) => {
@@ -43,20 +43,22 @@ export class ServiceBase {
             access_token: authStore.token.access_token,
             refresh_token: refreshToken,
           })
-          .then((response) => {
-            authStore.token = {access_token: response.access_token, refresh_token: response.refresh_token};
+          .then((response: any) => {
+            authStore.token = {
+              access_token: response.access_token,
+              refresh_token: response.refresh_token,
+            };
             error.response.config.headers['Authorization'] =
               'Bearer ' + response.data.access_token;
             return instance(error.response.config);
           })
           .catch((error2) => {
             // Retry failed, clean up and reject the promise
-            destroyToken();
-            authStore.token = {access_token: '', refresh_token: ''};
-            this.router.push('/');
+            authStore.token = { access_token: '', refresh_token: '' };
+            window.location.href = '/';
             return Promise.reject(error2);
           })
-          .finally(createAxiosResponseInterceptor(instance)); // Re-attach the interceptor by running the method
+          .finally(this.createAxiosResponseInterceptor(instance)); // Re-attach the interceptor by running the method
       },
     );
   }

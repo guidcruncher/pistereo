@@ -85,7 +85,7 @@ export class AuthService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer ' + accessToken
+        Authorization: 'Bearer ' + accessToken,
       },
       body: new URLSearchParams({
         grant_type: 'refresh_token',

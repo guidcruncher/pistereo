@@ -65,7 +65,7 @@ export class AuthController {
   @Public()
   @Post('refresh')
   @ApiOperation({ summary: 'Refresh access token' })
-  @ApiResponse({ status: 200, description: 'Refreshed access token.'})
+  @ApiResponse({ status: 200, description: 'Refreshed access token.' })
   async getRefreshTokenViaPost(@Session() session, @Body() formData: any) {
     const clientId = this.config.get('spotify.clientid');
     const refreshToken = formData.refresh_token;
