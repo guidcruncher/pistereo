@@ -31,11 +31,23 @@ export class AppController {
       return;
     }
 
-    let fileExtn = path.extname(filename);
-    let contentType = this.mimeType.lookup(filename);
+    let fileExtn: string = path.extname(filename);
+    let contentType: string = this.mimeType.lookup(filename);
 
-    this.log.log(filename);
-    const stream = fs.createReadStream(filename);
+    let options = {};
+
+    if (
+      contentType.startsWith('text') ||
+      contentType.includes('/json') ||
+      contentType.includes('yaml') ||
+      contentType.includes('javascript') ||
+      contentType.includes('+xml')
+    ) {
+      options = { encoding: 'utf8' };
+    }
+
+    this.log.log('200 ' + filename);
+    const stream = fs.createReadStream(filename, options);
     res.header('Content-Type', contentType);
     res.send(stream);
   }

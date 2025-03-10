@@ -1,5 +1,5 @@
 <template>
-  <v-app :theme="theme">
+  <v-app :theme="themeStore.theme">
     <v-app-bar color="primary">
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -11,7 +11,9 @@
 
       <v-btn
         :prepend-icon="
-          theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+          themeStore.theme === 'light'
+            ? 'mdi-weather-sunny'
+            : 'mdi-weather-night'
         "
         slim
         @click="onThemeChooserClick"
@@ -40,6 +42,7 @@
 
     <v-main>
       <v-container>
+        {{ themeStore.theme }}
         <router-view />
       </v-container>
     </v-main>
@@ -49,8 +52,9 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { useThemeStore } from '@/stores/theme';
 
-const theme = ref('light');
+const themeStore = useThemeStore();
 const drawer = ref(false);
 const group = ref(null);
 
@@ -59,6 +63,6 @@ watch(group, () => {
 });
 
 function onThemeChooserClick() {
-  theme.value = theme.value === 'light' ? 'dark' : 'light';
+  themeStore.toggleTheme();
 }
 </script>

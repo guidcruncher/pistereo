@@ -14,6 +14,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import secureSession from '@fastify/secure-session';
+import compression from '@fastify/compress';
 import { scopes, getScopes } from './spotify-client/scopes';
 
 async function bootstrap() {
@@ -48,6 +49,7 @@ async function bootstrap() {
     salt: appService.generateRandomString(16),
   });
 
+  await app.register(compression, { encodings: ['gzip', 'deflate'] });
   app.enableCors();
   const baseUrl = config.get('host.baseurl');
 
@@ -74,7 +76,7 @@ async function bootstrap() {
           },
         },
       },
-      'api',
+      'Api',
     )
     .build();
   const documentFactory = () =>

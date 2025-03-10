@@ -83,7 +83,11 @@ export class AuthController {
   @Get('redirect')
   @ApiOperation({ summary: 'Get Access token' })
   @ApiResponse({ status: 200, description: 'Access token and refresh token..' })
-  async postAuthRedirect(@Session() session, @Query('code') code: string) {
+  async postAuthRedirect(
+    @Session() session,
+    @Query('code') code: string,
+    @Res() res,
+  ) {
     const clientId = this.config.get('spotify.clientid');
     const clientSecret = this.config.get('spotify.clientsecret');
     const verifier = session.get('verifier');
@@ -101,7 +105,18 @@ export class AuthController {
 
     session.set('access_token', result.access_token);
     session.set('refresh_token', result.refresh_token);
-    return result;
+    let token: string = JSON.stringify(
+      JSON.stringify({
+        access_token: result.access_token,
+        refresh_token: result.refresh_token,
+      }),
+    );
+    res.header('Content-Type', 'text/html');
+    let html =
+      '<html><head><title>PiStereo</title></head><body><script type="text/javascript">localStorage.setItem("token", ' +
+      token +
+      ');window.location.href="/";</script></body></html>';
+    res.status(200).send(html);
   }
 
   @Public()
