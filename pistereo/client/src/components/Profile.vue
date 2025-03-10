@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       profile: null,
+      profileImage: null,
       message: '',
     };
   },
