@@ -24,11 +24,11 @@ ENV LIBRESPOT_ENABLE_VOLUME_NORMALISATION=on
 # Device name. Defaults to Librespot.
 ENV LIBRESPOT_NAME=PiStereo
 # Bitrate (kbps) {96|160|320}. Defaults to 160.
-ENV LIBRESPOT_BITRATE=160
+ENV LIBRESPOT_BITRATE=320
 # Output format {F64|F32|S32|S24|S24_3|S16}. Defaults to S16.
-ENV LIBRESPOT_FORMAT=S16
+ENV LIBRESPOT_FORMAT=F32
 # Specify the dither algorithm to use {none|gpdf|tpdf|tpdf_hp}. Defaults to tpdf for formats S16, S24, S24_3 and none for other formats.
-ENV LIBRESPOT_DITHER=tpdf
+ENV LIBRESPOT_DITHER=none
 # Displayed device type. Defaults to speaker.
 ENV LIBRESPOT_DEVICE_TYPE=Speaker
 # Path to a directory where files will be temporarily stored while downloading.

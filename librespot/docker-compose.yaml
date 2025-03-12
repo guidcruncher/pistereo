@@ -1,3 +1,4 @@
+
 name: pistereo-librespot
 
 services:
@@ -17,6 +18,8 @@ services:
     environment:
       - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
       - NODE_CONFIG_DIR=/usr/src/app/config
+    volumes:
+      - ./cache:/librespot/tmp
     container_name: pistereo-librespot
     hostname: pistereo-librespot
     restart: unless-stopped
