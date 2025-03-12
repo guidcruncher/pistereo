@@ -45,11 +45,14 @@
         <router-view />
       </v-container>
     </v-main>
-  <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" color="surface-light">
-    <div class="flex-1-0-100 text-center mt-2">
-      {{ new Date().getFullYear() }} — <strong>Guidcruncher</strong>
-    </div>
-  </v-footer>
+    <v-footer
+      class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3"
+      color="surface-light"
+    >
+      <div class="flex-1-0-100 text-center mt-2">
+        {{ new Date().getFullYear() }} — <strong>Guidcruncher</strong>
+      </div>
+    </v-footer>
   </v-app>
 </template>
 
