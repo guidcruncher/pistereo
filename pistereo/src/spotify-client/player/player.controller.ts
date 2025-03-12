@@ -17,6 +17,7 @@ import {
   Query,
   Res,
   Controller,
+  NotFoundException,
 } from '@nestjs/common';
 import { Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -67,6 +68,19 @@ export class PlayerController {
   @ApiOperation({ summary: 'Get available playback devices' })
   async getAvailableDevices(@AuthToken() token: string) {
     return await this.playerService.getAvailableDevices(token);
+  }
+
+  @Get('device')
+  @ApiOperation({ summary: 'Get default configured playback device' })
+  async getDefaultDevice(@AuthToken() token: string) {
+    let result: any = await this.playerService.getAvailableDevices(token);
+    let deviceName = this.config.get("spotify.playbackdevice");
+    if (result.status == 200 && result.result.devices) {
+    let defaultDevice: any = result.result.devices.find((d) => { return d.name == deviceName; });
+    return defaultDevice;
+    }
+
+    throw new NotFoundException("Default device '" + deviceName + "' not found.");
   }
 
   @Get('currently-playing')
