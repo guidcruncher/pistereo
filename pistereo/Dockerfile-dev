@@ -1,0 +1,32 @@
+# Use a multi-stage build to reduce the image size
+# Stage 1: Build the application
+FROM node:alpine as builder
+
+RUN apk add --no-cache alsa-utils alsaconf alsa-lib alsa-lib-dev curl bash jq avahi-compat-libdns_sd sudo
+RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing librespot
+RUN addgroup root audio
+RUN addgroup -S sudo && adduser -S appuser && addgroup appuser sudo && addgroup appuser audio
+RUN echo "%sudo      ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "appuser    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN npm install -g npm@11.2.0
+RUN npm i -g @nestjs/cli
+
+USER appuser
+
+ENV NODE_ENV=development
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+ 
+# RUN npm ci --no-fund --no-audit --silent --prefer-offline
+
+# COPY . .
+
+ENV NODE_CONFIG_DIR=/usr/src/app/config
+ENV PISTEREO_CLIENT_BASE=/usr/src/app/dist/client
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "start:dev"]

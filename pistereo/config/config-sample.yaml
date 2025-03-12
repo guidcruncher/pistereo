@@ -1,0 +1,19 @@
+host:
+  baseurl: "http://127.0.0.1:3000"
+  mongo:
+    url: mongodb:/user:password@mongodb.host:27017/
+    database: pistereo
+  listen:
+    port: 3000
+    listen: "0.0.0.0"
+  secret: "ENTER A STRING OF RANDOMNESS HERE"
+
+spotify:
+  clientid: "ENTER YOUR SPOTIFY CLIENTID"
+  clientsecret: "ENTER YOUR SPOTIFY CLIENT SECRET"
+  playbackdevice: PiStereo
+
+librespot:
+  configfolder: "PATH TO LIBRESPOT COMFIG FOLDER"
+  envfile: "FILENAME OF LIBRESPOT ENV FILE"
+  enableaccesstokenupdate: false
