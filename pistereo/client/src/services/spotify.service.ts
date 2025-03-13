@@ -14,9 +14,25 @@ export class SpotifyService extends ServiceBase {
     return response.data;
   }
 
+  public async setDeviceVolume(id: string, volume: number): Promise<any> {
+    let params = new URLSearchParams();
+    params.append('device_id', id);
+    params.append('volume_percent', volume);
+    const response: AxiosResponse<DeviceObject> = await this.client().put(
+      '/player/volume?' + params.toString(),
+      {},
+    );
+    return response.data;
+  }
+
+  public async getPlayerState(): Promise<any> {
+    const response: AxiosResponse = await this.client().get('/player');
+    return response.data;
+  }
+
   public async playerOp(id: string, command: string): Promise<any> {
     const playerCommand = async (id, command) => {
-      let response: AxiosResponse<any> = {};
+      let response: AxiosResponse = {} as AxiosResponse;
       let params = new URLSearchParams();
       params.append('device_id', id);
 
@@ -46,7 +62,10 @@ export class SpotifyService extends ServiceBase {
           );
           return response.data;
         case 'stop':
-          response = this.client().put('/player/stop?' + params.toString(), {});
+          response = await this.client().put(
+            '/player/stop?' + params.toString(),
+            {},
+          );
           return response.data;
         case 'next':
           response = await this.client().put(
@@ -57,6 +76,13 @@ export class SpotifyService extends ServiceBase {
       }
     };
 
-    return await playerCommand(id, command);
+    await playerCommand(id, command)
+      .then(async (response) => {
+        return await this.getPlayerState();
+      })
+      .catch((e) => {
+        console.log(e);
+        throw e;
+      });
   }
 }

@@ -72,7 +72,7 @@ export class PlayerController {
   @ApiOperation({
     summary: 'Transfer playback to default configured playback device.',
   })
-  async transferPlaybackaToDefault(
+  async transferPlaybackToDefault(
     @AuthToken() token: string,
     @Query('play') play: boolean,
   ) {
@@ -177,6 +177,38 @@ export class PlayerController {
     @Query('volume_percent') level: number,
   ) {
     return await this.playerService.setPlaybackVolume(token, deviceId, level);
+  }
+
+  @Put('default/volume')
+  @ApiOperation({ summary: 'Set playback volume on default configured device' })
+  async setPlaybackVolumeOnDefault(
+    @AuthToken() token: string,
+    @Query('volume_percent') level: number,
+  ) {
+    let result: any = await this.playerService.getAvailableDevices(token);
+    let deviceName = this.config.get('spotify.playbackdevice');
+
+    if (result.status == 200 && result.result.devices) {
+      let defaultDevice: any = result.result.devices.find((d) => {
+        return d.name == deviceName;
+      });
+
+      if (!defaultDevice) {
+        throw new NotFoundException(
+          "Default device '" + deviceName + "' not found.",
+        );
+      }
+
+      return await this.playerService.setPlaybackVolume(
+        token,
+        defaultDevice.id,
+        level,
+      );
+    }
+
+    throw new NotFoundException(
+      "Default device '" + deviceName + "' not found.",
+    );
   }
 
   @Put('next')
