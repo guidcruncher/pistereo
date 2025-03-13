@@ -59,9 +59,47 @@ export class PlayerController {
   @ApiOperation({ summary: 'Transfer playback to a device' })
   async transferPlayback(
     @AuthToken() token: string,
-    @Body() deviceIds: string[],
+    @Body() formData: dto.DeviceTransferRequest,
   ) {
-    return await this.playerService.transferPlayback(token, deviceIds);
+    return await this.playerService.transferPlayback(
+      token,
+      formData.device_ids,
+      formData.play,
+    );
+  }
+
+  @Put('default')
+  @ApiOperation({
+    summary: 'Transfer playback to default configured playback device.',
+  })
+  async transferPlaybackaToDefault(
+    @AuthToken() token: string,
+    @Query('play') play: boolean,
+  ) {
+    let result: any = await this.playerService.getAvailableDevices(token);
+    let deviceName = this.config.get('spotify.playbackdevice');
+
+    if (result.status == 200 && result.result.devices) {
+      let defaultDevice: any = result.result.devices.find((d) => {
+        return d.name == deviceName;
+      });
+
+      if (!defaultDevice) {
+        throw new NotFoundException(
+          "Default device '" + deviceName + "' not found.",
+        );
+      }
+
+      return await this.playerService.transferPlayback(
+        token,
+        [defaultDevice.id],
+        play,
+      );
+    }
+
+    throw new NotFoundException(
+      "Default device '" + deviceName + "' not found.",
+    );
   }
 
   @Get('devices')
@@ -70,17 +108,28 @@ export class PlayerController {
     return await this.playerService.getAvailableDevices(token);
   }
 
-  @Get('device')
+  @Get('default')
   @ApiOperation({ summary: 'Get default configured playback device' })
   async getDefaultDevice(@AuthToken() token: string) {
     let result: any = await this.playerService.getAvailableDevices(token);
-    let deviceName = this.config.get("spotify.playbackdevice");
+    let deviceName = this.config.get('spotify.playbackdevice');
     if (result.status == 200 && result.result.devices) {
-    let defaultDevice: any = result.result.devices.find((d) => { return d.name == deviceName; });
-    return defaultDevice;
+      let defaultDevice: any = result.result.devices.find((d) => {
+        return d.name == deviceName;
+      });
+
+      if (!defaultDevice) {
+        throw new NotFoundException(
+          "Default device '" + deviceName + "' not found.",
+        );
+      }
+
+      return defaultDevice;
     }
 
-    throw new NotFoundException("Default device '" + deviceName + "' not found.");
+    throw new NotFoundException(
+      "Default device '" + deviceName + "' not found.",
+    );
   }
 
   @Get('currently-playing')
@@ -146,6 +195,21 @@ export class PlayerController {
     @Query('device_id') deviceId: string,
   ) {
     return await this.playerService.skipPrevious(token, deviceId);
+  }
+
+  @Put('pause')
+  @ApiOperation({ summary: 'Pause playback' })
+  async pause(
+    @AuthToken() token: string,
+    @Query('device_id') deviceId: string,
+  ) {
+    return await this.playerService.pause(token, deviceId);
+  }
+
+  @Put('stop')
+  @ApiOperation({ summary: 'Stop playback' })
+  async stop(@AuthToken() token: string, @Query('device_id') deviceId: string) {
+    return await this.playerService.stop(token, deviceId);
   }
 
   @Public()

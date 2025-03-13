@@ -82,6 +82,13 @@ export class AuthorisationUrl {
   state: string;
 }
 
+export class DeviceTransferRequest {
+  @ApiProperty()
+  device_ids: string[];
+  @ApiProperty()
+  play: boolean;
+}
+
 export class PlayerSettings {
   @ApiProperty()
   accessToken: string;

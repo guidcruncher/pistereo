@@ -21,10 +21,11 @@ export class PlayerService {
   public async transferPlayback(
     token: string,
     deviceIds: string[],
+    play: boolean,
   ): Promise<any> {
     const result = await fetch('https://api.spotify.com/v1/me/player', {
       method: 'PUT',
-      body: JSON.stringify({ device_ids: deviceIds }),
+      body: JSON.stringify({ device_ids: deviceIds, play: play }),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -117,6 +118,36 @@ export class PlayerService {
       'https://api.spotify.com/v1/me/player/volume?volume_percent=' +
         level +
         '&device_id=' +
+        encodeURIComponent(deviceId),
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return await dto.ApiResult.create(result);
+  }
+
+  public async pause(token: string, deviceId: string): Promise<any> {
+    const result = await fetch(
+      'https://api.spotify.com/v1/me/player/pause?&device_id=' +
+        encodeURIComponent(deviceId),
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return await dto.ApiResult.create(result);
+  }
+
+  public async stop(token: string, deviceId: string): Promise<any> {
+    const result = await fetch(
+      'https://api.spotify.com/v1/me/player/pause?&device_id=' +
         encodeURIComponent(deviceId),
       {
         method: 'PUT',
