@@ -8,10 +8,12 @@ import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SpotifyClientModule } from './spotify-client/spotify-client.module';
 import configuration from './config/configuration';
+import { EventEmitterModule } from '@nestjs/event-emitter'
 
 @Global()
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],

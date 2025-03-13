@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Req, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Post, Body, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -12,7 +12,8 @@ export class AppController {
   private readonly log = new Logger(AppController.name);
   private readonly mimeType: MimeType = new MimeType(db);
 
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService,
+             ) {}
 
   @Get()
   async clientRequest(@Req() req, @Res() res) {
