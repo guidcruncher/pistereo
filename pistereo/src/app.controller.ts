@@ -12,8 +12,7 @@ export class AppController {
   private readonly log = new Logger(AppController.name);
   private readonly mimeType: MimeType = new MimeType(db);
 
-  constructor(private readonly appService: AppService,
-             ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   async clientRequest(@Req() req, @Res() res) {

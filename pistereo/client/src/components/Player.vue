@@ -7,8 +7,8 @@ export default {
     return {
       device: {} as DeviceObject,
       hasData: false,
-      track: {},
-      player: {},
+      track: {} as any,
+      player: {} as any,
     };
   },
   methods: {
@@ -56,10 +56,10 @@ export default {
         });
     },
     setTrack(s: any) {
-      let track = { is_playing: false };
+      let track = { is_playing: false } as any;
       if (s) {
         track = {
-          is_playing: s.is_playing,
+          is_playing: s.item.is_playing,
           album: {
             image: s.item.album.images[0],
             name: s.item.album.name,
@@ -67,7 +67,7 @@ export default {
             uri: s.item.album.uri,
             artist: s.item.album.artists
               .map((a) => {
-                  return a.name;
+                return a.name;
               })
               .join(', '),
           },

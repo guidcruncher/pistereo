@@ -15,6 +15,8 @@ COPY eventhandler.sh .
 COPY start.sh . 
 RUN chmod +x ./eventhandler.sh ./start.sh
 
+USER appuser
+
 # Disable caching of credentials.
 ENV LIBRESPOT_DISABLE_CREDENTIAL_CACHE=on
 # Run PROGRAM set by `__onevent` before the sink is uopened and after it is closed.
