@@ -165,7 +165,7 @@ export class PlayerService {
       'https://api.spotify.com/v1/me/player/next?&device_id=' +
         encodeURIComponent(deviceId),
       {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -180,7 +180,7 @@ export class PlayerService {
       'https://api.spotify.com/v1/me/player/previous?device_id=' +
         encodeURIComponent(deviceId),
       {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

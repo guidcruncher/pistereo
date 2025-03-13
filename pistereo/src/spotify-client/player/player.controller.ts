@@ -211,7 +211,7 @@ export class PlayerController {
     );
   }
 
-  @Put('next')
+  @Post('next')
   @ApiOperation({ summary: 'Skip to next track' })
   async skipNext(
     @AuthToken() token: string,
@@ -220,7 +220,7 @@ export class PlayerController {
     return await this.playerService.skipNext(token, deviceId);
   }
 
-  @Put('previous')
+  @Post('previous')
   @ApiOperation({ summary: 'Skip back to previous track' })
   async skipPrevious(
     @AuthToken() token: string,
