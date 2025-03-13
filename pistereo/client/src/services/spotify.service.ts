@@ -17,7 +17,7 @@ export class SpotifyService extends ServiceBase {
   public async setDeviceVolume(id: string, volume: number): Promise<any> {
     let params = new URLSearchParams();
     params.append('device_id', id);
-    params.append('volume_percent', volume);
+    params.append('volume_percent', volume.toString());
     const response: AxiosResponse<DeviceObject> = await this.client().put(
       '/player/volume?' + params.toString(),
       {},
@@ -44,7 +44,7 @@ export class SpotifyService extends ServiceBase {
           });
           return response.data;
         case 'previous':
-          response = await this.client().put(
+          response = await this.client().post(
             '/player/previous?' + params.toString(),
             {},
           );
@@ -68,7 +68,7 @@ export class SpotifyService extends ServiceBase {
           );
           return response.data;
         case 'next':
-          response = await this.client().put(
+          response = await this.client().post(
             '/player/next?' + params.toString(),
             {},
           );

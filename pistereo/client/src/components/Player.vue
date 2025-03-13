@@ -7,6 +7,8 @@ export default {
     return {
       device: {} as DeviceObject,
       hasData: false,
+      track: {},
+      player: {},
     };
   },
   methods: {
@@ -24,11 +26,69 @@ export default {
           console.log(e);
         });
     },
+    setVolume() {
+      const spotifyService = new SpotifyService();
+      spotifyService
+        .setDeviceVolume(this.device.id, this.device.volume_percent.toFixed(0))
+        .then((response) => {
+          if (response) {
+            this.getPlayerDevice();
+            this.getPlayerState();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getPlayerState() {
+      const spotifyService = new SpotifyService();
+      spotifyService
+        .getPlayerState()
+        .then((response) => {
+          if (response) {
+            this.player = response;
+            this.hasData = true;
+            this.setTrack(response);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    setTrack(s: any) {
+      let track = { is_playing: false };
+      if (s) {
+        track = {
+          is_playing: s.is_playing,
+          album: {
+            image: s.item.album.images[0],
+            name: s.item.album.name,
+            id: s.item.album.id,
+            uri: s.item.album.uri,
+            artist: s.item.album.artists
+              .map((a) => {
+                  return a.name;
+              })
+              .join(', '),
+          },
+          track: {
+            name: s.item.name,
+            number: s.item.track_number,
+            id: s.item.id,
+            uri: s.item.uri,
+          },
+        };
+      }
+      this.track = track;
+    },
     previous() {
       const spotifyService = new SpotifyService();
       spotifyService
         .playerOp(this.device.id, 'previous')
-        .then((state) => {})
+        .then((state) => {
+          this.player = state;
+          this.setTrack(state);
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -37,7 +97,10 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService
         .playerOp(this.device.id, 'play')
-        .then((state) => {})
+        .then((state) => {
+          this.player = state;
+          this.setTrack(state);
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -46,7 +109,10 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService
         .playerOp(this.device.id, 'pause')
-        .then((state) => {})
+        .then((state) => {
+          this.player = state;
+          this.setTrack(state);
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -55,7 +121,10 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService
         .playerOp(this.device.id, 'stop')
-        .then((state) => {})
+        .then((state) => {
+          this.player = state;
+          this.setTrack(state);
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -64,7 +133,10 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService
         .playerOp(this.device.id, 'next')
-        .then((state) => {})
+        .then((state) => {
+          this.player = state;
+          this.setTrack(state);
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -73,7 +145,9 @@ export default {
   mounted() {
     this.hasData = false;
     this.device = {} as DeviceObject;
+    this.player = {};
     this.getPlayerDevice();
+    this.getPlayerState();
   },
 };
 </script>
@@ -81,7 +155,13 @@ export default {
 
 <template>
   <v-container v-if="hasData">
-    {{ device }}
+    <v-container v-if="track.is_playing">
+      <img
+        :src="track.album.image.url"
+        :width="track.album.image.width"
+        :height="track.album.image.height"
+      />
+    </v-container>
     <v-container>
       <v-row>
         <v-col cols="auto"
@@ -104,6 +184,17 @@ export default {
           ><v-btn @click="next()" color="primary" icon="mdi-skip-next"></v-btn
         ></v-col>
       </v-row>
+    </v-container>
+    <v-container v-if="device.supports_volume">
+      <v-slider
+        v-model="device.volume_percent"
+        label="Volume"
+        track-color="green"
+        step="1"
+        min="0"
+        max="100"
+        @end="setVolume"
+      ></v-slider>
     </v-container>
   </v-container>
 </template>
