@@ -18,6 +18,8 @@ services:
     environment:
       - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
       - NODE_CONFIG_DIR=/usr/src/app/config
+      - WEBHOOK_URL=http://192.168.1.201:3000/webhook
+      - WEBHOOK_TIMEOUT=1
     volumes:
       - ./cache:/librespot/tmp
     container_name: pistereo-librespot

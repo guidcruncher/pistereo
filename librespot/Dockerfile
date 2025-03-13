@@ -15,8 +15,6 @@ COPY eventhandler.sh .
 COPY start.sh . 
 RUN chmod +x ./eventhandler.sh ./start.sh
 
-USER appuser
-
 # Disable caching of credentials.
 ENV LIBRESPOT_DISABLE_CREDENTIAL_CACHE=on
 # Run PROGRAM set by `__onevent` before the sink is uopened and after it is closed.
@@ -50,5 +48,6 @@ ENV WEBHOOK_URL=
 # Timeout in seconds to wait for response from a Webhook event
 ENV WEBHOOK_TIMEOUT=5
 
+USER appuser
 
 ENTRYPOINT [ "/bin/bash", "-e", "-c", "/librespot/app/start.sh" ]
