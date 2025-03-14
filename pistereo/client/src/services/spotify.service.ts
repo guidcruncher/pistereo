@@ -30,14 +30,16 @@ export class SpotifyService extends ServiceBase {
     return response.data;
   }
 
-  public async getPlaylists(offset: number, limit: number): Promise<PagedList<Playlist>> {
+  public async getPlaylists(
+    offset: number,
+    limit: number,
+  ): Promise<PagedList<Playlist>> {
     let params = new URLSearchParams();
     params.append('offset', offset.toString());
     params.append('limit', limit.toString());
 
-    const response: AxiosResponse<PagedList<Playlist>> = await this.client().get(
-      '/playlists?' + params.toString(),
-    );
+    const response: AxiosResponse<PagedList<Playlist>> =
+      await this.client().get('/playlists?' + params.toString());
     return response.data;
   }
   public async playerOp(id: string, command: string): Promise<any> {

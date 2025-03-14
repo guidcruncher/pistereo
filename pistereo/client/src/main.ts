@@ -7,6 +7,7 @@
 // Plugins
 import { registerPlugins } from '@/plugins';
 import { createPinia } from 'pinia';
+import VueSSE from 'vue-sse';
 
 // Components
 import App from './App.vue';
@@ -21,6 +22,7 @@ import { SpotifyService } from './services/spotify.service';
 const pinia = createPinia();
 const app = createApp(App);
 app.use(pinia);
+app.use(VueSSE);
 
 registerPlugins(app);
 

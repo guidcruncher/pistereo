@@ -39,7 +39,8 @@ interface PagedList<T> {
   next?: any;
   offset: number;
   previous?: any;
-  total: number;y
+  total: number;
+  y;
   items: T[];
 }
 
@@ -77,4 +78,3 @@ interface Owner {
 interface Externalurls {
   spotify: string;
 }
-

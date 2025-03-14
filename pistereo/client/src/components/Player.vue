@@ -141,6 +141,27 @@ export default {
           console.log(e);
         });
     },
+    initialise() {
+      this.$sse.create('/webhook/sse')
+        .on('message', (msg) => {
+         let ev = JSON.parse(msg);
+         switch (ev.name) {
+            case "playing":
+            case "paused":
+            case "session_connected":
+            case "stopped":
+            case "track_changed":
+              this.getPlayerState();
+              break;
+            case "volume_changed":
+              this.getPlayerDevice();
+              break;
+          }
+        })
+        .on('error', (err) => {console.error('Failed to parse or lost connection:', err); })
+        .connect()
+        .catch((err) => {console.error('Failed make initial connection:', err);});
+    },
   },
   mounted() {
     this.hasData = false;
@@ -148,28 +169,9 @@ export default {
     this.player = {};
     this.getPlayerDevice();
     this.getPlayerState();
+    this.initialise();
   },
 };
-</script>
-<script lang="ts" setup>
-import { useEventSource } from '@vueuse/core';
-import { ref, watch } from 'vue';
-
-const sse = ref(
-  useEventSource('/webhook/sse', [], {
-    autoReconnect: {
-      retries: 3,
-      delay: 1000,
-      onFailed() {
-        alert('Failed to connect EventSource after 3 retries');
-      },
-    },
-  }),
-);
-
-watch(sse, (newEv, oldEv) => {
-  console.log(newEv);
-});
 </script>
 
 <template>
