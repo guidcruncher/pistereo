@@ -32,3 +32,49 @@ interface DeviceObject {
   volume_percent: number;
   supports_volume: boolean;
 }
+
+interface PagedList<T> {
+  href: string;
+  limit: number;
+  next?: any;
+  offset: number;
+  previous?: any;
+  total: number;y
+  items: T[];
+}
+
+interface Playlist {
+  collaborative: boolean;
+  description: string;
+  external_urls: Externalurls;
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  owner: Owner;
+  primary_color?: any;
+  public: boolean;
+  snapshot_id: string;
+  tracks: Tracks;
+  type: string;
+  uri: string;
+}
+
+interface Tracks {
+  href: string;
+  total: number;
+}
+
+interface Owner {
+  display_name: string;
+  external_urls: Externalurls;
+  href: string;
+  id: string;
+  type: string;
+  uri: string;
+}
+
+interface Externalurls {
+  spotify: string;
+}
+

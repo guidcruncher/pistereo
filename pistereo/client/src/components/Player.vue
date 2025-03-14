@@ -59,7 +59,7 @@ export default {
       let track = { is_playing: false } as any;
       if (s) {
         track = {
-          is_playing: s.item.is_playing,
+          is_playing: s.is_playing,
           album: {
             image: s.item.album.images[0],
             name: s.item.album.name,
@@ -153,14 +153,22 @@ export default {
 </script>
 <script lang="ts" setup>
 import { useEventSource } from '@vueuse/core';
-const { status, data, close } = useEventSource('/webhook/sse', [], {
-  autoReconnect: {
-    retries: 3,
-    delay: 1000,
-    onFailed() {
-      alert('Failed to connect EventSource after 3 retries')
+import { ref, watch } from 'vue';
+
+const sse = ref(
+  useEventSource('/webhook/sse', [], {
+    autoReconnect: {
+      retries: 3,
+      delay: 1000,
+      onFailed() {
+        alert('Failed to connect EventSource after 3 retries');
+      },
     },
-  },
+  }),
+);
+
+watch(sse, (newEv, oldEv) => {
+  console.log(newEv);
 });
 </script>
 
@@ -182,10 +190,10 @@ const { status, data, close } = useEventSource('/webhook/sse', [], {
             icon="mdi-skip-previous"
           ></v-btn
         ></v-col>
-        <v-col cols="auto"
+        <v-col cols="auto" v-if="!track.is_playing"
           ><v-btn @click="play()" color="primary" icon="mdi-play"></v-btn
         ></v-col>
-        <v-col cols="auto"
+        <v-col cols="auto" v-if="track.is_playing"
           ><v-btn @click="pause()" color="primary" icon="mdi-pause"></v-btn
         ></v-col>
         <v-col cols="auto"
