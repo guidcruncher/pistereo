@@ -1,6 +1,6 @@
 <script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
-import VueSSE from 'vue-sse';
+// import VueSSE from 'vue-sse';
 
 export default {
   name: 'player',
@@ -143,10 +143,9 @@ export default {
         });
     },
     initialise() {
-      this.$sse
-        .create('/webhook/sse')
-        .on('message', (msg) => {
-          let ev = JSON.parse(msg);
+      const evtSource = new EventSource("/webhook/sse");
+      evtSource.onmessage=((e)=> {
+         let ev = JSON.parse(e.data);
           switch (ev.name) {
             case 'playing':
             case 'paused':
@@ -159,13 +158,6 @@ export default {
               this.getPlayerDevice();
               break;
           }
-        })
-        .on('error', (err) => {
-          console.error('Failed to parse or lost connection:', err);
-        })
-        .connect()
-        .catch((err) => {
-          console.error('Failed make initial connection:', err);
         });
     },
   },
