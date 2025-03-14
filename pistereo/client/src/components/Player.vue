@@ -1,4 +1,3 @@
-/
 <script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 
@@ -152,7 +151,18 @@ export default {
   },
 };
 </script>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useEventSource } from '@vueuse/core';
+const { status, data, close } = useEventSource('/webhook/sse', [], {
+  autoReconnect: {
+    retries: 3,
+    delay: 1000,
+    onFailed() {
+      alert('Failed to connect EventSource after 3 retries')
+    },
+  },
+});
+</script>
 
 <template>
   <v-container v-if="hasData">

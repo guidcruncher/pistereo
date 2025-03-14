@@ -56,9 +56,11 @@ export class WebhookService {
       case 'session_client_changed':
         return false;
       case 'session_connected':
-        return false;
+        await this.emitEvent(ev.playerEvent, {});
+        return true;
       case 'session_disconnected':
-        return false;
+        await this.emitEvent(ev.playerEvent, {});
+        return true;
       case 'shuffle_changed':
         return false;
       case 'stopped':
