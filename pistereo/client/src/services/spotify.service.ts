@@ -44,7 +44,7 @@ export class SpotifyService extends ServiceBase {
   }
 
   public async playItemOnPlayer(contextUri: string): Promise<any> {
-    let response: AxiosRespose = await this.client().put(
+    let response: AxiosResponse = await this.client().put(
       '/player/default/play',
       {
         contextUri: contextUri,

@@ -7,7 +7,7 @@ export default {
     return {
       hasData: false,
       playlists: null,
-      paging: { offset: 0, limit: 20, page: 1, pageCount: 0 },
+      paging: { offset: 0, limit: 4, page: 1, pageCount: 0 },
     };
   },
   methods: {
@@ -37,11 +37,17 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService.playItemOnPlayer(playlist.uri);
     },
+    onPageChange(pageNumber) {
+      let offset = 0;
+      if (pageNumber > 1) {offset = pageNumber * this.paging.limit;}
+      this.paging.offset = offset;
+      this.getPlaylists();
+    }
   },
   mounted() {
     this.hasData = false;
     this.playlists = null;
-    this.paging = { offset: 0, limit: 20, page: 1, pageCount: 0 };
+    this.paging = { offset: 0, limit: 4, page: 1, pageCount: 0 };
     this.getPlaylists();
   },
 };
@@ -73,5 +79,10 @@ export default {
         ></v-list-item-subtitle>
       </v-list-item>
     </v-list>
-  </v-card>
+     <v-pagination
+        v-model="playlists.items"
+        :length="paging.pageCount"
+        @input="onPageChange"
+      ></v-pagination>
+  </v-card> 
 </template>
