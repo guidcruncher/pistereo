@@ -176,6 +176,8 @@ export default {
 
 <template>
   <v-container v-if="hasData">
+<v-card v-if="hasData">
+    <v-card-item>
     <v-container v-if="track.is_playing">
       <img
         :src="track.album.image.url"
@@ -217,6 +219,8 @@ export default {
         @end="setVolume"
       ></v-slider>
     </v-container>
+</v-card-item>
+</v-card>
   </v-container>
 </template>
 

@@ -45,15 +45,19 @@ export default {
 
 <template>
   <v-card class="mx-auto" max-width="600" v-if="hasData">
-    <v-list lines="two">
+    <v-list lines="false" nav>
       <v-list-subheader inset>Playlists</v-list-subheader>
-
       <v-list-item
         v-for="item in playlists.items"
         :key="item.id"
-        :subtitle="item.type"
-        :title="item.name"
-      ></v-list-item>
+        :value="item"
+      >
+<template v-slot:prepend>
+              <img :src="item.images[2].url" :width="item.images[2].width" :height="item.images[2].height" />
+            </template>
+
+            <v-list-item-title v-text="item.name"></v-list-item-title>
+      </v-list-item>
     </v-list>
   </v-card>
 </template>
