@@ -42,28 +42,23 @@ function navigateToUrl(url: string) {
 </script>
 
 <template>
-  <v-card v-if="hasData">
-    <v-card-title>
-      {{ profile.display_name }}
-    </v-card-title>
-    <v-card-item>
-      {{ profile.id }}
-      <div class="profileimg">
-        <img :src="profileImage.url" />
-      </div>
-    </v-card-item>
-    <v-card-actions>
-      <v-btn @click="navigateToUrl(profile.external_urls.spotify)"
-        >View on Spotify</v-btn
-      >
-    </v-card-actions>
-  </v-card>
+  <div style="display: table">
+    <div class="profileimg" style="display: table-cell">
+      <img :src="profileImage.url" />
+    </div>
+    <div style="display: table-cell; padding-left: 5px; vertical-align: middle">
+      <h2>{{ profile.display_name }}</h2>
+    </div>
+  </div>
+  <v-btn @click="navigateToUrl(profile.external_urls.spotify)"
+    >View on Spotify</v-btn
+  >
 </template>
 
 <style>
 .profileimg {
-  width: 200px;
-  height: 200px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   overflow: hidden;
 }

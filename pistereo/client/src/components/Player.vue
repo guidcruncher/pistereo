@@ -177,11 +177,18 @@ export default {
     <v-card v-if="hasData">
       <v-card-item>
         <v-container v-if="track.is_playing">
-          <img
-            :src="track.album.image.url"
-            :width="track.album.image.width"
-            :height="track.album.image.height"
-          />
+          <div class="table">
+            <div>
+              <div class="albumimg">
+                <img :src="track.album.image.url" />
+              </div>
+            </div>
+            <div class="space"></div>
+            <div>
+              <h3>{{ track.album.name }}</h3>
+              <h5>{{ track.track.name }}</h5>
+            </div>
+          </div>
         </v-container>
         <v-container>
           <v-row>
@@ -226,4 +233,26 @@ export default {
   </v-container>
 </template>
 
-<style></style>
+<style>
+.table {
+  display: table;
+}
+.table div {
+  display: table-cell;
+  vertical-align:middle;
+}
+.table .space {
+  display: table-cell;
+  width: 10px;
+}
+.albumimg {
+  width: 150px;
+  height: 150px;
+  border-radius: 15%;
+  overflow: hidden;
+}
+.albumimg img {
+  max-width: 100%;
+  max-height: 100%;
+}
+</style>

@@ -34,6 +34,10 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list>
+        <v-list-item>
+          <MyProfileBanner />
+        </v-list-item>
+        <v-divider></v-divider>
         <v-list-item @click="onThemeChooserClick">
           <v-list-item-title>Toggle Theme</v-list-item-title>
         </v-list-item>

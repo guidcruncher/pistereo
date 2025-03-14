@@ -44,11 +44,14 @@ export class SpotifyService extends ServiceBase {
   }
 
   public async playItemOnPlayer(contextUri: string): Promise<any> {
-    let response: AxiosRespose = await this.client().put('/player/default/play', {
-      contextUri: contextUri,
-      uris: [],
-      positionMs: 0
-    });
+    let response: AxiosRespose = await this.client().put(
+      '/player/default/play',
+      {
+        contextUri: contextUri,
+        uris: [],
+        positionMs: 0,
+      },
+    );
     return response.data;
   }
 

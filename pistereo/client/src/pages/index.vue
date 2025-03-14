@@ -1,6 +1,4 @@
 <template>
-  <MyProfile />
-
   <Player />
 
   <Playlists />
