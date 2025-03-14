@@ -50,6 +50,15 @@ export class PlaybackRequest {
   positionMs: number = 0;
 }
 
+export class DefaultPlaybackRequest {
+  @ApiProperty()
+  contextUri: string;
+  @ApiProperty()
+  uris: string[];
+  @ApiProperty()
+  positionMs: number = 0;
+}
+
 export class SearchRequest {
   @ApiProperty()
   q: string;

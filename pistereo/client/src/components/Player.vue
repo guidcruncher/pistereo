@@ -1,5 +1,6 @@
 <script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
+import VueSSE from 'vue-sse';
 
 export default {
   name: 'player',
@@ -142,25 +143,30 @@ export default {
         });
     },
     initialise() {
-      this.$sse.create('/webhook/sse')
+      this.$sse
+        .create('/webhook/sse')
         .on('message', (msg) => {
-         let ev = JSON.parse(msg);
-         switch (ev.name) {
-            case "playing":
-            case "paused":
-            case "session_connected":
-            case "stopped":
-            case "track_changed":
+          let ev = JSON.parse(msg);
+          switch (ev.name) {
+            case 'playing':
+            case 'paused':
+            case 'session_connected':
+            case 'stopped':
+            case 'track_changed':
               this.getPlayerState();
               break;
-            case "volume_changed":
+            case 'volume_changed':
               this.getPlayerDevice();
               break;
           }
         })
-        .on('error', (err) => {console.error('Failed to parse or lost connection:', err); })
+        .on('error', (err) => {
+          console.error('Failed to parse or lost connection:', err);
+        })
         .connect()
-        .catch((err) => {console.error('Failed make initial connection:', err);});
+        .catch((err) => {
+          console.error('Failed make initial connection:', err);
+        });
     },
   },
   mounted() {
@@ -176,51 +182,55 @@ export default {
 
 <template>
   <v-container v-if="hasData">
-<v-card v-if="hasData">
-    <v-card-item>
-    <v-container v-if="track.is_playing">
-      <img
-        :src="track.album.image.url"
-        :width="track.album.image.width"
-        :height="track.album.image.height"
-      />
-    </v-container>
-    <v-container>
-      <v-row>
-        <v-col cols="auto"
-          ><v-btn
-            @click="previous()"
-            color="primary"
-            icon="mdi-skip-previous"
-          ></v-btn
-        ></v-col>
-        <v-col cols="auto" v-if="!track.is_playing"
-          ><v-btn @click="play()" color="primary" icon="mdi-play"></v-btn
-        ></v-col>
-        <v-col cols="auto" v-if="track.is_playing"
-          ><v-btn @click="pause()" color="primary" icon="mdi-pause"></v-btn
-        ></v-col>
-        <v-col cols="auto"
-          ><v-btn @click="stop()" color="primary" icon="mdi-stop"></v-btn
-        ></v-col>
-        <v-col cols="auto"
-          ><v-btn @click="next()" color="primary" icon="mdi-skip-next"></v-btn
-        ></v-col>
-      </v-row>
-    </v-container>
-    <v-container v-if="device.supports_volume">
-      <v-slider
-        v-model="device.volume_percent"
-        label="Volume"
-        track-color="green"
-        step="1"
-        min="0"
-        max="100"
-        @end="setVolume"
-      ></v-slider>
-    </v-container>
-</v-card-item>
-</v-card>
+    <v-card v-if="hasData">
+      <v-card-item>
+        <v-container v-if="track.is_playing">
+          <img
+            :src="track.album.image.url"
+            :width="track.album.image.width"
+            :height="track.album.image.height"
+          />
+        </v-container>
+        <v-container>
+          <v-row>
+            <v-col cols="auto"
+              ><v-btn
+                @click="previous()"
+                color="primary"
+                icon="mdi-skip-previous"
+              ></v-btn
+            ></v-col>
+            <v-col cols="auto" v-if="!track.is_playing"
+              ><v-btn @click="play()" color="primary" icon="mdi-play"></v-btn
+            ></v-col>
+            <v-col cols="auto" v-if="track.is_playing"
+              ><v-btn @click="pause()" color="primary" icon="mdi-pause"></v-btn
+            ></v-col>
+            <v-col cols="auto"
+              ><v-btn @click="stop()" color="primary" icon="mdi-stop"></v-btn
+            ></v-col>
+            <v-col cols="auto"
+              ><v-btn
+                @click="next()"
+                color="primary"
+                icon="mdi-skip-next"
+              ></v-btn
+            ></v-col>
+          </v-row>
+        </v-container>
+        <v-container v-if="device.supports_volume">
+          <v-slider
+            v-model="device.volume_percent"
+            label="Volume"
+            track-color="green"
+            step="1"
+            min="0"
+            max="100"
+            @end="setVolume"
+          ></v-slider>
+        </v-container>
+      </v-card-item>
+    </v-card>
   </v-container>
 </template>
 

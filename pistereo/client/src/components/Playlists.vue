@@ -33,6 +33,9 @@ export default {
           console.log(e);
         });
     },
+    loadPlaylist(playlist) {
+      console.log(playlist);
+    },
   },
   mounted() {
     this.hasData = false;
@@ -51,12 +54,22 @@ export default {
         v-for="item in playlists.items"
         :key="item.id"
         :value="item"
+        @click="loadPlaylist(item)"
       >
-<template v-slot:prepend>
-              <img :src="item.images[2].url" :width="item.images[2].width" :height="item.images[2].height" />
-            </template>
-
-            <v-list-item-title v-text="item.name"></v-list-item-title>
+        <template v-slot:prepend>
+          <div style="width: 64px; height: 64px; margin-right: 16px">
+            <img
+              v-if="item.images"
+              :src="item.images[0].url"
+              width="64"
+              height="64"
+            />
+          </div>
+        </template>
+        <v-list-item-title v-text="item.name"></v-list-item-title>
+        <v-list-item-subtitle
+          v-text="item.owner.display_name"
+        ></v-list-item-subtitle>
       </v-list-item>
     </v-list>
   </v-card>

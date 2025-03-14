@@ -21,6 +21,8 @@ import { SpotifyService } from './services/spotify.service';
 
 const pinia = createPinia();
 const app = createApp(App);
+
+registerPlugins(app);
 app.use(pinia);
 app.use(VueSSE);
 

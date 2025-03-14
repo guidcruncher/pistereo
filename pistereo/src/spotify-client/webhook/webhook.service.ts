@@ -13,7 +13,7 @@ export class WebhookService {
   ) {}
 
   private async emitEvent(name: string, payload: any) {
-    this.log.debug("Emitting event "+ name + " => "+ JSON.stringify(payload));
+    this.log.debug('Emitting event ' + name + ' => ' + JSON.stringify(payload));
     this.eventEmitter.emit('player.event', {
       name: name,
       fired: new Date().toISOString(),

@@ -169,6 +169,38 @@ export class PlayerController {
     );
   }
 
+  @Put('default/play')
+  @ApiOperation({ summary: 'Start playback on default configured device' })
+  async startResumePlaybackOnDefault(
+    @AuthToken() token: string,
+    @Body() formData: dto.DefaultPlaybackRequest,
+  ) {
+    let result: any = await this.playerService.getAvailableDevices(token);
+    let deviceName = this.config.get('spotify.playbackdevice');
+    if (result.status == 200 && result.result.devices) {
+      let defaultDevice: any = result.result.devices.find((d) => {
+        return d.name == deviceName;
+      });
+      if (!defaultDevice) {
+        throw new NotFoundException(
+          "Default device '" + deviceName + "' not found.",
+        );
+      }
+
+      return await this.playerService.startResumePlayback(
+        token,
+        defaultDevice.id,
+        formData.contextUri,
+        formData.uris,
+        formData.positionMs,
+      );
+    }
+
+    throw new NotFoundException(
+      "Default device '" + deviceName + "' not found.",
+    );
+  }
+
   @Put('volume')
   @ApiOperation({ summary: 'Set playback volume' })
   async setPlaybackVolume(
