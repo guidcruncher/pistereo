@@ -1,3 +1,4 @@
+/
 <script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 
@@ -29,7 +30,7 @@ export default {
     setVolume() {
       const spotifyService = new SpotifyService();
       spotifyService
-        .setDeviceVolume(this.device.id, this.device.volume_percent.toFixed(0))
+        .setDeviceVolume(this.device.id, this.device.volume_percent)
         .then((response) => {
           if (response) {
             this.getPlayerDevice();

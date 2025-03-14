@@ -19,6 +19,8 @@ ENV NODE_ENV=development
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+COPY dockerdevstart.sh ./
+RUN chmod +x ./dockerdevstart.sh
  
 # RUN npm ci --no-fund --no-audit --silent --prefer-offline
 
@@ -29,4 +31,4 @@ ENV PISTEREO_CLIENT_BASE=/usr/src/app/dist/client
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "start:dev"]
+CMD [ "/bin/bash", "-e", "-c", "./dockerdevstart.sh" ]
