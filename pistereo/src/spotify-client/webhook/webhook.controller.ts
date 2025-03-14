@@ -1,8 +1,19 @@
 import { PlayerWebhookData } from '../spotify-client.d';
-import { Controller, Get, Logger, Post, Body, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Sse,
+  MessageEvent,
+  Get,
+  Logger,
+  Post,
+  Body,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { Public } from '../auth/public.decorator';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Observable, fromEvent, map } from 'rxjs';
 
 @Public()
 @Controller('webhook')
@@ -16,7 +27,16 @@ export class WebhookController {
 
   @Post()
   async libRespotWebhook(@Body() formData: PlayerWebhookData, @Res() res) {
-    /// payload   {"playerEvent":"playing","trackId":"6VRhkROS2SZHGlp0pxndbJ","oldTrackId":""}
+    await this.webhookService.processEvent(formData);
     res.status(204).send();
+  }
+
+  @Sse('/sse')
+  async sse(): Promise<Observable<MessageEvent>> {
+    return fromEvent(this.eventEmitter, 'player.event').pipe(
+      map((payload) => ({
+        data: JSON.stringify(payload),
+      })),
+    );
   }
 }

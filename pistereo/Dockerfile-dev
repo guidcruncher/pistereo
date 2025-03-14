@@ -10,7 +10,7 @@ RUN echo "%sudo      ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "appuser    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN npm install -g npm@11.2.0
-RUN npm i -g @nestjs/cli
+RUN npm i -g @nestjs/cli rimraf
 
 USER appuser
 
@@ -18,10 +18,7 @@ ENV NODE_ENV=development
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-COPY dockerdevstart.sh ./
-RUN chmod +x ./dockerdevstart.sh
- 
+COPY package.json . 
 # RUN npm ci --no-fund --no-audit --silent --prefer-offline
 
 # COPY . .
@@ -31,4 +28,4 @@ ENV PISTEREO_CLIENT_BASE=/usr/src/app/dist/client
 
 EXPOSE 3000
 
-CMD [ "/bin/bash", "-e", "-c", "./dockerdevstart.sh" ]
+CMD [ "npm", "run", "start:dockerdev" ]

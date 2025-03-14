@@ -15,6 +15,7 @@
     "docker:sh": "docker compose -f ./docker-compose-dev.yaml exec --user appuser --privileged -t pistereo-dev /bin/bash",
     "docker:restart": "npm run docker:stop && npm run docker:dev",
     "docker:logs": "docker compose -f ./docker-compose-dev.yaml logs -f",
+    "start:dockerdev": "npm run rimraf && npm run format && npm run client-build && concurrently --kill-others --names \"VUE,NEST\" -c \"auto,auto\" \"npm run client-dev-build\" \"nest start --watch\"",
     "start:dev": "npm run rimraf && npm run format && concurrently --kill-others --names \"VUE,NEST\" -c \"auto,auto\" \"npm run client-dev-build\" \"nest start --watch\"",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/server/main",

@@ -1,4 +1,3 @@
-#!/bin/bash
 
 npm run rimraf
 npm run format

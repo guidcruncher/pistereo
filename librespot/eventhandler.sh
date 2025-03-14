@@ -13,11 +13,10 @@ echo "    WEBHOOK_DATA:  $payload"
 
 if [ -n "$WEBHOOK_URL" ]; then
 echo "** Sending Webhook to POST $WEBHOOK_URL"
-curl --header "Content-Type: application/json" \
-     --request POST \
-     --connect-timeout "$WEBHOOK_TIMEOUT"
-     --data "$payload" \
-     "$WEBHOOK_URL"
-else
-  echo "** ERROR: Webhook not sent, WEBHOOK_URL Is empty. **"
+curl -X 'POST' \
+  "$WEBHOOK_URL" \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d "$payload" \
+  --connect-timeout "$WEBHOOK_TIMEOUT"
 fi
