@@ -143,22 +143,22 @@ export default {
         });
     },
     initialise() {
-      const evtSource = new EventSource("/webhook/sse");
-      evtSource.onmessage=((e)=> {
-         let ev = JSON.parse(e.data);
-          switch (ev.name) {
-            case 'playing':
-            case 'paused':
-            case 'session_connected':
-            case 'stopped':
-            case 'track_changed':
-              this.getPlayerState();
-              break;
-            case 'volume_changed':
-              this.getPlayerDevice();
-              break;
-          }
-        });
+      const evtSource = new EventSource('/webhook/sse');
+      evtSource.onmessage = (e) => {
+        let ev = JSON.parse(e.data);
+        switch (ev.name) {
+          case 'playing':
+          case 'paused':
+          case 'session_connected':
+          case 'stopped':
+          case 'track_changed':
+            this.getPlayerState();
+            break;
+          case 'volume_changed':
+            this.getPlayerDevice();
+            break;
+        }
+      };
     },
   },
   mounted() {

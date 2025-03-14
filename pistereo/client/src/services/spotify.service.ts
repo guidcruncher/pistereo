@@ -42,6 +42,16 @@ export class SpotifyService extends ServiceBase {
       await this.client().get('/playlists?' + params.toString());
     return response.data;
   }
+
+  public async playItemOnPlayer(contextUri: string): Promise<any> {
+    let response: AxiosRespose = await this.client().put('/player/default/play', {
+      contextUri: contextUri,
+      uris: [],
+      positionMs: 0
+    });
+    return response.data;
+  }
+
   public async playerOp(id: string, command: string): Promise<any> {
     const playerCommand = async (id, command) => {
       let response: AxiosResponse = {} as AxiosResponse;

@@ -34,7 +34,8 @@ export default {
         });
     },
     loadPlaylist(playlist) {
-      console.log(playlist);
+      const spotifyService = new SpotifyService();
+      spotifyService.playItemOnPlayer(playlist.uri);
     },
   },
   mounted() {
