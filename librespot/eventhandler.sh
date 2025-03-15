@@ -47,11 +47,9 @@ payload=$(jq -c -n --arg event "$PLAYER_EVENT" \
 '{"playerEvent": $ARGS.named["event"]}')
 esac
 
-echo "  Spotify event: ---------------------------------------------"
-echo "    PLAYER_EVENT:  $PLAYER_EVENT"
-echo "    TRACK_ID:      $TRACK_ID"
-echo "    OLD_TRACK_ID:  $OLD_TRACK_ID"
-echo "    WEBHOOK_DATA:  $payload"
+echo " Spotify event: ---------------------------------------------"
+echo "  EVENT:   $PLAYER_EVENT"
+echo "  PAYLOAD: $payload"
 
 if [ -n "$WEBHOOK_URL" ]; then
 echo "** Sending Webhook to POST $WEBHOOK_URL"
