@@ -9,7 +9,7 @@ changed)
 		--arg uri "$URI" \
 		--arg name "$NAME" \
 		--arg duration "$DURATION_MS" \
-		--arg covers "$(echo $COVERS | sed 's/\n/,/g')" \
+		--jsonarg covers "['$(echo $COVERS | sed "s/\n/', '/g")']" \
 		'{"playerEvent": $ARGS.named["event"], "trackId": $ARGS.named["track"], "oldTrackId": $ARGS.named["oldtrack"], "uri": $ARGS.named["uri"], "name": $ARGS.named["name"], "duration": $ARGS.named["duration"], "covers": $ARGS.named["covers"]}')
 	;;
 unavailable | end_of_track | preload_next | loading | preloading | started | stopped)
