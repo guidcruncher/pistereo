@@ -1,5 +1,5 @@
 #!/bin/bash
-paylosd="";
+paylosd=""
 
 case "$PLAYER_EVENT" in
 changed)
@@ -12,27 +12,19 @@ changed)
   --arg covers "$(echo $COVERS | sed 's/\n/,/g')" \
   '{"playerEvent": $ARGS.named["event"], "trackId": $ARGS.named["track"], "oldTrackId": $ARGS.named["oldtrack"], "uri": $ARGS.named["uri"], "name": $ARGS.named["name"], "duration": $ARGS.named["duration"], "covers": $ARGS.named["covers"]}')
   ;;
-unavailable)
-end_of_track)
-preload_next)
-loading)
-preloading)
-started)
-stopped)
+unavailable | end_of_track | preload_next | loading | preloading  | started | stopped)
 payload=$(jq -c -n --arg event "$PLAYER_EVENT" \
 --arg track "$TRACK_ID" \
 '{"playerEvent": $ARGS.named["event"], "trackId": $ARGS.named["track"]}')
 ;;
-playing)
-paused)
+playing | paused)
 payload=$(jq -c -n --arg event "$PLAYER_EVENT" \
 --arg track "$TRACK_ID" \
 --arg duration "$DURATION_MS" \
 --arg progress "$POSITION_MS" \
 '{"playerEvent": $ARGS.named["event"], "trackId": $ARGS.named["track"], "duration": $ARGS.named["duration"], "progress": $ARGS.named["progress"]}')
 ;;
-seek)
-position_correction)
+seek | position_correction)
 payload=$(jq -c -n --arg event "$PLAYER_EVENT" \
 --arg progress "$POSITION_MS" \
 '{"playerEvent": $ARGS.named["event"], "position": $ARGS.named["position"]}')
