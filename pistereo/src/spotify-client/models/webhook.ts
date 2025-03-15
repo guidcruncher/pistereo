@@ -8,4 +8,18 @@ export class PlayerWebhookData {
   trackId: string;
   @ApiProperty()
   oldTrackId: string;
+  @ApiProperty()
+  duration: number;
+  @ApiProperty()
+  progress: number;
+  @ApiProperty()
+  volume: number;
+  @ApiProperty()
+  volumePercent: number;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  uri: string;
+  @ApiProperty()
+  covers: string;
 }
