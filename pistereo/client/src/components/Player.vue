@@ -59,7 +59,7 @@ export default {
           console.log(e);
         });
     },
-    getPlayer TimerState() {
+    getPlayerTimerState() {
       const spotifyService = new SpotifyService();
       spotifyService
         .getPlayerState()
