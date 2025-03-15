@@ -6,6 +6,7 @@ export default {
   name: 'player',
   data() {
     return {
+      timer: null,
       device: {} as DeviceObject,
       hasData: false,
       track: {} as any,
@@ -90,7 +91,7 @@ export default {
             uri: s.item.uri,
           },
         };
-        this.track=track;
+        this.track = track;
       }
     },
     previous() {
@@ -175,11 +176,20 @@ export default {
   mounted() {
     this.hasData = false;
     this.device = {} as DeviceObject;
-    this.track = {is_loaded: false, is_playing: false};
+    this.track = { is_loaded: false, is_playing: false };
     this.player = {};
     this.getPlayerDevice();
     this.getPlayerState();
     this.initialise();
+this.timer = setInterval(() => {
+if (this.track.is_playing) {
+    this.track.progressPercent += 1;
+  }
+}), 1000)
+},
+beforeDestroy() {
+  clearInterval(this.timer)
+}
   },
 };
 </script>
@@ -230,17 +240,17 @@ export default {
             ></v-col>
           </v-row>
         </v-container>
-<v-container>
-<v-slider
- v-model="track.progressPercent"
- label="Progess"
- track-color="green"
- step="1"
- min="0"
- max="100"
-disabled
- ></v-slider>
-</v-container>
+        <v-container>
+          <v-slider
+            v-model="track.progressPercent"
+            label="Progess"
+            track-color="green"
+            step="1"
+            min="0"
+            max="100"
+            disabled
+          ></v-slider>
+        </v-container>
         <v-container v-if="device.supports_volume">
           <v-slider
             v-model="device.volume_percent"
