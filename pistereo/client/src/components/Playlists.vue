@@ -37,12 +37,14 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService.playItemOnPlayer(playlist.uri);
     },
-    onPageChange(pageNumber) {
+    onPageChange() {
       let offset = 0;
-      if (pageNumber > 1) {offset = pageNumber * this.paging.limit;}
+      if (this.paging.page > 1) {
+        offset = (this.paging.page - 1) * this.paging.limit;
+      }
       this.paging.offset = offset;
       this.getPlaylists();
-    }
+    },
   },
   mounted() {
     this.hasData = false;
@@ -79,10 +81,10 @@ export default {
         ></v-list-item-subtitle>
       </v-list-item>
     </v-list>
-     <v-pagination
-        v-model="playlists.items"
-        :length="paging.pageCount"
-        @input="onPageChange"
-      ></v-pagination>
-  </v-card> 
+    <v-pagination
+      v-model="paging.page"
+      :length="paging.pageCount"
+      @update:modelValue="onPageChange"
+    ></v-pagination>
+  </v-card>
 </template>

@@ -7,7 +7,6 @@
 // Plugins
 import { registerPlugins } from '@/plugins';
 import { createPinia } from 'pinia';
-import VueSSE from 'vue-sse';
 
 // Components
 import App from './App.vue';
@@ -24,7 +23,6 @@ const app = createApp(App);
 
 registerPlugins(app);
 app.use(pinia);
-app.use(VueSSE);
 
 registerPlugins(app);
 

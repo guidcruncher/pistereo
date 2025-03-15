@@ -27,10 +27,12 @@ export default {
           console.log(e);
         });
     },
-    setVolume() {
+    setVolume(value?: number) {
       const spotifyService = new SpotifyService();
+      let newVolume = value ?? this.device.volume_percent;
+
       spotifyService
-        .setDeviceVolume(this.device.id, this.device.volume_percent)
+        .setDeviceVolume(this.device.id, newVolume)
         .then((response) => {
           if (response) {
             this.getPlayerDevice();
@@ -57,10 +59,14 @@ export default {
         });
     },
     setTrack(s: any) {
-      let track = { is_playing: false } as any;
+      let track = { is_loaded: false, is_playing: false } as any;
       if (s) {
         track = {
+          is_loaded: true,
           is_playing: s.is_playing,
+          duration: s.item.duration_ms,
+          progress: s.progress_ms ?? 0,
+          progressPercent: Math.abs((100 / s.item.duration_ms) * s.progress_ms),
           album: {
             image: s.item.album.images[0],
             name: s.item.album.name,
@@ -75,12 +81,17 @@ export default {
           track: {
             name: s.item.name,
             number: s.item.track_number,
+            artist: s.item.artists
+              .map((a) => {
+                return a.name;
+              })
+              .join(', '),
             id: s.item.id,
             uri: s.item.uri,
           },
         };
+        this.track=track;
       }
-      this.track = track;
     },
     previous() {
       const spotifyService = new SpotifyService();
@@ -112,7 +123,7 @@ export default {
         .playerOp(this.device.id, 'pause')
         .then((state) => {
           this.player = state;
-          this.setTrack(state);
+          //  this.setTrack(state);
         })
         .catch((e) => {
           console.log(e);
@@ -164,6 +175,7 @@ export default {
   mounted() {
     this.hasData = false;
     this.device = {} as DeviceObject;
+    this.track = {is_loaded: false, is_playing: false};
     this.player = {};
     this.getPlayerDevice();
     this.getPlayerState();
@@ -176,7 +188,7 @@ export default {
   <v-container v-if="hasData">
     <v-card v-if="hasData">
       <v-card-item>
-        <v-container v-if="track.is_playing">
+        <v-container v-if="track.is_loaded">
           <div class="table">
             <div>
               <div class="albumimg">
@@ -187,6 +199,7 @@ export default {
             <div>
               <h3>{{ track.album.name }}</h3>
               <h5>{{ track.track.name }}</h5>
+              <h6>{{ track.track.artist }}</h6>
             </div>
           </div>
         </v-container>
@@ -217,9 +230,24 @@ export default {
             ></v-col>
           </v-row>
         </v-container>
+<v-container>
+<v-slider
+ v-model="track.progressPercent"
+ label="Progess"
+ track-color="green"
+ step="1"
+ min="0"
+ max="100"
+disabled
+ ></v-slider>
+</v-container>
         <v-container v-if="device.supports_volume">
           <v-slider
             v-model="device.volume_percent"
+            append-icon="mdi-volume-high"
+            prepend-icon="mdi-volume-mute"
+            @click:append="setVolume(100)"
+            @click:prepend="setVolume(0)"
             label="Volume"
             track-color="green"
             step="1"
@@ -239,7 +267,7 @@ export default {
 }
 .table div {
   display: table-cell;
-  vertical-align:middle;
+  vertical-align: middle;
 }
 .table .space {
   display: table-cell;
