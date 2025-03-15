@@ -59,27 +59,44 @@ export default {
   <v-card class="mx-auto" max-width="600" v-if="hasData">
     <v-list lines="false" nav>
       <v-list-subheader inset>Playlists</v-list-subheader>
-      <v-list-item
+
+      <v-list-group
         v-for="item in playlists.items"
         :key="item.id"
         :value="item"
-        @click="loadPlaylist(item)"
       >
-        <template v-slot:prepend>
-          <div style="width: 64px; height: 64px; margin-right: 16px">
-            <img
-              v-if="item.images"
-              :src="item.images[0].url"
-              width="64"
-              height="64"
-            />
-          </div>
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <div style="width: 64px; height: 64px; margin-right: 16px">
+                <img
+                  v-if="item.images"
+                  :src="item.images[0].url"
+                  width="64"
+                  height="64"
+                />
+              </div>
+            </template>
+            <v-list-item-title v-text="item.name"></v-list-item-title>
+            <v-list-item-subtitle
+              v-text="item.owner.display_name"
+            ></v-list-item-subtitle>
+          </v-list-item>
         </template>
-        <v-list-item-title v-text="item.name"></v-list-item-title>
-        <v-list-item-subtitle
-          v-text="item.owner.display_name"
-        ></v-list-item-subtitle>
-      </v-list-item>
+
+        <v-list-item
+          prepend-icon="mdi-play"
+          title="Play"
+          :value="item"
+          @click="loadPlaylist(item)"
+        ></v-list-item>
+        <v-list-item
+          prepend-icon="mdi-view-list "
+          title="View"
+          :value="item"
+          @click="loadPlaylist(item)"
+        ></v-list-item>
+      </v-list-group>
     </v-list>
     <v-pagination
       v-model="paging.page"
