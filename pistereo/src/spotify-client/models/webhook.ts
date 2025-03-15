@@ -21,5 +21,5 @@ export class PlayerWebhookData {
   @ApiProperty()
   uri: string;
   @ApiProperty()
-  covers: string;
+  covers: string[];
 }

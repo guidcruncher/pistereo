@@ -26,8 +26,8 @@ export class WebhookController {
   ) {}
 
   @Post()
-  async libRespotWebhook(@Body() formData: PlayerWebhookData, @Res() res) {
-    await this.webhookService.processEvent(formData);
+  async libRespotWebhook(@Body() formData: any, @Res() res) {
+    await this.webhookService.processEvent(formData as PlayerWebhookData);
     res.status(204).send();
   }
 

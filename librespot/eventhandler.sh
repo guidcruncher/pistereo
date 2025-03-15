@@ -44,9 +44,9 @@ echo "  EVENT:   $PLAYER_EVENT"
 echo "  PAYLOAD: $payload"
 
 if [ -n "$WEBHOOK_URL" ]; then
-	echo "** Sending Webhook to POST $WEBHOOK_URL"
-        if [ -n "$PAYLOAD" ]; then
-	curl -X 'POST' \
+        if [ -n "$payload" ]; then
+          echo "** Sending Webhook to POST $WEBHOOK_URL"
+	  curl -X 'POST' \
 		"$WEBHOOK_URL" \
 		-H 'accept: */*' \
 		-H 'Content-Type: application/json' \

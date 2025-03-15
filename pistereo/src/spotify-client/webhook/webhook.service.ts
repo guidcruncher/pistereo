@@ -39,10 +39,10 @@ export class WebhookService {
       case 'loading':
         return false;
       case 'paused':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'playing':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'position_correction':
         return false;
@@ -57,24 +57,25 @@ export class WebhookService {
       case 'session_client_changed':
         return false;
       case 'session_connected':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'session_disconnected':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'shuffle_changed':
         return false;
       case 'stopped':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'track_changed':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'unavailable':
-        await this.emitEvent(ev.playerEvent, {});
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
       case 'volume_changed':
-        await this.emitEvent(ev.playerEvent, {});
+        ev.volumePercent = Math.abs((100 / 65535) * ev.volume);
+        await this.emitEvent(ev.playerEvent, ev);
         return true;
     }
 
