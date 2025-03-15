@@ -59,6 +59,23 @@ export default {
           console.log(e);
         });
     },
+    getPlayer TimerState() {
+      const spotifyService = new SpotifyService();
+      spotifyService
+        .getPlayerState()
+        .then((s) => {
+          if (s) {
+            this.track.duration = s.item.duration_ms;
+            this.track.progress = s.progress_ms ?? 0;
+            this.track.progressPercent = Math.abs(
+              (100 / s.item.duration_ms) * s.progress_ms,
+            );
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     setTrack(s: any) {
       let track = { is_loaded: false, is_playing: false } as any;
       if (s) {
@@ -181,15 +198,14 @@ export default {
     this.getPlayerDevice();
     this.getPlayerState();
     this.initialise();
-this.timer = setInterval(() => {
-if (this.track.is_playing) {
-    this.track.progressPercent += 1;
-  }
-}), 1000)
-},
-beforeDestroy() {
-  clearInterval(this.timer)
-}
+    this.timer = setInterval(() => {
+      if (this.track.is_playing) {
+        this.getPlayerTimerState();
+      }
+    }, 10000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>
