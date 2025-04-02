@@ -50,11 +50,11 @@ export class TunerService extends ServiceBase {
     return response.data;
   }
 
-  public async getStation(uuid: string): Promise<any> {
+  public async getStation(uuid: string): Promise<Station> {
     const response: AxiosResponse<any> = await this.client('/api/radio').get(
       '/' + uuid,
     );
-    return response.data;
+    return response.data as Station;
   }
 
   public async playStation(uuid: string): Promise<any> {
@@ -71,9 +71,9 @@ export class TunerService extends ServiceBase {
     return response.data;
   }
 
-  public async getStationPresets(): Promise<any[]> {
+  public async getStationPresets(): Promise<RadioPreset[]> {
     const response: AxiosResponse<any> =
       await this.client('/api/radio').get('/presets');
-    return response.data as any[];
+    return response.data as RadioPreset[];
   }
 }

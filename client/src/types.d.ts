@@ -128,3 +128,11 @@ interface StationSearchRequest {
   bitrateMin: number;
   bitrateMax: number;
 }
+
+interface RadioPreset {
+  id: string;
+  stationuuid: string;
+  name: string;
+  image: string;
+  info: Station;
+}
