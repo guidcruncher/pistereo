@@ -1,7 +1,5 @@
 <template>
-
-<RadioPresets  />
-
+  <RadioPresets />
 </template>
 
 <script lang="ts"></script>

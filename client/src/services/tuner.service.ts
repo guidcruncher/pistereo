@@ -65,15 +65,15 @@ export class TunerService extends ServiceBase {
   }
 
   public async saveStationPreset(uuid: string): Promise<any> {
-    const response: AxiosResponse<any> = await this.client(
-      '/api/radio',
-    ).put('/presets/' + uuid);
+    const response: AxiosResponse<any> = await this.client('/api/radio').put(
+      '/presets/' + uuid,
+    );
     return response.data;
   }
 
-  public async getStationPresets(): Promise<any> {
+  public async getStationPresets(): Promise<any[]> {
     const response: AxiosResponse<any> =
       await this.client('/api/radio').get('/presets');
-    return response.data;
+    return response.data as any[];
   }
 }

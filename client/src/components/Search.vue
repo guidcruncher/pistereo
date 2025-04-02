@@ -221,7 +221,7 @@ export default {
               v-if="item.images"
               :src="item.images[0].url"
               width="64"
-              height="64" 
+              height="64"
             />
             <img
               v-if="item.album"

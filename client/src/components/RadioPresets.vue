@@ -1,24 +1,29 @@
-<script lang="ts">
+<script>
 import { TunerService } from '../services/tuner.service';
+import { on, emit, off } from '../composables/useeventbus';
 
 export default {
   name: 'RadioPresets',
   data() {
     return {
-      presets: any[],
+      presets: null,
       hasData: false,
     };
   },
   mounted() {
     this.hasData = false;
-    this.presets=[];
+    this.presets = null;
     this.getRadioPresets();
   },
   methods: {
+ playRadio(item) {
+      const tunerService = new TunerService();
+      tunerService.playStation(item.stationuuid);
+    },
     getRadioPresets() {
       const tunerService = new TunerService();
       tunerService
-        .getPresets()
+        .getStationPresets()
         .then((response) => {
           this.presets = response;
           this.hasData = true;
@@ -30,22 +35,29 @@ export default {
   },
 };
 </script>
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <template>
-<v-card title="Presets">
-<v-infinite-scroll
-    direction="horizontal"
-    @load="getRadioPresets"
-  >
-    <template v-for="(item, index) in presets" :key="item">
-<div class="albumimgbig">
-              <img :src="item.image" />
-            </div>
-    </template>
-  </v-infinite-scroll>
-</v-card>
+  <v-card title="Presets">
+      <template v-for="(item, index) in presets" :key="item">
+        <div class="stationlogo" @click="playRadio(item)">
+          <img :src="item.image" />
+        </div>
+{{ item.name }}
+<a :href="item.info.homepage">{{ item.info.homepage }}</a>
+      </template>
+  </v-card>
 </template>
- <style>
+
+<style>
+.stationlogo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.profileimg img {
+  max-width: 100%;
+  max-height: 100%;
+}
 </style>
