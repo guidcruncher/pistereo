@@ -16,6 +16,7 @@ declare module 'vue' {
     Playlist: typeof import('./components/Playlist.vue')['default']
     Playlists: typeof import('./components/Playlists.vue')['default']
     RadioPlayer: typeof import('./components/RadioPlayer.vue')['default']
+    RadioPresets: typeof import('./components/RadioPresets.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./components/Search.vue')['default']
