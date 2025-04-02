@@ -1,0 +1,12 @@
+
+echo '{ command: [ "loadfile", "http://media-ice.musicradio.com/LBCUK", "replace" ] }' | socat - ./socket/mpv
+
+echo '{ command: [ "stop" ] }' | socat - ./socket/mpv
+
+echo '{ command: [ "get_property", "path" ] }' | socat - ./socket/mpv
+
+echo '{ command: [ "cycle", "pause" ] }' | socat - ./socket/mpv
+
+echo '{ command: [ "get_property", "volume" ] }' | socat  - ./socket/mpv
+
+echo '{ command: [ "set_property", "volume", "80" ] }' | socat  - ./socket/mpv

@@ -1,0 +1,45 @@
+FROM guidcruncher/pistereo-base:latest AS base
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TARGETARCH
+ENV TZ=UTC
+
+#USER appuser
+
+ENV NODE_ENV=development
+
+WORKDIR /usr/src/mediaserver
+
+RUN <<EOF
+ mkdir -p /usr/src/mediaserver/config /usr/src/mediaserver/socket
+ DOWNLOAD_URL=$(curl -s https://api.github.com/repos/devgianlu/go-librespot/releases/latest \
+  | jq '.assets[].browser_download_url' -r | grep go-librespot_linux_$TARGETARCH.tar.gz)
+ curl -L "$DOWNLOAD_URL" -o ./librespot.tar.gz
+ tar xvf ./librespot.tar.gz go-librespot
+ chmod +x go-librespot
+ rm ./librespot.tar.gz
+EOF
+
+COPY ./mediaserver/config.yml ./default.config
+
+WORKDIR /usr/src/app
+
+COPY ./provisioning/ ./provisioning
+
+COPY package.json . 
+
+ENV NODE_CONFIG_DIR=/usr/src/app/config
+ENV PISTEREO_CLIENT_BASE=/usr/src/app/dist/client
+ENV MPV_SOCKET=/usr/src/mediaserver/socket/mpv
+ENV LIBRESPOT_HOST=http://127.0.0.1:3678
+
+COPY ./config ./config
+
+EXPOSE 3000
+EXPOSE 3678
+
+VOLUME /usr/src/app/config
+VOLUME /usr/src/mediaserver/config
+VOLUME /usr/src/mediaserver/socket
+
+CMD [ "/usr/src/app/provisioning/start.sh" ]
