@@ -42,6 +42,6 @@ import { AuthModule } from '@auth/auth.module';
     AlbumController,
     WebhookController,
     LibrespotController,
-  ],
+  ], exports: [LibrespotService]
 })
 export class SpotifyClientModule {}

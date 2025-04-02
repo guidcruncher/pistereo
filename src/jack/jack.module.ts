@@ -8,6 +8,8 @@ import { DataModule } from '@data/data.module';
 import { JackListenerService } from './jack-listener.service';
 import { TokenGuard } from '@auth/token.guard';
 import { AuthModule } from '@auth/auth.module';
+import { SpotifyClientModule } from '../spotify-client/spotify-client.module';
+import { StreamerClientModule } from '../streamer-client/streamer-client.module';
 
 @Module({
   providers: [
@@ -17,6 +19,6 @@ import { AuthModule } from '@auth/auth.module';
     JackListenerService,
   ],
   controllers: [JackController],
-  imports: [AuthModule, DataModule],
+  imports: [AuthModule, DataModule, StreamerClientModule, SpotifyClientModule ],
 })
 export class JackModule {}

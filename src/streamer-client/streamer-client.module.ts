@@ -12,5 +12,6 @@ import { AuthModule } from '@auth/auth.module';
   providers: [StreamerService, StreamerSocketService],
   controllers: [StreamerController, WebhookController],
   imports: [AuthModule, DataModule],
+  exports: [ StreamerService ]
 })
 export class StreamerClientModule {}

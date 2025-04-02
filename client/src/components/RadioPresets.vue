@@ -1,35 +1,41 @@
-<script setup>
+<script>
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';
 import { ref } from 'vue';
 
-let _presets = [];
-let _hasData = false;
-
-const hasData = ref(_hasData);
-const presets = ref(_presets);
-
-function playRadio(item) {
-  const tunerService = new TunerService();
-  tunerService.playStation(item.stationuuid);
-}
-
-function getRadioPresets() {
-  const tunerService = new TunerService();
-  tunerService
-    .getStationPresets()
-    .then((response) => {
-      this.presets = response;
-      this.hasData = true;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-}
-
-getRadioPresets();
+export default {
+  name: 'Radiopresets',
+  data() {
+    return {
+      presets: null,
+      hasData: false,
+    };
+  },
+  mounted() {
+    this.hasData = false;
+    this.tracks = null;
+  },
+  beforeUnmount() {},
+  methods: {
+    playRadio(item) {
+      const tunerService = new TunerService();
+      tunerService.playStation(item.stationuuid);
+    },
+    getRadioPresets() {
+      const tunerService = new TunerService();
+      tunerService
+        .getStationPresets()
+        .then((response) => {
+          this.presets = response;
+          this.hasData = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+  },
+};
 </script>
-<script lang="ts" setup></script>
 
 <template>
   <v-card title="Presets">

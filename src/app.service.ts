@@ -1,13 +1,25 @@
-import { INestApplication, Injectable, Logger } from '@nestjs/common';
+import {
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+  INestApplication,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
+import { JackService } from './jack/jack.service';
 
 @Injectable()
-export class AppService {
+export class AppService
+  implements OnApplicationShutdown, OnApplicationBootstrap
+{
   private readonly log = new Logger(AppService.name);
   private app: INestApplication;
 
-  constructor(private readonly config: ConfigService) {}
+  constructor(
+    private readonly config: ConfigService,
+    private readonly jackService: JackService,
+  ) {}
 
   public setApp(app: INestApplication) {
     this.app = app;
@@ -21,8 +33,10 @@ export class AppService {
     this.log.log('**** SIGNAL: ' + signal + ', Shutting down. ****');
     this.getApp().close();
   }
-  onApplicationBootstrap() {
+
+  async onApplicationBootstrap() {
     this.log.log('Running post bootstrap initialization services.');
+    await this.jackService.restartLastPlayed();
     this.log.log('Finished running post bootstrap initialization services.');
   }
 

@@ -18,6 +18,26 @@ export class JackService extends ServiceBase {
     super();
   }
 
+  async restartLastPlayed() {
+    let playing: any = await this.userService.getLastPlayed();
+
+    if (!playing.playing) {
+      return;
+    }
+    switch (playing.playing.source) {
+      case 'spotify':
+        this.librespotService.play({
+          uri: playing.playing.uri,
+          skip_to_uri: '',
+          paused: false,
+        });
+        break;
+      case 'streamer':
+        this.streamerService.play(playing.playing.stationuuid);
+        break;
+    }
+  }
+
   async getStatus() {
     let spotifyStatus: any = await this.librespotService.getStatus();
     let streamerStatus: any = await this.streamerService.getStatus();

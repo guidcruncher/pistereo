@@ -85,6 +85,7 @@ export default {
       if (currentSource) {
         if (currentSource.playing) {
           playerStore.setSource(currentSource.playing.source);
+
           emit('source_changed', {
             source: currentSource.playing.source,
             playing: currentSource.playing,

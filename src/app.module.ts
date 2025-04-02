@@ -15,6 +15,7 @@ import { JackModule } from './jack/jack.module';
 import { RadioClientModule } from './radio-client/radio-client.module';
 import { DataModule } from './data/data.module';
 import { AuthModule } from '@auth/auth.module';
+import { JackService } from './jack/jack.service';
 
 @Global()
 @Module({
@@ -45,6 +46,6 @@ import { AuthModule } from '@auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JackService],
 })
 export class AppModule {}
