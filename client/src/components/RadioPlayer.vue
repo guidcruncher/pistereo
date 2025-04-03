@@ -32,6 +32,7 @@ export default {
     setVolume(value) {
       const tunerService = new TunerService();
       tunerService.setVolume(value);
+      this.volume = value;
     },
     playRadio(uuid: string) {
       const tunerService = new TunerService();
@@ -173,7 +174,7 @@ export default {
       ></v-col>
       <v-col cols="1" />
     </v-row>
-    <v-row v-if="volume">
+    <v-row>
       <v-col cols="12"
         ><v-slider
           v-model="volume"
