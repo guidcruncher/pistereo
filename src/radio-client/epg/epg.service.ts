@@ -10,9 +10,7 @@ export class EpgService {
   private readonly log = new Logger(EpgService.name);
 
   public async initialiseCron() {
-    const cronHours = this.config
-      .get<string>('radio.xmltvrefresh')
-      .split(',') as string[];
+    const cronHours = (this.config.get<string>('radio.xmltvrefresh') ??  "").split(',') as string[];
   }
 
   public async downloadEpg() {
