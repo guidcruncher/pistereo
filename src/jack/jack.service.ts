@@ -39,20 +39,25 @@ export class JackService extends ServiceBase {
   }
 
   async getStatus() {
-    let spotifyStatus: any = await this.librespotService.getStatus();
-    let streamerStatus: any = await this.streamerService.getStatus();
-    let playing: any = await this.userService.getLastPlayed();
-    let results: any = { playing: playing ? playing.detail : {}, source: [] };
-    this.log.log(this.__caller() + ' =>getStatus');
-    if (spotifyStatus && spotifyStatus.track) {
-      results.source.push('spotify');
-    }
+    try {
+      let spotifyStatus: any = await this.librespotService.getStatus();
+      let streamerStatus: any = await this.streamerService.getStatus();
+      let playing: any = await this.userService.getLastPlayed();
+      let results: any = { playing: playing ? playing.detail : {}, source: [] };
+      this.log.log(this.__caller() + ' =>getStatus');
+      if (spotifyStatus && spotifyStatus.track) {
+        results.source.push('spotify');
+      }
 
-    if (streamerStatus && streamerStatus.active) {
-      results.source.push('streamer');
-    }
+      if (streamerStatus && streamerStatus.active) {
+        results.source.push('streamer');
+      }
 
-    return results;
+      return results;
+    } catch (err) {
+      this.log.error('Error in getStatus', err);
+      return { playing: {}, source: [] };
+    }
   }
 
   async stopAll() {

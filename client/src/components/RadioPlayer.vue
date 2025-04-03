@@ -12,6 +12,7 @@ export default {
       hasData: false,
       paused: false,
       stopped: false,
+      streamer: {} as any,
       station: {} as any,
     };
   },
@@ -27,6 +28,10 @@ export default {
           });
         }
       });
+    },
+    setVolume(value) {
+      const tunerService = new TunerService();
+      tunerService.setVolume(value);
     },
     playRadio(uuid: string) {
       const tunerService = new TunerService();
@@ -71,25 +76,43 @@ export default {
     },
   },
   mounted() {
+    const tunerService = new TunerService();
     const playerStore = usePlayerStore();
     this.paused = false;
     this.stopped = true;
     this.station = {};
 
+    this.streamer = tunerService.getStatus();
+
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
     }
+
+    on('streamer.stream-changed', (data: any) => {
+      this.paused = false;
+      this.stopped = false;
+      this.station = data.station;
+    });
+    0;
 
     on('source_changed', (data: any) => {
       if (data.source == 'streamer') {
         const jackService = new JackService();
         jackService.stopDevice('spotify');
         this.getPlayerState();
+      } else {
+        const jackService = new JackService();
+        jackService.stopDevice('streamer');
+        this.paused = false;
+        this.stopped = true;
+        this.station = {};
+        this.hasData = false;
       }
     });
   },
   beforeDestroy() {
     off('source_changed');
+    off('streamer.stream-changed');
   },
 };
 </script>
@@ -148,6 +171,21 @@ export default {
       ></v-col>
       <v-col cols="1" />
     </v-row>
+    <v-row v-if="streamer.volume" ~>
+      <v-col cols="12"
+        ><v-slider
+          v-model="streamer.volume"
+          append-icon="mdi-volume-high"
+          prepend-icon="mdi-volume-mute"
+          @click:append="setVolume(100)"
+          @click:prepend="setVolume(0)"
+          track-color="primary"
+          step="1"
+          min="0"
+          max="100"
+          @end="setVolume"
+        ></v-slider> </v-col
+    ></v-row>
   </v-container>
 </template>
 

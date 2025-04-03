@@ -125,15 +125,15 @@ export default {
           console.log(e);
         });
     },
-  },
-  eject() {
-    this.player.is_playing = false;
-    const jackService = new JackService();
-    jackService.eject();
-    this.hasData = false;
-    this.track = {};
-    this.player = {};
-    this.getPlayerState();
+    eject() {
+      this.player.is_playing = false;
+      const jackService = new JackService();
+      jackService.eject();
+      this.hasData = false;
+      this.track = {};
+      this.player = {};
+      this.getPlayerState();
+    },
   },
   mounted() {
     const playerStore = usePlayerStore();
@@ -157,6 +157,7 @@ export default {
       } else {
         clearInterval(this.timer);
         this.timer = 0;
+        this.hasData = false;
       }
     });
 
@@ -167,6 +168,7 @@ export default {
       // spotifyService.playerOp(this.player.device_id, 'stop').then(() => {
       clearInterval(this.timer);
       this.timer = 0;
+      this.hasData = false;
     });
 
     on('spotify.metadata', (data: any) => {
@@ -203,14 +205,11 @@ export default {
       clearInterval(this.timer);
       this.timer = 0;
     });
-
-    this.timer = setInterval(() => {
-      this.getPlayerState();
-    }, 10000);
   },
   beforeDestroy() {
     off('source_changed');
     off('spotify.metadata');
+
     off('spotify.volume');
     off('spotify.playing');
     off('spotify.paused');
@@ -277,7 +276,7 @@ export default {
           readonly
         ></v-slider> </v-col
     ></v-row>
-    <v-row v-if="player.volume">
+    <v-row v-if="player.volume" ~>
       <v-col cols="12"
         ><v-slider
           v-model="player.volume"

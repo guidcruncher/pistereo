@@ -24,7 +24,11 @@ export default {
       jackService.eject();
       const tunerService = new TunerService();
       tunerService.playStation(item.stationuuid);
-      emit("streamer.stream-changed", {stationuuid:item.stationuuid, station: item});
+      emit('streamer.stream-changed', {
+        stationuuid: item.stationuuid,
+        station: item,
+      });
+      emit('source_changed', { source: 'streamer' });
     },
     getRadioPresets() {
       const tunerService = new TunerService();

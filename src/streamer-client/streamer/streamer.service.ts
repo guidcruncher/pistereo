@@ -43,20 +43,32 @@ export class StreamerService extends ServiceBase {
   public async sendCommand(cmd: string, parameters: any[] = []): Promise<any> {
     let commandText: any[] = [cmd];
     commandText = commandText.concat(parameters);
-    let json: string = JSON.stringify({ command: commandText });
+    let jsonCmd: string = JSON.stringify({ command: commandText });
     let socket: string = process.env.MPV_SOCKET as string;
-    let cmdText: string = "echo '" + json + "' | socat - " + socket;
-    this.log.log(this.__caller() + ' => sendCommand ' + json);
+    let cmdText: string = "echo '" + jsonCmd + "' | socat - " + socket;
+    this.log.log(this.__caller() + ' => sendCommand ' + jsonCmd);
 
     return new Promise((resolve, reject) => {
+      if (cmd == 'get_property' && parameters.length > 0) {
+        if (parameters[0] == '') {
+          this.log.error(
+            'ERROR ' + this.__caller() + ' Missing property name => ' + jsonCmd,
+          );
+          reject();
+          return;
+        }
+      }
+
       exec(cmdText)
         .then((result) => {
           let json: any = JSON.parse(result.stdout);
           if (json.error) {
             json.statusCode = errorCodes[json.error] ?? 500;
+            json.command = jsonCmd;
+            json.caller = this.__caller();
             resolve(json);
           } else {
-            reject(json);
+            resolve(json);
           }
         })
         .catch((err) => {

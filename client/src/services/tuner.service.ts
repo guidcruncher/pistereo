@@ -76,4 +76,18 @@ export class TunerService extends ServiceBase {
       await this.client('/api/radio').get('/presets');
     return response.data as RadioPreset[];
   }
+
+  public async setVolume(value: number) {
+    const response: AxiosResponse<any> = await this.client({
+      baseUrl: '/api/stream',
+    }).put('/volume?volume=' + value.toString());
+    return response.data;
+  }
+
+  public async getStatus() {
+    const response: AxiosResponse<any> = await this.client({
+      baseUrl: '/api/stream',
+    }).get('/');
+    return response.data as any;
+  }
 }

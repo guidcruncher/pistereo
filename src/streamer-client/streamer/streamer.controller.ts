@@ -59,13 +59,6 @@ export class StreamerController {
     return await this.streamerService.sendCommand('cycle', ['pause']);
   }
 
-  @Get(':name')
-  @ApiOperation({ summary: 'Get a property value' })
-  @ApiParam({ name: 'name' })
-  async getPropertyValue(@Param('name') name: string) {
-    return await this.streamerService.sendCommand('get_property', [name]);
-  }
-
   @Put('volume')
   @ApiOperation({ summary: 'Set playback volume' })
   @ApiQuery({ name: 'volume', type: Number, required: true, default: 100 })

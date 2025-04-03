@@ -19,6 +19,7 @@ export class RadioService {
   public async getPresets(id: string): Promise<RadioPreset[]> {
     return (await this.radioPresetModel
       .find({ id: id })
+      .sort({ name: 1 })
       .lean()
       .exec()) as RadioPreset[];
   }
