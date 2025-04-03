@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { EpgService } from './epg.service';
@@ -18,7 +19,7 @@ export class EpgSchedulerService {
 
   public registerJobs() {
     let xmltvrefresh: string[] = (
-      config.get<string>('radio.xmltvrefresh') as string
+      this.config.get<string>('radio.xmltvrefresh') as string
     ).split(',');
     xmltvrefresh.forEach((hour) => {
       const job = new CronJob(`0 5 ${hour} * * *`, () => {
@@ -40,11 +41,18 @@ export class EpgSchedulerService {
           });
       });
 
-      this.schedulerRegistry.addCronJob(
-        'EPG Refresh ' + hour.padStart(2, '0') + ':05:00',
-        job,
-      );
-      job.start();
+      let name: string = 'EPG Refresh ' + hour.padStart(2, '0') + ':05:00';
+      try {
+        this.schedulerRegistry.deleteCronJob(name);
+      } catch (err) {
+        this.log.warn('Job not found.');
+      }
+      try {
+        this.schedulerRegistry.addCronJob(name, job);
+        job.start();
+      } catch (err) {
+        this.log.error('Error adding job ' + name, err);
+      }
     });
   }
 }

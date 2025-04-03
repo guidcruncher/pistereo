@@ -24,7 +24,7 @@ export class EpgService {
 
   public async downloadEpg() {
     let xmltvurl: any = this.config.get<string>('radio.xmltvurl');
-    let localFilename = path.join(process.env.APPCACHE, 'epg.xml');
+    let localFilename = path.join(process.env.APPCACHE as string, 'epg.xml');
     let xml: any = '';
 
     const result = await fetch(xmltvurl, {
@@ -40,9 +40,9 @@ export class EpgService {
     fs.writeFileSync(localFilename, xml);
   }
 
-  public async getEpg(useCache: boolean = true) {
+  public async getEpg(useCache: boolean = true): Promise<any> {
     let xmltvurl: any = this.config.get<string>('radio.xmltvurl');
-    let localFilename = path.join(process.env.APPCACHE, 'epg.xml');
+    let localFilename = path.join(process.env.APPCACHE as string, 'epg.xml');
     let reload: boolean = true;
     let xml: any = '';
 
@@ -52,20 +52,8 @@ export class EpgService {
     }
 
     if (reload) {
-      const result = await fetch(xmltvurl, {
-        method: 'GET',
-      });
-
-      xml = await result.text();
-
-      if (fs.existsSync(localFilename)) {
-        if (fs.existsSync(localFilename + '.bak')) {
-          fs.unlinkSync(localFilename + '.bak');
-        }
-        fs.copyFileSync(localFilename, localFilename + '.bak');
-      }
-
-      fs.writeFileSync(localFilename, xml);
+      await this.downloadEpg();
+      xml = fs.readFileSync(localFilename, 'utf8');
     }
 
     const parsed = parseXmltv(xml, { asDom: true });

@@ -1,5 +1,4 @@
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
