@@ -15,11 +15,13 @@ export default {
     };
   },
   methods: {
-    setVolume(value: number = 100) {
+    setVolume(value: number) {
+      let volume = value ?? this.player.volume;
+
+if (volume == -1) {volume=this.player.volume;}
       const spotifyService = new SpotifyService();
-      if (value) {
         spotifyService
-          .setDeviceVolume(value)
+          .setDeviceVolume(volume)
           .then((response) => {
             if (response) {
               this.getPlayerState();
@@ -28,7 +30,6 @@ export default {
           .catch((e) => {
             console.log(e);
           });
-      }
     },
     getPlayerState() {
       const jackService = new JackService();
@@ -41,7 +42,7 @@ export default {
               if (response) {
                 this.player = response;
                 this.player.is_playing = !(response.stopped || response.paused);
-                this.player.is_loaded = true;
+    	            this.player.is_loaded = true;
                 this.hasData = true;
                 this.setTrack(response.track);
               }
@@ -145,13 +146,15 @@ export default {
     this.getPlayerState();
 
     on('source_changed', (data: any) => {
-      if (data.source == 'spotify') {
+if (data.playing) {
+      if (data.playing.source == 'spotify') {
         const jackService = new JackService();
         jackService.stopDevice('streamer');
+this.hasData=true;
         this.getPlayerState();
         if (this.timer == 0) {
           this.timer = setInterval(() => {
-            //            this.getPlayerState();
+                       this.getPlayerState();
           }, 10000);
         }
       } else {
@@ -159,6 +162,9 @@ export default {
         this.timer = 0;
         this.hasData = false;
       }
+} else { this.hasData=false; clearInterval(this.timer); this.timer=0;
+this.timer=setInterval(()=>{this.getPlayerState();}, 10000);
+ }
     });
 
     on('streamer.file-loaded', (data: any) => {
@@ -222,7 +228,7 @@ export default {
 </script>
 <template>
   <v-container v-if="hasData">
-    <v-row v-if="hasData">
+    <v-row >
       <v-col cols="12">
         <div class="centre">
           <div class="albumimg">
@@ -230,7 +236,7 @@ export default {
           </div>
         </div> </v-col
     ></v-row>
-    <v-row v-if="hasData">
+    <v-row >
       <v-col cols="12"
         ><div class="centre">
           <h4>{{ track.album_name }}</h4>
@@ -239,7 +245,7 @@ export default {
         </div>
       </v-col></v-row
     >
-    <v-row v-if="player.is_playing">
+    <v-row>
       <v-col cols="3"
         ><v-btn
           @click="stop()"
@@ -266,7 +272,7 @@ export default {
       ></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" v-if="hasData">
+      <v-col cols="12" >
         <v-slider
           v-model="track.progressPercent"
           track-color="green"
@@ -276,7 +282,7 @@ export default {
           readonly
         ></v-slider> </v-col
     ></v-row>
-    <v-row v-if="player.volume" ~>
+    <v-row >
       <v-col cols="12"
         ><v-slider
           v-model="player.volume"
@@ -288,7 +294,7 @@ export default {
           step="1"
           min="0"
           max="100"
-          @end="setVolume"
+          @end="setVolume(-1)"
         ></v-slider> </v-col
     ></v-row>
   </v-container>

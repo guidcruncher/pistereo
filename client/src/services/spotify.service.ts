@@ -39,10 +39,10 @@ export class SpotifyService extends ServiceBase {
 
   public async setDeviceVolume(volume: number): Promise<any> {
     const params = new URLSearchParams();
-    params.append('volume', volume.toString());
+    params.append('volume_percent', volume.toString());
     const response: AxiosResponse<DeviceObject> = await this.client({
-      baseUrl: '/api/librespot',
-    }).put('/volume?' + params.toString(), {});
+      baseUrl: '/api/spotify',
+    }).put('/player/default/volume?' + params.toString(), {});
     return response.data;
   }
 
