@@ -87,7 +87,7 @@ export class TunerService extends ServiceBase {
   public async getStatus() {
     const response: AxiosResponse<any> = await this.client({
       baseUrl: '/api/stream',
-    }).get('/');
+    }).get('');
     return response.data as any;
   }
 }

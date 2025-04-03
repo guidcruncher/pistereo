@@ -12,7 +12,7 @@ export default {
       hasData: false,
       paused: false,
       stopped: false,
-      streamer: {} as any,
+      volume: 100,
       station: {} as any,
     };
   },
@@ -82,7 +82,9 @@ export default {
     this.stopped = true;
     this.station = {};
 
-    this.streamer = tunerService.getStatus();
+    tunerService.getStatus().then((state) => {
+      this.volume = state.volume;
+    });
 
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
@@ -171,10 +173,10 @@ export default {
       ></v-col>
       <v-col cols="1" />
     </v-row>
-    <v-row v-if="streamer.volume" ~>
+    <v-row v-if="volume">
       <v-col cols="12"
         ><v-slider
-          v-model="streamer.volume"
+          v-model="volume"
           append-icon="mdi-volume-high"
           prepend-icon="mdi-volume-mute"
           @click:append="setVolume(100)"
