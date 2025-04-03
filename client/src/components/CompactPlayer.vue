@@ -18,18 +18,20 @@ export default {
     setVolume(value: number) {
       let volume = value ?? this.player.volume;
 
-if (volume == -1) {volume=this.player.volume;}
+      if (volume == -1) {
+        volume = this.player.volume;
+      }
       const spotifyService = new SpotifyService();
-        spotifyService
-          .setDeviceVolume(volume)
-          .then((response) => {
-            if (response) {
-              this.getPlayerState();
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+      spotifyService
+        .setDeviceVolume(volume)
+        .then((response) => {
+          if (response) {
+            this.getPlayerState();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     getPlayerState() {
       const jackService = new JackService();
@@ -42,7 +44,7 @@ if (volume == -1) {volume=this.player.volume;}
               if (response) {
                 this.player = response;
                 this.player.is_playing = !(response.stopped || response.paused);
-    	            this.player.is_loaded = true;
+                this.player.is_loaded = true;
                 this.hasData = true;
                 this.setTrack(response.track);
               }
@@ -146,25 +148,30 @@ if (volume == -1) {volume=this.player.volume;}
     this.getPlayerState();
 
     on('source_changed', (data: any) => {
-if (data.playing) {
-      if (data.playing.source == 'spotify') {
-        const jackService = new JackService();
-        jackService.stopDevice('streamer');
-this.hasData=true;
-        this.getPlayerState();
-        if (this.timer == 0) {
-          this.timer = setInterval(() => {
-                       this.getPlayerState();
-          }, 10000);
+      if (data.playing) {
+        if (data.playing.source == 'spotify') {
+          const jackService = new JackService();
+          jackService.stopDevice('streamer');
+          this.hasData = true;
+          this.getPlayerState();
+          if (this.timer == 0) {
+            this.timer = setInterval(() => {
+              this.getPlayerState();
+            }, 10000);
+          }
+        } else {
+          clearInterval(this.timer);
+          this.timer = 0;
+          this.hasData = false;
         }
       } else {
+        this.hasData = false;
         clearInterval(this.timer);
         this.timer = 0;
-        this.hasData = false;
+        this.timer = setInterval(() => {
+          this.getPlayerState();
+        }, 10000);
       }
-} else { this.hasData=false; clearInterval(this.timer); this.timer=0;
-this.timer=setInterval(()=>{this.getPlayerState();}, 10000);
- }
     });
 
     on('streamer.file-loaded', (data: any) => {
@@ -228,7 +235,7 @@ this.timer=setInterval(()=>{this.getPlayerState();}, 10000);
 </script>
 <template>
   <v-container v-if="hasData">
-    <v-row >
+    <v-row>
       <v-col cols="12">
         <div class="centre">
           <div class="albumimg">
@@ -236,7 +243,7 @@ this.timer=setInterval(()=>{this.getPlayerState();}, 10000);
           </div>
         </div> </v-col
     ></v-row>
-    <v-row >
+    <v-row>
       <v-col cols="12"
         ><div class="centre">
           <h4>{{ track.album_name }}</h4>
@@ -272,7 +279,7 @@ this.timer=setInterval(()=>{this.getPlayerState();}, 10000);
       ></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" >
+      <v-col cols="12">
         <v-slider
           v-model="track.progressPercent"
           track-color="green"
@@ -282,7 +289,7 @@ this.timer=setInterval(()=>{this.getPlayerState();}, 10000);
           readonly
         ></v-slider> </v-col
     ></v-row>
-    <v-row >
+    <v-row>
       <v-col cols="12"
         ><v-slider
           v-model="player.volume"
