@@ -22,6 +22,7 @@ services:
       - ./:/usr/src/app
       - ./config:/usr/src/app/config
       - ../cache/:/usr/src/mediaserver/config
+      - ../tmp/:/usr/src/app/appcache
       - ./socket:/usr/src/mediaserver/socket
     container_name: pistereo-dev
     hostname: pistereo-dev

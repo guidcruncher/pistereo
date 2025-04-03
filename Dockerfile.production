@@ -23,7 +23,7 @@ EOF
 COPY ./mediaserver/config.yml ./default.config
 
 WORKDIR /usr/src/app
-
+RUN mkdir ./appcache
 COPY ./provisioning/ ./provisioning
 
 COPY package.json . 
@@ -32,6 +32,8 @@ ENV NODE_CONFIG_DIR=/usr/src/app/config
 ENV PISTEREO_CLIENT_BASE=/usr/src/app/dist/client
 ENV MPV_SOCKET=/usr/src/mediaserver/socket/mpv
 ENV LIBRESPOT_HOST=http://127.0.0.1:3678
+ENV LIBRESPOT_WS=ws://127.0.0.1:3678
+ENV APPCACHE=/usr/src/app/appcache
 
 COPY ./config ./config
 

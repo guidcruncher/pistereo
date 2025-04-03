@@ -1,4 +1,5 @@
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -17,10 +18,12 @@ import { EpgService } from '../radio-client/epg/epg.service';
 import { DataModule } from '../data/data.module';
 import { AuthModule } from '@auth/auth.module';
 import { JackService } from '../jack/jack.service';
+import { SchedulerService } from './scheduler.service';
 
 @Global()
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -47,6 +50,6 @@ import { JackService } from '../jack/jack.service';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JackService, EpgService],
+  providers: [AppService, JackService, EpgService, SchedulerService],
 })
 export class AppModule {}

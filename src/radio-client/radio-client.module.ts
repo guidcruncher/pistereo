@@ -7,10 +7,17 @@ import { DataModule } from '@data/data.module';
 import { TokenGuard } from '@auth/token.guard';
 import { AuthModule } from '@auth/auth.module';
 import { EpgService } from './epg/epg.service';
+import { EpgSchedulerService } from './epg/epg-scheduler.service';
 
 @Module({
-  providers: [RadioBrowserService, StreamerService, EpgService],
+  providers: [
+    RadioBrowserService,
+    StreamerService,
+    EpgService,
+    EpgSchedulerService,
+  ],
   controllers: [RadioBrowserController],
   imports: [AuthModule, DataModule],
+  exports: [EpgSchedulerService],
 })
 export class RadioClientModule {}

@@ -30,10 +30,10 @@ export class RadioService {
   }
 
   public async getXmlTvStationUuid(xmltv_id: string) {
-    return (await this.xmlTvRadioLinkModel
+    return await this.xmlTvRadioLinkModel
       .findOne({ xmltv_id: xmltv_id }, 'stationuuid')
       .lean()
-      .exec());
+      .exec();
   }
 
   public async getPresets(id: string): Promise<RadioPreset[]> {
