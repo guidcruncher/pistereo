@@ -8,6 +8,10 @@ import * as dto from '@data/dto';
 import { LastPlayed, LastPlayedSchema } from '../dto/lastplayed.dto';
 import { User, UserSchema } from '../dto/user.dto';
 import { RadioPreset, RadioPresetSchema } from '../dto/radio.dto';
+import {
+  XmlTvRadioLink,
+  XmlTvRadioLinkSchema,
+} from '../dto/xmltvradiolink.dto';
 
 const mongoose = require('mongoose');
 
@@ -54,6 +58,7 @@ export class MongoConnectionService {
       { name: dto.LastPlayed.name, schema: dto.LastPlayedSchema },
       { name: dto.User.name, schema: dto.UserSchema },
       { name: dto.RadioPreset.name, schema: dto.RadioPresetSchema },
+      { name: dto.XmlTvRadioLink.name, schema: dto.XmlTvRadioLinkSchema },
     ]);
   }
 }
