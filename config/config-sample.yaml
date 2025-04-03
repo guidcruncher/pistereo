@@ -17,3 +17,6 @@ spotify:
 
 radio:
   radiobrowser: https://de2.api.radio-browser.info
+  xmltvurl: https://raw.githubusercontent.com/dp247/Freeview-EPG/master/epg.xml
+  xmltvchannels: https://raw.githubusercontent.com/dp247/Freeview-EPG/mmaster/channels.json
+  xmltvrefresh: 1,9,5

@@ -1,3 +1,4 @@
+
 import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
@@ -7,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
-import { JackService } from './jack/jack.service';
+import { JackService } from '../jack/jack.service';
 
 @Injectable()
 export class AppService

@@ -10,12 +10,12 @@ import * as path from 'path';
 import { SpotifyClientModule } from './spotify-client/spotify-client.module';
 import configuration from './config/configuration';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { StreamerClientModule } from './streamer-client/streamer-client.module';
-import { JackModule } from './jack/jack.module';
-import { RadioClientModule } from './radio-client/radio-client.module';
-import { DataModule } from './data/data.module';
+import { StreamerClientModule } from '../streamer-client/streamer-client.module';
+import { JackModule } from '../jack/jack.module';
+import { RadioClientModule } from '../radio-client/radio-client.module';
+import { DataModule } from '../data/data.module';
 import { AuthModule } from '@auth/auth.module';
-import { JackService } from './jack/jack.service';
+import { JackService } from '../jack/jack.service';
 
 @Global()
 @Module({
