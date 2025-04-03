@@ -16,8 +16,8 @@ export class EpgService {
   }
 
   public async downloadEpg() {
-    let xmltvurl: string = this.config.get<string>('radio.xmltvurl');
-    let xmltvchannels: string = this.config.get<string>('radio.xmltvchannels');
+    let xmltvurl: any = this.config.get<string>('radio.xmltvurl');
+    let xmltvchannels: any = this.config.get<string>('radio.xmltvchannels');
     const result = await fetch(xmltvchannels, {
       method: 'GET',
     });

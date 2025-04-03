@@ -24,17 +24,18 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter({
       logger: false,
-    }),
-    {
-      logger: new ConsoleLogger({
+    }));
+
+const config: ConfigService = app.get(ConfigService);
+
+  app.useLogger( new ConsoleLogger({
+        prefix: 'server',
+        logLevels: config.get<string[]>("logging.loglevels") ?? ['log', 'error', 'warn', 'debug', 'verbose'],
         colors: true,
         timestamp: true,
         json: false,
-      }),
-    },
-  );
+      }));
 
-  const config: ConfigService = app.get(ConfigService);
   const appService: AppService = app.get(AppService);
   const log = new Logger('Bootstrap');
   const nodeEnv: string = process.env.NODE_ENV ?? 'development';

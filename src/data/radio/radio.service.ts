@@ -33,7 +33,7 @@ export class RadioService {
     return (await this.xmlTvRadioLinkModel
       .findOne({ xmltv_id: xmltv_id }, 'stationuuid')
       .lean()
-      .exec()) as string;
+      .exec());
   }
 
   public async getPresets(id: string): Promise<RadioPreset[]> {

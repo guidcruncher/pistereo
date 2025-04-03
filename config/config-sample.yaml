@@ -9,6 +9,14 @@ host:
   secret: "ENTER A STRING OF RANDOMNESS HERE"
   jwtsecret: "ENTER A STRING OF RANDONESS HERE"
 
+logging:
+  loglevels:
+    - log
+    - error
+    - warn
+    - debug
+    - verbose
+
 spotify:
   clientid: "ENTER YOUR SPOTIFY CLIENTID"
   clientsecret: "ENTER YOUR SPOTIFY CLIENT SECRET"

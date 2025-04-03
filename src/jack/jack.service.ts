@@ -21,7 +21,7 @@ export class JackService extends ServiceBase {
   async restartLastPlayed() {
     let playing: any = await this.userService.getLastPlayed();
 
-    if (!playing.playing) {
+    if (!playing || !playing.playing) {
       return;
     }
     switch (playing.playing.source) {
