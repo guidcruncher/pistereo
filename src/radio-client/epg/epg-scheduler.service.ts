@@ -22,6 +22,7 @@ export class EpgSchedulerService {
     ).split(',');
     xmltvrefresh.forEach((hour) => {
       const job = new CronJob(`0 5 ${hour} * * *`, () => {
+        this.log.debug('Invoking job => EPG Refresh ' + hour.padStart(2, '0') + ':05:00');
         await this.epgService.downloadEpg();
       });
 
