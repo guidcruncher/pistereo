@@ -5,6 +5,7 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Connection } from 'mongoose';
 import { RadioPreset } from '../dto/radio.dto';
+import { XmlTvRadioLink } from '../dto/xmltvradiolink.dto';
 
 @Injectable()
 export class RadioService {
@@ -14,7 +15,26 @@ export class RadioService {
     private readonly configService: ConfigService,
     @InjectConnection() private readonly connection: Connection,
     @InjectModel(RadioPreset.name) private radioPresetModel: Model<RadioPreset>,
+    @InjectModel(XmlTvRadioLink.name)
+    private xmlTvRadioLinkModel: Model<XmlTvRadioLink>,
   ) {}
+
+  public async updateXmlTvRadioLink(xmltv_id: string, stationuuid: string) {
+    return await this.xmlTvRadioLinkModel.findOneAndUpdate(
+      { xmtv_id: xmltv_id },
+      { xmltv_id: xmltv_id, stationuuid: stationuuid, updated: new Date() },
+      {
+        upsert: true,
+      },
+    );
+  }
+
+  public async getXmlTvStationUuid(xmltv_id: string) {
+    return (await this.xmlTvRadioLinkModel
+      .findOne({ xmltv_id: xmltv_id }, 'stationuuid')
+      .lean()
+      .exec()) as string;
+  }
 
   public async getPresets(id: string): Promise<RadioPreset[]> {
     return (await this.radioPresetModel

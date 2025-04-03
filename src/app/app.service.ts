@@ -1,4 +1,3 @@
-
 import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
@@ -9,6 +8,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import { JackService } from '../jack/jack.service';
+import { EpgService } from '../radio-client/epg/epg.service';
 
 @Injectable()
 export class AppService
@@ -20,6 +20,7 @@ export class AppService
   constructor(
     private readonly config: ConfigService,
     private readonly jackService: JackService,
+    private readonly epgService: EpgService,
   ) {}
 
   public setApp(app: INestApplication) {
@@ -38,6 +39,7 @@ export class AppService
   async onApplicationBootstrap() {
     this.log.log('Running post bootstrap initialization services.');
     await this.jackService.restartLastPlayed();
+    await this.epgService.downloadEpg();
     this.log.log('Finished running post bootstrap initialization services.');
   }
 

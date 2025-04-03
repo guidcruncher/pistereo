@@ -7,12 +7,13 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
-import { SpotifyClientModule } from './spotify-client/spotify-client.module';
-import configuration from './config/configuration';
+import { SpotifyClientModule } from '../spotify-client/spotify-client.module';
+import configuration from '../config/configuration';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { StreamerClientModule } from '../streamer-client/streamer-client.module';
 import { JackModule } from '../jack/jack.module';
 import { RadioClientModule } from '../radio-client/radio-client.module';
+import { EpgService } from '../radio-client/epg/epg.service';
 import { DataModule } from '../data/data.module';
 import { AuthModule } from '@auth/auth.module';
 import { JackService } from '../jack/jack.service';
@@ -46,6 +47,6 @@ import { JackService } from '../jack/jack.service';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JackService],
+  providers: [AppService, JackService, EpgService],
 })
 export class AppModule {}
