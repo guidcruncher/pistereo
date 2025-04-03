@@ -1,4 +1,4 @@
-import { ConsoleLogger } from '@nestjs/common';
+import { LogLevel, ConsoleLogger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { AppService } from './app/app.service';
@@ -30,7 +30,7 @@ const config: ConfigService = app.get(ConfigService);
 
   app.useLogger( new ConsoleLogger({
         prefix: 'server',
-        logLevels: config.get<string[]>("logging.loglevels") ?? ['log', 'error', 'warn', 'debug', 'verbose'],
+        logLevels: config.get<LogLevel[]>("logging.loglevels") ?? ['log', 'error', 'warn', 'debug', 'verbose'],
         colors: true,
         timestamp: true,
         json: false,
