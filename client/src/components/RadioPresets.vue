@@ -1,4 +1,5 @@
 <script>
+import { JackService } from '../services/jack.service';
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';
 import { ref } from 'vue';
@@ -14,12 +15,16 @@ export default {
   mounted() {
     this.hasData = false;
     this.tracks = null;
+    this.getRadioPresets();
   },
   beforeUnmount() {},
   methods: {
     playRadio(item) {
+      const jackService = new JackService();
+      jackService.eject();
       const tunerService = new TunerService();
       tunerService.playStation(item.stationuuid);
+      emit("streamer.stream-changed", {stationuuid:item.stationuuid, station: item});
     },
     getRadioPresets() {
       const tunerService = new TunerService();
@@ -38,25 +43,35 @@ export default {
 </script>
 
 <template>
-  <v-card title="Presets">
-    <template v-for="(item, index) in presets" :key="item">
-      <div class="stationlogo" @click="playRadio(item)">
-        <img :src="item.image" />
-      </div>
-      {{ item.name }}
-      <a :href="item.info.homepage">{{ item.info.homepage }}</a>
-    </template>
+  <v-card>
+    <v-banner sticky>Presets</v-banner>
+    <v-slide-group show-arrows>
+      <v-slide-group-item
+        v-for="(item, index) in presets"
+        :key="item"
+        v-slot="{ isSelected, toggle }"
+      >
+        <div class="spacer">
+          <div class="stationlogo" @click="playRadio(item)">
+            <img :src="item.image" :alt="item.name" @click="playRadio(item)" />
+          </div>
+        </div>
+      </v-slide-group-item>
+    </v-slide-group>
   </v-card>
 </template>
 
 <style>
+.spacer {
+  padding: 5px;
+}
 .stationlogo {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 5%;
   overflow: hidden;
 }
-.profileimg img {
+.stationlogo img {
   max-width: 100%;
   max-height: 100%;
 }

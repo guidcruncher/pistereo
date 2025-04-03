@@ -12,6 +12,11 @@ export class JackService extends ServiceBase {
     return response.data;
   }
 
+  public async eject() {
+    const response: AxiosResponse<any> = await this.client().put('/eject');
+    return response.data;
+  }
+
   public async stopDevice(device: string) {
     const response: AxiosResponse<any> = await this.client().put(
       '/stop/' + device,

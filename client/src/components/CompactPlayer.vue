@@ -106,6 +106,7 @@ export default {
         .playerOp(this.player.device_id, 'stop')
         .then((state) => {
           this.player = state;
+          this.player.is_playing = false;
           this.setTrack(state);
         })
         .catch((e) => {
@@ -125,6 +126,15 @@ export default {
         });
     },
   },
+  eject() {
+    this.player.is_playing = false;
+    const jackService = new JackService();
+    jackService.eject();
+    this.hasData = false;
+    this.track = {};
+    this.player = {};
+    this.getPlayerState();
+  },
   mounted() {
     const playerStore = usePlayerStore();
     this.hasData = false;
@@ -141,9 +151,12 @@ export default {
         this.getPlayerState();
         if (this.timer == 0) {
           this.timer = setInterval(() => {
-            this.getPlayerState();
+            //            this.getPlayerState();
           }, 10000);
         }
+      } else {
+        clearInterval(this.timer);
+        this.timer = 0;
       }
     });
 
@@ -227,31 +240,7 @@ export default {
         </div>
       </v-col></v-row
     >
-    <v-row>
-      <v-col cols="3">
-        <v-btn
-          @click="previous()"
-          color="primary"
-          size="small"
-          icon="mdi-skip-previous"
-        ></v-btn
-      ></v-col>
-      <v-col cols="3">
-        <v-btn
-          @click="play()"
-          color="primary"
-          icon="mdi-play"
-          size="small"
-          v-if="!player.is_playing"
-        ></v-btn>
-        <v-btn
-          @click="pause()"
-          color="primary"
-          icon="mdi-pause"
-          size="small"
-          v-if="player.is_playing"
-        ></v-btn>
-      </v-col>
+    <v-row v-if="player.is_playing">
       <v-col cols="3"
         ><v-btn
           @click="stop()"
@@ -266,6 +255,14 @@ export default {
           color="primary"
           size="small"
           icon="mdi-skip-next"
+        ></v-btn
+      ></v-col>
+      <v-col cols="3"
+        ><v-btn
+          @click="eject()"
+          color="primary"
+          size="small"
+          icon="mdi-eject"
         ></v-btn
       ></v-col>
     </v-row>

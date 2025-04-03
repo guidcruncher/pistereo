@@ -56,13 +56,25 @@ export class JackService extends ServiceBase {
   }
 
   async stopAll() {
+    this.log.log(this.__caller() + ' => stopAll ');
     await this.streamerService.stop();
     await this.librespotService.stop();
     return true;
   }
 
+  async eject() {
+    this.log.log(this.__caller() + ' => eject');
+    let playing: any = await this.userService.getLastPlayed();
+
+    if (playing.playing) {
+      await this.stopDevice(playing.playing.source);
+    }
+
+    return await this.userService.deleteLastPlayed();
+  }
+
   async stopDevice(name: string) {
-    this.log.log(this.__caller() + ' =>stopDevice ' + name);
+    this.log.log(this.__caller() + ' => stopDevice ' + name);
     switch (name) {
       case 'streamer':
         await this.streamerService.stop();

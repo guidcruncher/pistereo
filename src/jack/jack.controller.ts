@@ -33,6 +33,12 @@ export class JackController {
     return await this.jackService.stopAll();
   }
 
+  @Put('eject')
+  @ApiOperation({ summary: 'Stop and eject media from current device' })
+  async eject() {
+    return await this.jackService.eject();
+  }
+
   @Put('stop/:device')
   @ApiOperation({ summary: 'Stop a given device' })
   @ApiParam({ name: 'device' })

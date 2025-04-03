@@ -19,6 +19,6 @@ import { StreamerClientModule } from '../streamer-client/streamer-client.module'
     JackListenerService,
   ],
   controllers: [JackController],
-  imports: [AuthModule, DataModule, StreamerClientModule, SpotifyClientModule ],
+  imports: [AuthModule, DataModule, StreamerClientModule, SpotifyClientModule],
 })
 export class JackModule {}

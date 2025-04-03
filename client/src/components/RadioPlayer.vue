@@ -60,6 +60,15 @@ export default {
       this.paused = false;
       this.stopped = true;
     },
+    eject() {
+      this.paused = false;
+      this.stopped = true;
+      const jackService = new JackService();
+      jackService.eject();
+      this.station = null;
+      this.hasData = false;
+      this.getPlayerState();
+    },
   },
   mounted() {
     const playerStore = usePlayerStore();
@@ -104,7 +113,7 @@ export default {
       </v-col></v-row
     >
     <v-row>
-      <v-col cols="3" />
+      <v-col cols="2" />
       <v-col cols="3">
         <v-btn
           @click="play()"
@@ -129,7 +138,15 @@ export default {
           icon="mdi-stop"
         ></v-btn
       ></v-col>
-      <v-col cols="3" />
+      <v-col cols="3"
+        ><v-btn
+          @click="eject()"
+          color="primary"
+          size="small"
+          icon="mdi-eject"
+        ></v-btn
+      ></v-col>
+      <v-col cols="1" />
     </v-row>
   </v-container>
 </template>
