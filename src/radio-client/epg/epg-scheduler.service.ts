@@ -11,23 +11,19 @@ export class EpgSchedulerService {
 
   constructor(
     private readonly config: ConfigService,
-    private schedulerRegistry: SchedulerRegistry,
     private readonly epgService: EpgService,
-  ) {
-    this.registerJobs();
-  }
+  ) {}
 
-  public registerJobs() {
+  public registerJobs(schedulerRegistry: SchedulerRegistry) {
     let xmltvrefresh: string[] = (
       this.config.get<string>('radio.xmltvrefresh') as string
     ).split(',');
     xmltvrefresh.forEach((hour) => {
       const job = new CronJob(`0 5 ${hour} * * *`, () => {
         this.log.debug(
-          'Invoking job => EPG Refresh ' + hour.padStart(2, '0') + ':05:00',
+          'Invoking job EPG Refresh ' + hour.padStart(2, '0') + ':05:00',
         );
-        this.epgService
-          .downloadEpg()
+        this.runJob()
           .then(() => {
             this.log.debug(
               'Finished job => EPG Refresh ' + hour.padStart(2, '0') + ':05:00',
@@ -43,16 +39,36 @@ export class EpgSchedulerService {
 
       let name: string = 'EPG Refresh ' + hour.padStart(2, '0') + ':05:00';
       try {
-        this.schedulerRegistry.deleteCronJob(name);
+        schedulerRegistry.deleteCronJob(name);
       } catch (err) {
         this.log.warn('Job not found.');
       }
       try {
-        this.schedulerRegistry.addCronJob(name, job);
+        schedulerRegistry.addCronJob(name, job);
         job.start();
       } catch (err) {
         this.log.error('Error adding job ' + name, err);
       }
     });
+  }
+
+  async runJobUuidRefresh() {
+    try {
+      this.log.debug('Starting EPG Job with UUID Refresh');
+      await this.epgService.executeScheduleJobWithStationCheck();
+      this.log.debug('Finished EPG Job with UUID Refresh');
+    } catch (err) {
+      this.log.error('Error invoking EPG Job with UUID Refresh', err);
+    }
+  }
+
+  async runJob() {
+    try {
+      this.log.debug('Starting EPG Job');
+      await this.epgService.executeScheduleJob();
+      this.log.debug('Finished EPG Job');
+    } catch (err) {
+      this.log.error('Error invoking EPG Job', err);
+    }
   }
 }

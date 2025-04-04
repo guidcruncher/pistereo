@@ -18,6 +18,6 @@ import { EpgSchedulerService } from './epg/epg-scheduler.service';
   ],
   controllers: [RadioBrowserController],
   imports: [AuthModule, DataModule],
-  exports: [EpgSchedulerService],
+  exports: [EpgSchedulerService, RadioBrowserService],
 })
 export class RadioClientModule {}

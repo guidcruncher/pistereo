@@ -11,7 +11,6 @@ import {
   SwaggerModule,
   DocumentBuilder,
 } from '@nestjs/swagger';
-import { EpgSchedulerService } from './radio-client/epg/epg-scheduler.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import secureSession from '@fastify/secure-session';
@@ -46,7 +45,6 @@ async function bootstrap() {
   );
 
   const appService: AppService = app.get(AppService);
-  const epgSchedulerService: EpgSchedulerService = app.get(EpgSchedulerService);
   const log = new Logger('Bootstrap');
   const nodeEnv: string = process.env.NODE_ENV ?? 'development';
   log.log('Running in ' + nodeEnv + ' mode.');
@@ -55,7 +53,6 @@ async function bootstrap() {
       (process.env.PISTEREO_CLIENT_BASE ?? ''),
   );
 
-  epgSchedulerService.registerJobs();
   app.enableShutdownHooks();
 
   app.register(fastifyCookie);

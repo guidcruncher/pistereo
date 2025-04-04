@@ -59,6 +59,7 @@ export class MongoConnectionService {
       { name: dto.User.name, schema: dto.UserSchema },
       { name: dto.RadioPreset.name, schema: dto.RadioPresetSchema },
       { name: dto.XmlTvRadioLink.name, schema: dto.XmlTvRadioLinkSchema },
+      { name: dto.Channel.name, schema: dto.ChannelSchema },
     ]);
   }
 }

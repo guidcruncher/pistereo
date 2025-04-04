@@ -18,6 +18,7 @@ import { DataModule } from '../data/data.module';
 import { AuthModule } from '@auth/auth.module';
 import { JackService } from '../jack/jack.service';
 import { SchedulerService } from './scheduler.service';
+import { SchedulerController } from './scheduler.controller';
 
 @Global()
 @Module({
@@ -48,7 +49,7 @@ import { SchedulerService } from './scheduler.service';
     DataModule,
     AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, SchedulerController],
   providers: [AppService, JackService, EpgService, SchedulerService],
 })
 export class AppModule {}

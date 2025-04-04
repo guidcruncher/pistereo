@@ -10,6 +10,12 @@ export class XmlTvRadioLink {
   @Prop({ index: true, default: '' })
   stationuuid: string;
 
+  @Prop()
+  name: string;
+
+  @Prop()
+  epgname: string;
+
   @Prop({ type: Date, default: Date.now })
   created: Date;
 
@@ -17,15 +23,30 @@ export class XmlTvRadioLink {
   updated: Date;
 }
 
-export interface Channel {
+@Schema()
+export class Channel {
+  @Prop()
   src: string;
+
+  @Prop()
   lang: string;
+
+  @Prop({ index: true })
   xmltv_id: string;
+
+  @Prop()
   provider_id: string;
+
+  @Prop()
   icon_url: string;
+
+  @Prop({ index: true })
   name: string;
 }
 
 export type XmlTvRadioLinkDocument = HydratedDocument<XmlTvRadioLink>;
 export const XmlTvRadioLinkSchema =
   SchemaFactory.createForClass(XmlTvRadioLink);
+
+export type ChannelDocument = HydratedDocument<Channel>;
+export const ChannelSchema = SchemaFactory.createForClass(Channel);
