@@ -12,6 +12,7 @@ export default {
       hasData: false,
       source: {} as any,
       station: {} as any,
+      epg: [] as any[],
     };
   },
   methods: {
@@ -24,6 +25,9 @@ export default {
             this.station = station;
             this.hasData = true;
           });
+          tunerService.getEpg(state.playing.stationuuid).then((epg)=>{
+            this.epg=epg;
+          });
         }
       });
     },
@@ -32,6 +36,7 @@ export default {
     const playerStore = usePlayerStore();
     this.hasData = false;
     this.station = {};
+this.epg=[];
 
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
@@ -53,7 +58,7 @@ export default {
   <v-container v-if="hasData">
     <v-container v-if="hasData">
       <v-row v-if="station.favicon">
-        <v-col cols="12">
+         <v-col cols="12">
           <div class="centre">
             <div class="albumimgbig">
               <img :src="station.favicon" />
@@ -73,6 +78,21 @@ export default {
         </v-col>
       </v-row>
     </v-container>
+
+<v-card>
+
+<v-list lines="false" nav>
+      <v-list-item v-for="item in epg" :key="item" :value="item">
+        <v-list-item-title v-text="item.title" />
+        <v-list-item-subtitle v-text="item.desc" />
+      </v-list-item>
+<template>
+{ item.start }} - {{ item.stop }}
+</template>
+    </v-list>
+
+  </v-card>
+
   </v-container>
 </template>
 
