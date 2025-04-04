@@ -50,6 +50,22 @@ export class RadioService {
     );
   }
 
+  public async getChannel(stationuuid: string) {
+    let xmltvid = await this.xmlTvRadioLinkModel
+      .findOne({ stationuuid: stationuuid })
+      .lean()
+      .exec();
+
+    if (xmltvid) {
+      return await this.channelModel
+        .findOne({ xmltv_id: xmltvid.xmltv_id })
+        .lean()
+        .exec();
+    }
+
+    return null;
+  }
+
   public async cleanupLinks() {}
 
   public async getXmlTvStationUuid(xmltv_id: string) {
@@ -64,11 +80,23 @@ export class RadioService {
   }
 
   public async getPresets(id: string): Promise<RadioPreset[]> {
-    return (await this.radioPresetModel
+    let res: RadioPreset[] = (await this.radioPresetModel
       .find({ id: id })
       .sort({ name: 1 })
       .lean()
       .exec()) as RadioPreset[];
+
+    for (let i = 0; i < res.length; i++) {
+      if (res[i].image == '') {
+        let ch = await this.getChannel(res[i].stationuuid);
+        if (ch) {
+          res[i].image = ch.icon_url;
+        }
+      }
+    }
+    return res.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
   }
 
   public async savePreset(preset: RadioPreset) {

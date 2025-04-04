@@ -135,6 +135,13 @@ export class RadioBrowserService extends ServiceBase {
 
   async savePreset(uuid: string, user: any) {
     let result: any = await this.searchByUuid([uuid]);
+
+    if (result[0].favicon == '') {
+      let ch = await this.radioService.getChannel(uuid);
+      if (ch) {
+        result[0].favicon = ch.icon_url;
+      }
+    }
     return await this.radioService.savePreset({
       stationuuid: uuid,
       id: user.id,
