@@ -10,6 +10,7 @@ export default {
   data() {
     return {
       hasData: false,
+      hasEpg: false,
       source: {} as any,
       station: {} as any,
       epg: [] as any[],
@@ -25,8 +26,10 @@ export default {
             this.station = station;
             this.hasData = true;
           });
-          tunerService.getEpg(state.playing.stationuuid).then((epg)=>{
-            this.epg=epg;
+           this.hasEpg=false;
+           tunerService.getEpg(state.playing.stationuuid).then((epg) => {
+            this.epg = epg;
+            this.hasEpg=true;
           });
         }
       });
@@ -36,7 +39,8 @@ export default {
     const playerStore = usePlayerStore();
     this.hasData = false;
     this.station = {};
-this.epg=[];
+    this.epg = [];
+    this.hasEpg = false;
 
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
@@ -58,7 +62,7 @@ this.epg=[];
   <v-container v-if="hasData">
     <v-container v-if="hasData">
       <v-row v-if="station.favicon">
-         <v-col cols="12">
+        <v-col cols="12">
           <div class="centre">
             <div class="albumimgbig">
               <img :src="station.favicon" />
@@ -79,20 +83,14 @@ this.epg=[];
       </v-row>
     </v-container>
 
-<v-card>
-
-<v-list lines="false" nav>
-      <v-list-item v-for="item in epg" :key="item" :value="item">
-        <v-list-item-title v-text="item.title" />
-        <v-list-item-subtitle v-text="item.desc" />
-      </v-list-item>
-<template>
-{ item.start }} - {{ item.stop }}
-</template>
-    </v-list>
-
-  </v-card>
-
+    <v-card v-if="hasEpg">
+      <v-list lines="false" nav>
+        <v-list-item v-for="item in epg" :key="item" :value="item">
+          <v-list-item-title v-text="item.title" />
+          <v-list-item-subtitle v-text="item.desc" />
+        </v-list-item>
+      </v-list>
+    </v-card>
   </v-container>
 </template>
 

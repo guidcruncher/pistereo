@@ -96,7 +96,6 @@ export default {
       this.stopped = false;
       this.station = data.station;
     });
-    0;
 
     on('source_changed', (data: any) => {
       if (data.source == 'streamer') {

@@ -15,12 +15,12 @@ export class TunerService extends ServiceBase {
     return response.data;
   }
 
- public async getEpg(uuid: string) {
-const response: AxiosResponse<any> = await this.client({
-baseUrl: '/api/radio',
-}).get('/epg/' + uuid);
-return response.data;
-}
+  public async getEpg(uuid: string) {
+    const response: AxiosResponse<any> = await this.client().get(
+      '/epg/' + uuid,
+    );
+    return response.data;
+  }
 
   public async getDefaultSearch(): Promise<StationSearchRequest> {
     const ls: LocationService = new LocationService();
