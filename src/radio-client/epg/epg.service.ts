@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Channel } from '@data/dto/xmltvradiolink.dto';
-import { parseXmltv, writeXmltv, parser } from '@iptv/xmltv';
+import parser from 'epg-parser';
 import * as path from 'path';
 import * as fs from 'fs';
 import { SchedulerRegistry } from '@nestjs/schedule';
@@ -85,20 +85,24 @@ export class EpgService {
         }
         await this.randomWait();
       }
-    }
 
-    await this.radioService.cleanupLinks();
+      await this.radioService.cleanupLinks();
+    }
   }
 
   public async downloadEpg() {
     let xmltvurl: any = this.config.get<string>('radio.xmltvurl');
     let localFilename = path.join(process.env.APPCACHE as string, 'epg.xml');
     let xml: any = '';
-
     const result = await fetch(xmltvurl, {
       method: 'GET',
     });
     xml = await result.text();
+
+    if (fs.existsSync(localFilename + '.json')) {
+      fs.unlinkSync(localFilename + '.json');
+    }
+
     if (fs.existsSync(localFilename)) {
       if (fs.existsSync(localFilename + '.bak')) {
         fs.unlinkSync(localFilename + '.bak');
@@ -124,7 +128,13 @@ export class EpgService {
       xml = fs.readFileSync(localFilename, 'utf8');
     }
 
-    const parsed = parseXmltv(xml, { asDom: true });
+    let parsed: any = {} as any;
+    if (fs.existsSync(localFilename + '.json')) {
+      parsed = JSON.parse(fs.readFileSync(localFilename + '.json', 'utf8'));
+    } else {
+      parsed = parser.parse(xml);
+      fs.writeFileSync(localFilename + '.json', JSON.stringify(parsed));
+    }
     return parsed;
   }
 
@@ -135,28 +145,26 @@ export class EpgService {
       return null;
     }
 
+    const getValue = (ar) => {
+      if (!ar) return '';
+      if (ar.length > 0) {
+        return ar[0].value;
+      }
+      return '';
+    };
+
     const parsed = await this.getEpg(useCache);
-    let results = parsed
-      .find((node) => {
-        return node.tagName == 'tv';
-      })
-      .children.filter((node) => {
-        return (
-          node.tagName === 'programme' &&
-          node.attributes.channel === channel.xmltv_id
-        );
+    let results = parsed.programs
+      .filter((program) => {
+        return program.channel == channel.xmltv_id;
       })
       .map((programme) => {
         return {
-          title: programme.children.find((t) => t.tagName === 'title')
-            .children[0],
-          desc: programme.children.find((t) => t.tagName === 'desc')
-            .children[0],
-          icon: programme.children.find((t) => t.tagName === 'icon')
-            .children[0],
-          start: new Date(programme.attributes.start),
-          stop: new Date(programme.attributes.stop),
-          channel: programme.attributes.channel,
+          title: getValue(programme.title),
+          desc: getValue(programme.desc),
+          icon: getValue(programme.image),
+          start: programme.start,
+          stop: programme.stop,
         };
       })
       .sort((a, b) => {
@@ -164,7 +172,7 @@ export class EpgService {
       });
 
     return results.filter((a) => {
-      return a.stop >= Date.now;
+      return Date.parse(a.stop).valueOf() >= new Date().valueOf();
     });
   }
 }

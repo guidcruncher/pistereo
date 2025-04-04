@@ -31,14 +31,14 @@ import { EpgService } from '../epg/epg.service';
 export class RadioBrowserController {
   constructor(
     private readonly radioBrowserService: RadioBrowserService,
-    private readonly epgService: EpfService,
+    private readonly epgService: EpgService,
   ) {}
 
-  @Get('epg/:stationuuid')
+  @Get('epg/:uuid')
   @ApiOperation({ summary: 'Get a channels EPG' })
-  @ApiParam({ name: 'stationuuid', type: string })
-  async getEpgForChannel(@Param('stationuuidi') stationuuid: string) {
-    let res = await epgService.getEpgForChannel(stationuuid, true);
+  @ApiParam({ name: 'uuid' })
+  async getEpgForChannel(@Param('uuid') stationuuid: string) {
+    let res = await this.epgService.getEpgForChannel(stationuuid, true);
 
     if (res == null) {
       throw new NotFoundException();
