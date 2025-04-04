@@ -24,11 +24,28 @@ import { RadioBrowserService } from './radio-browser.service';
 import { Public, Private } from '@auth/public.decorator';
 import { SearchRequest } from './models';
 import { User } from '@auth/auth-token.decorator';
+import { EpgService } from '../epg/epg.service';
 
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/')
 export class RadioBrowserController {
-  constructor(private readonly radioBrowserService: RadioBrowserService) {}
+  constructor(
+    private readonly radioBrowserService: RadioBrowserService,
+    private readonly epgService: EpfService,
+  ) {}
+
+  @Get('epg/:stationuuid')
+  @ApiOperation({ summary: 'Get a channels EPG' })
+  @ApiParam({ name: 'stationuuid', type: string })
+  async getEpgForChannel(@Param('stationuuidi') stationuuid: string) {
+    let res = await epgService.getEpgForChannel(stationuuid, true);
+
+    if (res == null) {
+      throw new NotFoundException();
+    }
+
+    return res;
+  }
 
   @Post('search')
   @ApiOperation({ summary: 'Performs a search' })

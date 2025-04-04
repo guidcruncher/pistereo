@@ -128,7 +128,13 @@ export class EpgService {
     return parsed;
   }
 
-  public async getEpgForChannel(channel: string, useCache: boolean = true) {
+  public async getEpgForChannel(stationuuid: string, useCache: boolean = true) {
+    let channel = await this.radioService.getChannel(stationuuid);
+
+    if (!channel) {
+      return null;
+    }
+
     const parsed = await this.getEpg(useCache);
     let results = parsed
       .find((node) => {
@@ -136,7 +142,8 @@ export class EpgService {
       })
       .children.filter((node) => {
         return (
-          node.tagName === 'programme' && node.attributes.channel === channel
+          node.tagName === 'programme' &&
+          node.attributes.channel === channel.xmltv_id
         );
       })
       .map((programme) => {
