@@ -99,10 +99,6 @@ export class EpgService {
     });
     xml = await result.text();
 
-    if (fs.existsSync(localFilename + '.json')) {
-      fs.unlinkSync(localFilename + '.json');
-    }
-
     if (fs.existsSync(localFilename)) {
       if (fs.existsSync(localFilename + '.bak')) {
         fs.unlinkSync(localFilename + '.bak');
@@ -110,69 +106,11 @@ export class EpgService {
       fs.copyFileSync(localFilename, localFilename + '.bak');
     }
     fs.writeFileSync(localFilename, xml);
+    let parsed = parser.parse(xml);
+    await this.radioService.updateEpg(parsed);
   }
 
-  public async getEpg(useCache: boolean = true): Promise<any> {
-    let xmltvurl: any = this.config.get<string>('radio.xmltvurl');
-    let localFilename = path.join(process.env.APPCACHE as string, 'epg.xml');
-    let reload: boolean = true;
-    let xml: any = '';
-
-    if (useCache && fs.existsSync(localFilename)) {
-      reload = false;
-      xml = fs.readFileSync(localFilename, 'utf8');
-    }
-
-    if (reload) {
-      await this.downloadEpg();
-      xml = fs.readFileSync(localFilename, 'utf8');
-    }
-
-    let parsed: any = {} as any;
-    if (fs.existsSync(localFilename + '.json')) {
-      parsed = JSON.parse(fs.readFileSync(localFilename + '.json', 'utf8'));
-    } else {
-      parsed = parser.parse(xml);
-      fs.writeFileSync(localFilename + '.json', JSON.stringify(parsed));
-    }
-    return parsed;
-  }
-
-  public async getEpgForChannel(stationuuid: string, useCache: boolean = true) {
-    let channel = await this.radioService.getChannel(stationuuid);
-
-    if (!channel) {
-      return null;
-    }
-
-    const getValue = (ar) => {
-      if (!ar) return '';
-      if (ar.length > 0) {
-        return ar[0].value;
-      }
-      return '';
-    };
-
-    const parsed = await this.getEpg(useCache);
-    let results = parsed.programs
-      .filter((program) => {
-        return program.channel == channel.xmltv_id;
-      })
-      .map((programme) => {
-        return {
-          title: getValue(programme.title),
-          desc: getValue(programme.desc),
-          icon: getValue(programme.image),
-          start: programme.start,
-          stop: programme.stop,
-        };
-      })
-      .sort((a, b) => {
-        return a.start - b.start;
-      });
-
-    return results.filter((a) => {
-      return Date.parse(a.stop).valueOf() >= new Date().valueOf();
-    });
+  public async getEpgForChannel(stationuuid: string) {
+    return await this.radioService.getEpg(stationuuid);
   }
 }

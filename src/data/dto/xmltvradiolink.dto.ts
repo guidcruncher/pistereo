@@ -24,6 +24,33 @@ export class XmlTvRadioLink {
 }
 
 @Schema()
+export class Epg {
+  @Prop({ index: true })
+  channel: string;
+
+  @Prop()
+  title: string;
+
+  @Prop()
+  desc: string;
+
+  @Prop()
+  icon: string;
+
+  @Prop({ type: Date })
+  start: Date;
+
+  @Prop({ type: Date, Expires: 300 })
+  stop: Date;
+}
+
+export class EpgData {
+  programs: Epg[];
+
+  channels: any[];
+}
+
+@Schema()
 export class Channel {
   @Prop()
   src: string;
@@ -50,3 +77,6 @@ export const XmlTvRadioLinkSchema =
 
 export type ChannelDocument = HydratedDocument<Channel>;
 export const ChannelSchema = SchemaFactory.createForClass(Channel);
+
+export type EpgDocument = HydratedDocument<Epg>;
+export const EpgSchema = SchemaFactory.createForClass(Epg);

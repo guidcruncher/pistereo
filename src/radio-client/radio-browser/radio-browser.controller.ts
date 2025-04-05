@@ -38,7 +38,7 @@ export class RadioBrowserController {
   @ApiOperation({ summary: 'Get a channels EPG' })
   @ApiParam({ name: 'uuid' })
   async getEpgForChannel(@Param('uuid') stationuuid: string) {
-    let res = await this.epgService.getEpgForChannel(stationuuid, true);
+    let res = await this.epgService.getEpgForChannel(stationuuid);
 
     if (res == null) {
       throw new NotFoundException();
