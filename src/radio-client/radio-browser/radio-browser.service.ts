@@ -106,13 +106,21 @@ export class RadioBrowserService extends ServiceBase {
       },
     );
     let json: any = await result.json();
+    for (let i = 0; i < json.length; i++) {
+      if (json[i].favicon == '') {
+        let ch = await this.radioService.getChannel(json[i].stationuuid);
+        if (ch) {
+          json[i].favicon = ch.icon_url;
+        }
+      }
+    }
     return json;
   }
 
   public async streamStation(uuid: string) {
     let result: any = await this.searchByUuid([uuid]);
     this.log.log(this.__caller() + ' =>streamStatiom');
-    if (result.length > 0) {
+    if (result.len - gth > 0) {
       this.userService.updateLastPlayed(
         '',
         'streamer',

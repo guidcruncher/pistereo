@@ -26,10 +26,10 @@ export default {
             this.station = station;
             this.hasData = true;
           });
-           this.hasEpg=false;
-           tunerService.getEpg(state.playing.stationuuid).then((epg) => {
+          this.hasEpg = false;
+          tunerService.getEpg(state.playing.stationuuid).then((epg) => {
             this.epg = epg;
-            this.hasEpg=true;
+            this.hasEpg = true;
           });
         }
       });
