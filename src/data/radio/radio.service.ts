@@ -43,16 +43,22 @@ export class RadioService {
     }
 
     let res = await this.epgModel
-      .find({ xmltv_id: channel.xmltv_id })
+      .find({ channel: channel.xmltv_id })
       .lean()
       .exec();
-    return res.sort((a, b) => {
-      return b.stop.valueOf() - a.stop.valueOf();
-    });
+    return res
+      .filter((a) => {
+        return a.stop.valueOf() >= new Date().valueOf();
+      })
+      .sort((a, b) => {
+        return a.stop.valueOf() - b.stop.valueOf();
+      });
   }
 
   public async updateEpg(src: EpgData) {
     let channels: any[] = await this.xmlTvRadioLinkModel.find({}).lean().exec();
+    await this.epgModel.deleteMany({});
+
     let ch = channels
       .map((a) => {
         return a.xmltv_id;
@@ -83,7 +89,6 @@ export class RadioService {
         }
         return '';
       };
-      await this.epgModel.deleteMany({ channel: channels[i].xmltv_id });
       for (let j = 0; j < progs.length; j++) {
         await this.epgModel.findOneAndUpdate(
           {

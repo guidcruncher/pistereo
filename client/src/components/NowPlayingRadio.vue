@@ -88,6 +88,8 @@ export default {
         <v-list-item v-for="item in epg" :key="item" :value="item">
           <v-list-item-title v-text="item.title" />
           <v-list-item-subtitle v-text="item.desc" />
+          <v-list-item-subtitle v-text="item.start" /> -
+          <v-list-item-subtitle v-text="item.stop" />
         </v-list-item>
       </v-list>
     </v-card>
