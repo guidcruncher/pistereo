@@ -120,7 +120,7 @@ export class RadioBrowserService extends ServiceBase {
   public async streamStation(uuid: string) {
     let result: any = await this.searchByUuid([uuid]);
     this.log.log(this.__caller() + ' =>streamStatiom');
-    if (result.len - gth > 0) {
+    if (result.length > 0) {
       this.userService.updateLastPlayed(
         '',
         'streamer',
