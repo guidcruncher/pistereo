@@ -26,7 +26,7 @@ RUN <<EOF
  echo $TZ > /etc/timezone
 
  npm install -g npm@11.2.0
- npm i -g @nestjs/cli rimraf concurrently pm2 prettier
+ npm i -g @nestjs/cli rimraf pm2 prettier
  npm cache clean --force
 EOF
 

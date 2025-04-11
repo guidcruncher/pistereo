@@ -4,7 +4,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH
 ENV TZ=UTC
 
-RUN npm i -g concurrently
 RUN npm cache clean --force
 
 USER appuser
