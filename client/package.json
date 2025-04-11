@@ -1,8 +1,16 @@
 {
   "name": "client",
-  "private": true,
   "type": "module",
   "version": "0.0.0",
+  "description": "PiStereo Client Web UI",
+  "author": "guidcruncher",
+  "private": true,
+  "homePage": "https://github.com/guidcruncher/pistereo",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guidcruncher/pistereo.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",

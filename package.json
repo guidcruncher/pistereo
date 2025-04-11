@@ -1,10 +1,15 @@
 {
   "name": "pistereo",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "0.0.2",
+  "description": "PiStereo Server and Client",
+  "author": "guidcruncher",
   "private": true,
-  "license": "UNLICENSED",
+  "homePage": "https://github.com/guidcruncher/pistereo",
+  "license": "GPL-3.0",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/guidcruncher/pistereo.git"
+  },
   "scripts": {
     "build": "npm run rimraf && npm run client-build && nest build",
     "rimraf": "npx rimraf ./dist",
