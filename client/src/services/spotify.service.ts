@@ -259,7 +259,7 @@ export class SpotifyService extends ServiceBase {
   public async getSavedShows(
     offset: number,
     limit: number,
-  ): Promise<PagedList<Show>> {
+  ): Promise<PagedList<any>> {
     const params = new URLSearchParams();
     params.append('offset', offset.toString());
     params.append('limit', limit.toString());
