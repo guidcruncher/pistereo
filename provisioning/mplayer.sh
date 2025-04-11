@@ -10,28 +10,28 @@ CMD=""
 
 case "$1" in
 load)
-  CMD='{ command: [ "loadfile", "$2", "replace" ] }'
+  CMD="{ command: [ \"loadfile\", \"$2\", \"replace\" ] }"
   ;;
 play)
-  CMD='{ command: [ "cycle", "play" ] }'
+  CMD="{ command: [ \"cycle\", \"play\" ] }"
   ;;
 pause)
-  CMD='{ command: [ "cycle", "pause" ] }'
+  CMD="{ command: [ \"cycle\", \"pause\" ] }"
   ;;
 stop)
-  CMD='{ command: [ "stop" ] }'
+  CMD="{ command: [ \"stop\" ] }"
   ;;
 volume)
-  CMD='{ command: [ "set_property", "volume", "$2" ] }'
+  CMD="{ command: [ \"set_property\", \"volume\", \"$2\" ] }"
   ;;
 mute)
-  CMD='{ command: [ "set_property", "volume", 0 ] }'
+  CMD="{ command: [ \"set_property\", \"volume\", 0 ] }"
   ;;
 unmute)
-  CMD='{ command: [ "set_property", "volume", 80 ] }'
+  CMD="{ command: [ \"set_property\", \"volume\", 80 ] }"
   ;;
 get-property)
-  CMD='{ command: [ "get_property", "$2" ] }'
+  CMD="{ command: [ \"get_property\", \"$2\" ] }"
   ;;
 *)
   echo "Format:"

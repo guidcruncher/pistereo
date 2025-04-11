@@ -24,6 +24,26 @@ export class StreamerService extends ServiceBase {
     super();
   }
 
+  public async getMetaData() {
+    let idleProp = await this.sendCommand('get_property', ['core-idle']);
+
+    if (idleProp && idleProp.statusCode == 200 && !idleProp.data) {
+      let metaData = await this.sendCommand('get_property', ['metadata']);
+      if (metaData && metaData.statusCode == 200) {
+        let iceData = metaData.data ?? {};
+        if (iceData['icy-title']) {
+          let nowPlaying: string = 'Now playing: ' + iceData['icy-title'];
+          this.emitEvent('now_playing', {
+            nowPlaying: nowPlaying,
+            metadata: iceData,
+          });
+        }
+      }
+    }
+
+    return '';
+  }
+
   private async emitEvent(name: string, payload: any) {
     this.log.log(
       this.__caller() +
@@ -89,7 +109,7 @@ export class StreamerService extends ServiceBase {
     this.log.log(this.__caller() + ' => getStatus');
     let pathProp = await this.sendCommand('get_property', ['path']);
     let volProp = await this.sendCommand('get_property', ['volume']);
-    let metaData = await this.sendCommand("get_property", ["metadata"]);
+    let metaData = await this.sendCommand('get_property', ['metadata']);
     let playbackProp = await this.sendCommand('get_property', [
       'playback-time',
     ]);
@@ -99,9 +119,9 @@ export class StreamerService extends ServiceBase {
       result.position = playbackProp.data;
     }
 
-   if (metaData && metaData.statusCode == 200) {
-     result.metadata = metaData.data;
-   }
+    if (metaData && metaData.statusCode == 200) {
+      result.metadata = metaData.data;
+    }
     if (idleProp && idleProp.statusCode == 200) {
       result.playing = !idleProp.data;
     }

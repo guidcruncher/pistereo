@@ -75,6 +75,10 @@ export default {
         });
       }
 
+      if (ev.name == 'streamer.now_playing') {
+        emit('streamer_now_playing', ev);
+      }
+
       if (ev.name != 'streamer.metadata-update') {
         emit(ev.name, ev);
       }

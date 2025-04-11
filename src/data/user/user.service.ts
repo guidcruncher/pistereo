@@ -10,7 +10,6 @@ import { User } from '../dto/user.dto';
 
 @Injectable()
 export class UserService {
-
   private logger: Logger = new Logger(UserService.name);
 
   constructor(

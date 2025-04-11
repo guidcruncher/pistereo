@@ -16,6 +16,7 @@ export default {
       hasEpg: false,
       source: {} as any,
       station: {} as any,
+      nowplaying: '',
       epg: [] as any[],
     };
   },
@@ -42,12 +43,17 @@ export default {
     const playerStore = usePlayerStore();
     this.hasData = false;
     this.station = {};
+    this.nowplaying = '';
     this.epg = [];
     this.hasEpg = false;
 
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
     }
+
+    on('streamer.now_playing', (data: any) => {
+      this.nowplaying = data.nowPlaying;
+    });
 
     on('streamer.stream-changed', (data: any) => {
       this.hasData = false;
@@ -74,6 +80,7 @@ export default {
   beforeDestroy() {
     off('source_changed');
     off('streamer.stream-changed');
+    off('streamer.now_playing');
   },
 };
 </script>
@@ -97,6 +104,7 @@ export default {
             <h4>
               <a :href="station.homepage">{{ station.homepage }}</a>
             </h4>
+            <h6>{{ nowplaying }}</h6>
           </div>
         </v-col>
       </v-row>
