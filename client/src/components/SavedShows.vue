@@ -24,7 +24,7 @@ export default {
   methods: {
     playShow(item) {
       const spotifyService = new SpotifyService();
-      spotifyService.playTrack(item.show.uri);
+      spotifyService.playTrackInPlayList(item.show.uri, item.show.uri);
     },
     showTracks(show) {
       const spotifyService = new SpotifyService();
@@ -43,22 +43,12 @@ export default {
         spotifyService
           .getShowEpisodes(show.show.id, show.paging.offset, show.paging.limit)
           .then((episodes) => {
+            show.paging = episodes.paging;
             show.showtracks = true;
-            show.episodes = episodes;
+            show.episodes = episodes.items;
+            this.show = show;
           });
       }
-    },
-    onEpisodePageChange() {
-      let offset = 0;
-      if (this.show.paging.page > 1) {
-        offset = (this.show.paging.page - 1) * this.show.paging.limit;
-      }
-      this.show.paging.offset = offset;
-      this.showTracks(this.show);
-    },
-    playShowEpisode(episode, item) {
-      const spotifyService = new SpotifyService();
-      spotifyService.playTrackInPlayList(this.show.uri, episode.uri);
     },
     onPageChange() {
       let offset = 0;
@@ -119,50 +109,11 @@ export default {
                     density="compact"
                     size="normal"
                     @click="playShow(item)"
-                  />
-                  <v-btn
-                    icon="mdi-chevron-up"
-                    density="compact"
-                    size="normal"
-                    v-if="item.showtracks"
-                    @click="item.showtracks = false"
-                  />
-                  <v-btn
-                    icon="mdi-chevron-down"
-                    density="compact"
-                    size="normal"
-                    v-if="!item.showtracks"
-                    @click="showTracks(item)"
                   /> </v-col
               ></v-row>
             </template>
           </v-list-item>
         </template>
-        <v-list-item
-          v-for="episode in item.episodes.items"
-          v-if="item.showtracks && item.episodes"
-          :key="episode"
-          :value="episode"
-        >
-          <v-list-item-title>{{ episode.name }} </v-list-item-title>
-          <template #append>
-            <v-row align="center" justify="center">
-              <v-col cols="auto">
-                <v-btn
-                  icon="mdi-play"
-                  density="compact"
-                  size="normal"
-                  @click="playShowEpisode(episode, item)"
-                /> </v-col
-            ></v-row>
-          </template>
-        </v-list-item>
-        <v-pagination
-          v-if="item.showtracks && item.episodes"
-          v-model="item.episodes.paging.page"
-          :length="item.episodes.paging.pageCount"
-          @update:model-value="onEpisodePageChange"
-        />
       </v-list-group>
     </v-list>
     <v-pagination
