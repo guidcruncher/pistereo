@@ -21,7 +21,7 @@ export class SchedulerService {
     this.epgSchedulerService.registerJobs(this.schedulerRegistry);
 
     const job = new CronJob(`10 * * * * *`, async () => {
-      await this.schedulerService.getMetaData();
+      await this.streamerService.getMetaData();
     });
     this.schedulerRegistry.addCronJob('Stream Metadata monitor', job);
     job.start();
