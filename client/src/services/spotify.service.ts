@@ -259,6 +259,28 @@ export class SpotifyService extends ServiceBase {
         throw e;
       });
   }
+
+  public async getShowEpisodes(id: string, offset: number, limit: number) {
+    const params = new URLSearchParams();
+    params.append('offset', offset.toString());
+    params.append('limit', limit.toString());
+    const response: AxiosResponse<PagedList<any>> = await this.client().get(
+      '/shows/' + id + '/episodes?' + params.toString(),
+    );
+    return response.data;
+  }
+  public async getSavedShows(
+    offset: number,
+    limit: number,
+  ): Promise<PagedList<Show>> {
+    const params = new URLSearchParams();
+    params.append('offset', offset.toString());
+    params.append('limit', limit.toString());
+    const response: AxiosResponse<PagedList<any>> = await this.client().get(
+      '/profile/me/shows?' + params.toString(),
+    );
+    return response.data;
+  }
 }
 
 export const SearchTypes: Record<string, string> = {
