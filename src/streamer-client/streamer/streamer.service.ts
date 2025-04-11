@@ -89,6 +89,7 @@ export class StreamerService extends ServiceBase {
     this.log.log(this.__caller() + ' => getStatus');
     let pathProp = await this.sendCommand('get_property', ['path']);
     let volProp = await this.sendCommand('get_property', ['volume']);
+    let metaData = await this.sendCommand("get_property", ["metadata"]);
     let playbackProp = await this.sendCommand('get_property', [
       'playback-time',
     ]);
@@ -98,6 +99,9 @@ export class StreamerService extends ServiceBase {
       result.position = playbackProp.data;
     }
 
+   if (metaData && metaData.statusCode == 200) {
+     result.metadata = metaData.data;
+   }
     if (idleProp && idleProp.statusCode == 200) {
       result.playing = !idleProp.data;
     }
