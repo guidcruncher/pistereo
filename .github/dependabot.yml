@@ -1,0 +1,28 @@
+# `dependabot.yml` file with
+# reviews and an assignee for all npm pull requests
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "dev"
+    reviewers:
+      - "guidcruncher"
+    assignees:
+      - "guidcruncher"
+    labels:
+      - "server dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/client "
+    schedule:
+      interval: "weekly"
+    target-branch: "dev"
+    reviewers:
+      - "guidcruncher"
+    assignees:
+      - "guidcruncher"
+    labels:
+      - "client dependencies"
