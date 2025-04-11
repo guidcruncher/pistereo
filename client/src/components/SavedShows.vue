@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       shows: null,
+      show: null,
       hasData: false,
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0, total: 0 },
     };
@@ -16,39 +17,48 @@ export default {
   mounted() {
     this.hasData = false;
     this.shows = null;
+    this.show = null;
     this.getSavedShows();
   },
   beforeUnmount() {},
   methods: {
     playShow(item) {
       const spotifyService = new SpotifyService();
-      spotifyService.playTrackInPlayList(
-        item.show.tracks.items[0].uri,
-        item.show.uri,
-      );
+      spotifyService.playTrack(item.show.uri);
     },
     showTracks(show) {
       const spotifyService = new SpotifyService();
+      this.show = show;
+      this.shows.forEach((s) => {
+        if (s.show.id != show.show.id) {
+          s.showtracks = false;
+        }
+      });
+      if (!show.paging) {
+        show.paging = { offset: 0, limit: 10 };
+      }
       if (show.episodes && show.episodes.length > 0) {
         show.showtracks = true;
       } else {
-        spotifyService.getShowEpisodes(show.id).then((episodes) => {
-          show.showtracks = true;
-          show.episodes = episodes;
-        });
+        spotifyService
+          .getShowEpisodes(show.show.id, show.paging.offset, show.paging.limit)
+          .then((episodes) => {
+            show.showtracks = true;
+            show.episodes = episodes;
+          });
       }
     },
-    onEpisodePageChange(show) {
+    onEpisodePageChange() {
       let offset = 0;
-      if (show.paging.page > 1) {
-        offset = (show.paging.page - 1) * show.paging.limit;
+      if (this.show.paging.page > 1) {
+        offset = (this.show.paging.page - 1) * this.show.paging.limit;
       }
-      show.paging.offset = offset;
-      this.showTRcks(show);
+      this.show.paging.offset = offset;
+      this.showTracks(this.show);
     },
-    playShowEpisode(episodee, item) {
+    playShowEpisode(episode, item) {
       const spotifyService = new SpotifyService();
-      spotifyService.playTrackInPlayList(episode.uri, item.show.uri);
+      spotifyService.playTrackInPlayList(this.show.uri, episode.uri);
     },
     onPageChange() {
       let offset = 0;
@@ -130,14 +140,11 @@ export default {
         </template>
         <v-list-item
           v-for="episode in item.episodes.items"
-          v-if="item.showtracks"
+          v-if="item.showtracks && item.episodes"
           :key="episode"
           :value="episode"
         >
           <v-list-item-title>{{ episode.name }} </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ episode.html_description }}
-          </v-list-item-subtitle>
           <template #append>
             <v-row align="center" justify="center">
               <v-col cols="auto">
@@ -151,9 +158,10 @@ export default {
           </template>
         </v-list-item>
         <v-pagination
+          v-if="item.showtracks && item.episodes"
           v-model="item.episodes.paging.page"
           :length="item.episodes.paging.pageCount"
-          @update:model-value="onEpisodePageChange(item)"
+          @update:model-value="onEpisodePageChange"
         />
       </v-list-group>
     </v-list>

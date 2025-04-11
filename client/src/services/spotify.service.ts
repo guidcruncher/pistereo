@@ -141,19 +141,6 @@ export class SpotifyService extends ServiceBase {
     return response.data;
   }
 
-  public async getSavedShows(
-    offset: number,
-    limit: number,
-  ): Promise<PagedList<any>> {
-    const params = new URLSearchParams();
-    params.append('offset', offset.toString());
-    params.append('limit', limit.toString());
-    const response: AxiosResponse<PagedList<any>> = await this.client().get(
-      '/profile/me/shows?' + params.toString(),
-    );
-    return response.data;
-  }
-
   public async playItemOnPlayer(contextUri: string): Promise<any> {
     const response: AxiosResponse = await this.client().put(
       '/player/default/play',
