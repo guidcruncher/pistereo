@@ -1,0 +1,84 @@
+FROM guidcruncher/pistereo-base:latest AS build
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TARGETARCH
+ENV TZ=UTC
+
+# USER appuser
+
+ENV NODE_ENV=production
+
+RUN npm i -g @nestjs/cli typescript @swc/cli @swc/core vue eslint --no-fund --no-audit --silent --prefer-offline
+
+WORKDIR /pistereo/mediaserver
+
+RUN <<EOF
+ mkdir -p /pistereo/mediaserver/config /pistereo/mediaserver/socket
+ DOWNLOAD_URL=$(curl -s https://api.github.com/repos/devgianlu/go-librespot/releases/latest \
+  | jq '.assets[].browser_download_url' -r | grep go-librespot_linux_$TARGETARCH.tar.gz)
+ curl -L "$DOWNLOAD_URL" -o ./librespot.tar.gz
+ tar xvf ./librespot.tar.gz go-librespot
+ chmod +x go-librespot
+ rm ./librespot.tar.gz
+EOF
+
+COPY ./mediaserver/config.yml ./mediaserver/config.yml
+COPY ./mediaserver/config.yml ./mediaserver/config/config.yml
+
+WORKDIR /pistereo/app
+RUN mkdir ./appcache ./client
+
+WORKDIR /pistereo/app/client
+COPY ./client/package*.json .
+RUN npm i --no-fund --no-audit --silent --prefer-offline
+
+WORKDIR /pistereo/app
+COPY package*.json .
+RUN npm i --no-fund --no-audit --silent --prefer-offline
+
+COPY . .
+COPY ecosystem.config.production.js ecosystem.config.js
+RUN rm ecosystem.config.production.js 
+
+RUN npm run build
+
+FROM guidcruncher/pistereo-base:latest AS base
+
+WORKDIR /pistereo/app
+RUN mkdir config provisioning
+RUN mkdir -p /pistereo/app/config /pistereo/mediaserver/config /cache/app
+COPY --from=build /pistereo/app/dist /pistereo/app/dist
+COPY --from=build /pistereo/mediaserver /pistereo/mediaserver
+COPY --from=build /pistereo/app/package*.json /pistereo/app/dist/server/
+COPY --from=build /pistereo/app/client/package*.json /pistereo/app/dist/client
+
+WORKDIR /pistereo/app/dist/server
+RUN npm ci --no-fund --no-audit --silent --prefer-offline
+WORKDIR /pistereo/app/dist/client
+RUN npm ci --no-fund --no-audit --silent --prefer-offline
+
+WORKDIR /pistereo/app
+COPY ./mediaserver/config.yml /pistereo/app/default-mediaserver.config
+COPY ./mediaserver/config.yml /pistereo/mediaserver/config/config.yml
+COPY ./config/* /pistereo/app/config/
+COPY ./config/config.yaml /pistereo/app/default-server.config
+COPY ./config/stationmappings.json /pistereo/app/default-stationmappings.json
+COPY ./provisioning/*.sh ./provisioning/
+RUN chmod +x ./provisioning/*.sh
+COPY ./ecosystem.config.production.js ./ecosystem.config.js
+
+ENV BASE=/pistereo
+ENV NODE_CONFIG_DIR=/pistereo/app/config
+ENV PISTEREO_CLIENT_BASE=/pistereo/app/dist/client
+ENV MPV_SOCKET=/pistereo/mediaserver/socket/mpv
+ENV LIBRESPOT_HOST=http://127.0.0.1:3678
+ENV LIBRESPOT_WS=ws://127.0.0.1:3678
+ENV APPCACHE=/cache/app
+
+EXPOSE 3000
+EXPOSE 3678
+
+VOLUME /pistereo/app/config
+VOLUME /pistereo/mediaserver/config
+
+CMD [ "/pistereo/app/provisioning/start.sh" ]

@@ -1,0 +1,30 @@
+name: pistereo-dev
+
+services:
+  pistereo-dev:
+    user: ${MY_UID}:${MY_GID}
+    extra_hosts:
+      - pistereo-dev:127.0.0.1
+    dns:
+      - 192.168.1.201
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    stdin_open: true
+    tty: true
+    network_mode: host
+    expose:
+      - 3000
+    environment:
+      - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
+      - TZ=Europe/London
+    volumes:
+      - ../dev-cache/cache:/cache
+      - ./:/pistereo/app/
+      - ../dev-cache/mediaserver/:/pistereo/mediaserver/config
+    container_name: pistereo-dev
+    hostname: pistereo-dev
+    restart: unless-stopped
+    devices:
+      - /dev/snd:/dev/snd:rw
+    privileged: true

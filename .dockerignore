@@ -1,0 +1,12 @@
+dist
+node_modules
+.git
+*.md
+scripts
+socket
+appcache 
+.npm
+cache
+*.sh
+Dockerfile*
+docker-compose*.*

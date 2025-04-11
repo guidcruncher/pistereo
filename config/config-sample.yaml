@@ -1,0 +1,30 @@
+host:
+  baseurl: "http://127.0.0.1:3000"
+  mongo:
+    url: mongodb:/user:password@mongodb.host:27017/
+    database: pistereo
+  listen:
+    port: 3000
+    listen: "0.0.0.0"
+  secret: "ENTER A STRING OF RANDOMNESS HERE"
+  jwtsecret: "ENTER A STRING OF RANDONESS HERE"
+
+logging:
+  loglevels:
+    - log
+    - error
+    - warn
+    - debug
+    - verbose
+
+spotify:
+  clientid: "ENTER YOUR SPOTIFY CLIENTID"
+  clientsecret: "ENTER YOUR SPOTIFY CLIENT SECRET"
+  playbackdevice: PiStereo
+  deviceid: ''
+
+radio:
+  radiobrowser: https://de2.api.radio-browser.info
+  xmltvurl: https://raw.githubusercontent.com/dp247/Freeview-EPG/master/epg.xml
+  xmltvchannels: https://raw.githubusercontent.com/dp247/Freeview-EPG/master/channels.json
+  xmltvrefresh: 1,9,17

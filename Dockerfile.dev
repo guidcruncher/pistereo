@@ -1,0 +1,50 @@
+FROM guidcruncher/pistereo-base:latest AS base
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TARGETARCH
+ENV TZ=UTC
+
+RUN npm i -g concurrently
+RUN npm cache clean --force
+
+USER appuser
+
+ENV NODE_ENV=development
+
+WORKDIR /pistereo/mediaserver
+
+RUN <<EOF
+ mkdir -p /pistereo/mediaserver/config /pistereo/mediaserver/socket /cache/app/
+ DOWNLOAD_URL=$(curl -s https://api.github.com/repos/devgianlu/go-librespot/releases/latest \
+  | jq '.assets[].browser_download_url' -r | grep go-librespot_linux_$TARGETARCH.tar.gz)
+ curl -L "$DOWNLOAD_URL" -o ./librespot.tar.gz
+ tar xvf ./librespot.tar.gz go-librespot
+ chmod +x go-librespot
+ rm ./librespot.tar.gz
+EOF
+
+COPY ./mediaserver/config.yml /pistereo/mediaserver/config/config.yml
+WORKDIR /pistereo/app
+RUN sudo mkdir -p /cache/app
+COPY ./provisioning/ ./provisioning
+
+COPY package.json . 
+
+ENV BASE=/pistereo
+ENV NODE_CONFIG_DIR=/pistereo/app/config
+ENV PISTEREO_CLIENT_BASE=/pistereo/app/dist/client
+ENV MPV_SOCKET=/pistereo/mediaserver/socket/mpv
+ENV LIBRESPOT_HOST=http://127.0.0.1:3678
+ENV LIBRESPOT_WS=ws://127.0.0.1:3678
+ENV APPCACHE=/cache/app
+
+COPY ./ecosystem.config.js /pistereo/app/ecosystem.config.js
+COPY ./config ./config
+
+EXPOSE 3000
+EXPOSE 3678
+
+VOLUME /pistereo/app/config
+VOLUME /pistereo/mediaserver/config
+
+CMD [ "/pistereo/app/provisioning/start.sh" ]

@@ -1,0 +1,23 @@
+name: pistereo
+
+services:
+  pistereo:
+    image: guidcruncher/pistereo:latest
+    extra_hosts:
+      - pistereo:127.0.0.1
+    dns:
+      - 192.168.1.201
+    network_mode: host
+    expose:
+      - 3000
+    environment:
+      - TZ=Europe/London
+    container_name: pistereo
+    hostname: pistereo
+    restart: unless-stopped
+    volumes:
+      - ../config/config:/pistereo/app/config
+      - ../config/mediaserver/:/pistereo/mediaserver/config
+    devices:
+      - /dev/snd:/dev/snd:rw
+    privileged: true
