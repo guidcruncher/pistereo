@@ -1,9 +1,9 @@
-<script setup>
+<script lang="ts" setup>
 const rules = {
   required: (value) => !!value || 'Required',
 };
 </script>
-<script>
+<script lang="ts">
 import { SearchTypes, SpotifyService } from '../services/spotify.service';
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';

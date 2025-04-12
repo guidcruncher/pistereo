@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 import { on, emit, off } from '../composables/useeventbus';
 

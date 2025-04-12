@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { JackService } from '../services/jack.service';
 import { SpotifyService } from '../services/spotify.service';
 import { on, emit, off } from '../composables/useeventbus';
@@ -22,6 +22,9 @@ export default {
   },
   beforeUnmount() {},
   methods: {
+    browse(item) {
+      emit('podcast.picker', { show: item });
+    },
     playShow(item) {
       const spotifyService = new SpotifyService();
       spotifyService.playTrackInPlayList(item.show.uri, item.show.uri);
@@ -83,10 +86,7 @@ export default {
     <v-list lines="false">
       <v-list-group v-for="item in shows" :key="item" :value="item">
         <template v-slot:activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            @click="item.showtracks = item.showtracks ? true : !item.showtracks"
-          >
+          <v-list-item v-bind="props" @click="browse(item)">
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">
                 <img
@@ -105,8 +105,13 @@ export default {
               <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn
+                    icon="mdi-podcast"
+                    size="normal"
+                    @click="browse(item)"
+                  />
+
+                  <v-btn
                     icon="mdi-play"
-                    density="compact"
                     size="normal"
                     @click="playShow(item)"
                   /> </v-col
@@ -122,6 +127,8 @@ export default {
       @update:model-value="onPageChange"
     />
   </v-card>
+
+  <ShowChooser />
 </template>
 
 <style>

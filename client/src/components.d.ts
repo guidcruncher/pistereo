@@ -23,6 +23,7 @@ declare module 'vue' {
     SavedAlbums: typeof import('./components/SavedAlbums.vue')['default']
     SavedShows: typeof import('./components/SavedShows.vue')['default']
     Search: typeof import('./components/Search.vue')['default']
+    ShowChooser: typeof import('./components/ShowChooser.vue')['default']
     TopTracks: typeof import('./components/TopTracks.vue')['default']
     TrackInfo: typeof import('./components/TrackInfo.vue')['default']
   }

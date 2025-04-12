@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { on, emit, off } from '../composables/useeventbus';
 
 export default {

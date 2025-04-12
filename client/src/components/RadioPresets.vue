@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { JackService } from '../services/jack.service';
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';

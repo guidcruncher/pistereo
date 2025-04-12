@@ -30,7 +30,7 @@ export class JackService extends ServiceBase {
   }
 
   public async getStreamerStatus() {
-    const response : AxiosResponse<any> = await this.client({
+    const response: AxiosResponse<any> = await this.client({
       baseUrl: '/api/stream',
     }).get('');
     return response.data;

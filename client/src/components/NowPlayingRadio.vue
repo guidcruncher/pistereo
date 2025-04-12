@@ -111,7 +111,11 @@ export default {
             <h4>
               <a :href="station.homepage">{{ station.homepage }}</a>
             </h4>
-            <h5>Now playing - {{nowplaying.metadata["icy-title"] }} ({{ nowplaying.metadata["icy-genre"] }})</h5>
+            <h5>
+              Now playing - {{ nowplaying.metadata['icy-title'] }} ({{
+                nowplaying.metadata['icy-genre']
+              }})
+            </h5>
           </div>
         </v-col>
       </v-row>
