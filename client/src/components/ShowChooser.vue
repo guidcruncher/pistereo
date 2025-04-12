@@ -35,11 +35,17 @@ export default {
   methods: {
     playShow() {
       const spotifyService = new SpotifyService();
-      spotifyService.playTrackInPlayList(this.show.uri, this.show.uri);
+      spotifyService.playTrackInPlayList(
+        this.show.show.uri,
+        this.show.show.uri,
+      );
+      emit('context_change', { context: this.show.show.uri });
     },
     playShowTrack(track) {
       const spotifyService = new SpotifyService();
       spotifyService.playTrackInPlayList(track.uri, this.show.show.uri);
+      emit('context_change', { context: this.show.show.uri });
+      this.isActive=false;
     },
     showTracks() {
       const spotifyService = new SpotifyService();
@@ -61,27 +67,23 @@ export default {
     if (this.paging.page > 1) {
       offset = (this.paging.page - 1) * this.paging.limit;
     }
-    this.offset = offset;
+    this.paging.offset = offset;
+alert(JSON.stringify(this.paging));
     this.showTracks();
   },
 };
 </script>
 
 <template>
-  <div class="text-center pa-4">
     <v-dialog
       v-model="isActive"
-      transition="dialog-bottom-transition"
-      fullscreen
-      scrollable
+width="auto" fullscreen
     >
-      <v-card>
-        <v-toolbar>
-          <v-btn icon="mdi-close" @click="isActive = false"></v-btn>
-
-          <v-toolbar-title>Podcast</v-toolbar-title>
-        </v-toolbar>
-        <v-card>
+<v-card>
+ <v-toolbar>
+ <v-btn icon="mdi-close" @click="isActive = false"></v-btn>
+<v-toolbar-title>Podcast</v-toolbar-title>
+</v-toolbar>
           <v-row
             ><v-col cols="2">
               <div style="width: 100px; height: 100px; margin: 16px">
@@ -118,12 +120,6 @@ export default {
                 <v-row align="center" justify="center">
                   <v-col cols="auto">
                     <v-btn
-                      icon="mdi-podcast"
-                      size="normal"
-                      @click="browse(item)"
-                    />
-
-                    <v-btn
                       icon="mdi-play"
                       size="normal"
                       @click="playShowTrack(item)"
@@ -137,10 +133,8 @@ export default {
             :length="paging.pageCount"
             @update:model-value="onPageChange"
           />
-        </v-card>
-      </v-card>
-    </v-dialog>
-  </div>
+</v-card>
+   </v-dialog>
 </template>
 
 <style></style>

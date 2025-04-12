@@ -28,6 +28,7 @@ export default {
     playShow(item) {
       const spotifyService = new SpotifyService();
       spotifyService.playTrackInPlayList(item.show.uri, item.show.uri);
+      emit('context_change', { context: item.show.uri });
     },
     showTracks(show) {
       const spotifyService = new SpotifyService();

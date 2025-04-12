@@ -37,6 +37,7 @@ export default {
     loadPlaylist(playlist) {
       const spotifyService = new SpotifyService();
       spotifyService.playPlaylist(playlist.uri);
+      emit('context_change', { context: playlist.uri });
     },
     viewPlaylist(playlist) {
       emit('view_playlist', { playlist: playlist });

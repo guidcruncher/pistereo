@@ -26,10 +26,12 @@ export default {
         item.album.tracks.items[0].uri,
         item.album.uri,
       );
+      emit('context_change', { context: item.album.uri });
     },
     playAlbumTrack(track, item) {
       const spotifyService = new SpotifyService();
       spotifyService.playTrackInPlayList(track.uri, item.album.uri);
+      emit('context_change', { context: item.album.uri });
     },
     onPageChange() {
       let offset = 0;
