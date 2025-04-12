@@ -127,8 +127,6 @@ export default {
       @update:model-value="onPageChange"
     />
   </v-card>
-
-  <ShowChooser />
 </template>
 
 <style>

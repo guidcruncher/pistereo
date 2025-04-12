@@ -251,6 +251,7 @@ export class SpotifyService extends ServiceBase {
     const params = new URLSearchParams();
     params.append('offset', offset.toString());
     params.append('limit', limit.toString());
+
     const response: AxiosResponse<PagedList<any>> = await this.client().get(
       '/shows/' + id + '/episodes?' + params.toString(),
     );

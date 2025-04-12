@@ -12,7 +12,7 @@ export default {
       show: null,
       hasData: false,
       isActive: false,
-      paging: { offset: 0, limit: 10, page: 1, pageCount: 0, total: 0 },
+      paging: { offset: 0, limit: 8, page: 1, pageCount: 0, total: 0 },
     };
   },
   mounted() {
@@ -24,6 +24,8 @@ export default {
     on('podcast.picker', (data: any) => {
       this.show = data.show;
       this.isActive = true;
+      this.paging = { offset: 0, limit: 8, page: 1, pageCount: 0, total: 0 };
+      this.showTracks();
     });
   },
   beforeDestroy() {
@@ -37,14 +39,18 @@ export default {
     },
     playShowTrack(track) {
       const spotifyService = new SpotifyService();
-      spotifyService.playTrackInPlayList(track.uri, this.show.uri);
+      spotifyService.playTrackInPlayList(track.uri, this.show.show.uri);
     },
     showTracks() {
       const spotifyService = new SpotifyService();
       spotifyService
-        .getShowEpisodes(this.show.id, this.paging.offset, this.paging.limit)
+        .getShowEpisodes(
+          this.show.show.id,
+          this.paging.offset,
+          this.paging.limit,
+        )
         .then((episodes) => {
-          thie.paging = episodes.paging;
+          this.paging = episodes.paging;
           this.shows = episodes.items;
           this.hasData = true;
         });
@@ -67,6 +73,7 @@ export default {
       v-model="isActive"
       transition="dialog-bottom-transition"
       fullscreen
+      scrollable
     >
       <v-card>
         <v-toolbar>
@@ -74,86 +81,63 @@ export default {
 
           <v-toolbar-title>Podcast</v-toolbar-title>
         </v-toolbar>
-        <v-row
-          ><v-col cols="2">
-            <div style="width: 64px; height: 64px; margin-right: 16px">
-              <img
-                v-if="show.show.images"
-                :src="show.show.images[1].url"
-                width="64"
-                height="64"
-              />
-            </div> </v-col
-          ><v-col cols="10">
-            <div class="list-item-title">{{ show.show.name }}</div>
-            <div class="list-item-subtitle">{{ show.show.publisher }}</div>
-          </v-col></v-row
-        >
-
-        <v-list lines="two">
-          <v-list-subheader>User Controls</v-list-subheader>
-
-          <v-list-item
-            subtitle="Set the content filtering level to restrict apps that can be downloaded"
-            title="Content filtering"
-            link
-          ></v-list-item>
-
-          <v-list-item
-            subtitle="Require password for purchase or use password to restrict purchase"
-            title="Password"
-            link
-          ></v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-subheader>General</v-list-subheader>
-
-          <v-list-item
-            subtitle="Notify me about updates to apps or games that I downloaded"
-            title="Notifications"
-            @click="notifications = !notifications"
+        <v-card>
+          <v-row
+            ><v-col cols="2">
+              <div style="width: 100px; height: 100px; margin: 16px">
+                <img
+                  v-if="show.show.images"
+                  :src="show.show.images[1].url"
+                  width="100"
+                  height="100"
+                />
+              </div> </v-col
+            ><v-col cols="10"
+              ><div style="margin-top: 16px">
+                <h3>{{ show.show.name }}</h3>
+                <h5>{{ show.show.publisher }}</h5>
+              </div></v-col
+            ></v-row
           >
-            <template v-slot:prepend>
-              <v-list-item-action start>
-                <v-checkbox-btn
-                  v-model="notifications"
-                  color="primary"
-                ></v-checkbox-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
 
-          <v-list-item
-            subtitle="Auto-update apps at any time. Data charges may apply"
-            title="Sound"
-            @click="sound = !sound"
-          >
-            <template v-slot:prepend>
-              <v-list-item-action start>
-                <v-checkbox-btn
-                  v-model="sound"
-                  color="primary"
-                ></v-checkbox-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
+          <v-list lines="false">
+            <v-list-item v-for="item in shows" :key="item" :value="item">
+              <template #prepend>
+                <div style="width: 64px; height: 64px; margin-right: 16px">
+                  <img
+                    v-if="item.images"
+                    :src="item.images[1].url"
+                    width="64"
+                    height="64"
+                  />
+                </div>
+              </template>
+              <v-list-item-title v-text="item.name" />
+              <v-list-item-subtitle>{{ item.publisher }} </v-list-item-subtitle>
+              <template #append>
+                <v-row align="center" justify="center">
+                  <v-col cols="auto">
+                    <v-btn
+                      icon="mdi-podcast"
+                      size="normal"
+                      @click="browse(item)"
+                    />
 
-          <v-list-item
-            subtitle="Automatically add home screen widgets"
-            title="Auto-add widgets"
-            @click="widgets = !widgets"
-          >
-            <template v-slot:prepend>
-              <v-list-item-action start>
-                <v-checkbox-btn
-                  v-model="widgets"
-                  color="primary"
-                ></v-checkbox-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-        </v-list>
+                    <v-btn
+                      icon="mdi-play"
+                      size="normal"
+                      @click="playShowTrack(item)"
+                    /> </v-col
+                ></v-row>
+              </template>
+            </v-list-item>
+          </v-list>
+          <v-pagination
+            v-model="paging.page"
+            :length="paging.pageCount"
+            @update:model-value="onPageChange"
+          />
+        </v-card>
       </v-card>
     </v-dialog>
   </div>

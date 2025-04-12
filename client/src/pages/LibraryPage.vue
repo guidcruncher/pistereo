@@ -25,6 +25,8 @@
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
+
+  <ShowChooser />
 </template>
 
 <script lang="ts">
