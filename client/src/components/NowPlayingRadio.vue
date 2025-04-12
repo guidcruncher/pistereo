@@ -1,4 +1,3 @@
-t
 <script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 import { TunerService } from '../services/tuner.service';
@@ -16,11 +15,18 @@ export default {
       hasEpg: false,
       source: {} as any,
       station: {} as any,
-      nowplaying: '',
+      nowplaying: {},
+      timer: 0,
       epg: [] as any[],
     };
   },
   methods: {
+    tick() {
+      const jackService = new JackService();
+      jackService.getStreamerStatus().then((state) => {
+        this.nowplaying = state;
+      });
+    },
     getPlayerState() {
       const jackService = new JackService();
       jackService.getStatus().then((state) => {
@@ -43,17 +49,17 @@ export default {
     const playerStore = usePlayerStore();
     this.hasData = false;
     this.station = {};
-    this.nowplaying = '';
+    this.nowplaying = {};
     this.epg = [];
     this.hasEpg = false;
+    this.tick();
+    this.timer = setInterval(() => {
+      this.tick();
+    }, 5000);
 
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
     }
-
-    on('streamer.now_playing', (data: any) => {
-      this.nowplaying = data.nowPlaying;
-    });
 
     on('streamer.stream-changed', (data: any) => {
       this.hasData = false;
@@ -78,9 +84,10 @@ export default {
   },
   beforeUnmount() {},
   beforeDestroy() {
+    this.clearInterval(this.timer);
+    this.timer = 0;
     off('source_changed');
     off('streamer.stream-changed');
-    off('streamer.now_playing');
   },
 };
 </script>
@@ -104,7 +111,7 @@ export default {
             <h4>
               <a :href="station.homepage">{{ station.homepage }}</a>
             </h4>
-            <h6>{{ nowplaying }}</h6>
+            <h5>Now playing - {{nowplaying.metadata["icy-title"] }} ({{ nowplaying.metadata["icy-genre"] }})</h5>
           </div>
         </v-col>
       </v-row>
