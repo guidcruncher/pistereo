@@ -17,8 +17,8 @@ export default {
       query: { text: '', valid: false, searchTypes: '', market: '' },
       hasData: false,
       loading: false,
-      data: {},
-      results: {},
+      data: {} as any,
+      results: {} as any,
       paging: { offset: 0, limit: 10, page: 1, pageCount: 0, total: 0 },
     };
   },
@@ -125,8 +125,9 @@ export default {
       });
     },
     loadSearchPage() {
+const done=((arg)=>{});
       if (this.query.searchTypes == 'radio') {
-        this.loadRadioSearchPage({((arg)=>{})});
+        this.loadRadioSearchPage({done});
       } else {
         this.loadSpotifySearchPage();
       }
@@ -138,7 +139,7 @@ export default {
         }
       } else {
         if (this.data && this.data[this.query.searchTypes]) {
-          this.results = this.getReseults();
+          this.results = this.getResults();
           this.paging = this.results.paging;
         } else {
           if (this.query.valid) {
@@ -183,7 +184,7 @@ export default {
       if (!['playlist'].includes(this.query.searchTypes)) {
         window.open(item.external_urls.spotify);
       } else {
-        viewPlaylist(item);
+        this.viewPlaylist(item);
       }
     },
   },

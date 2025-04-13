@@ -14,7 +14,6 @@ export default {
   },
   mounted() {
     this.hasData = false;
-    this.tracks = null;
     this.getRadioPresets();
   },
   beforeUnmount() {},

@@ -49,7 +49,6 @@ export default {
           if (response.items.length > 0) {
             this.paging = response.paging;
             this.albums = response.items;
-            this.paging.total = response.total;
             this.hasData = true;
           }
         })
