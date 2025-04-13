@@ -31,7 +31,7 @@ export class RadioService {
 
   public async updateChannels(channels: Channel[]) {
     for (let i = 0; i < channels.length; i++) {
-      let c = channels[i];
+      const c = channels[i];
       await this.channelModel.findOneAndUpdate({ xmltv_id: c.xmltv_id }, c, {
         upsert: true,
       });
@@ -39,7 +39,7 @@ export class RadioService {
   }
 
   private toUTC(date: Date) {
-    var utc = Date.UTC(
+    const utc = Date.UTC(
       date.getUTCFullYear(),
       date.getUTCMonth(),
       date.getUTCDate(),
@@ -51,17 +51,17 @@ export class RadioService {
   }
 
   public async getEpg(stationuuid: string) {
-    let channel: Channel = (await this.getChannel(stationuuid)) as Channel;
+    const channel: Channel = (await this.getChannel(stationuuid)) as Channel;
 
     if (!channel) {
       return [];
     }
 
-    let res = await this.epgModel
+    const res = await this.epgModel
       .find({ channel: channel.xmltv_id })
       .lean()
       .exec();
-    let now = this.toUTC(new Date());
+    const now = this.toUTC(new Date());
     return res
       .filter((a) => {
         return this.toUTC(a.stop) >= now;
@@ -72,17 +72,20 @@ export class RadioService {
   }
 
   public async updateEpg(src: EpgData) {
-    let channels: any[] = await this.xmlTvRadioLinkModel.find({}).lean().exec();
+    const channels: any[] = await this.xmlTvRadioLinkModel
+      .find({})
+      .lean()
+      .exec();
     await this.epgModel.deleteMany({});
 
-    let ch = channels
+    const ch = channels
       .map((a) => {
         return a.xmltv_id;
       })
       .filter((value, index, array) => array.indexOf(value) === index);
 
     for (let i = 0; i < ch.length; i++) {
-      let progs = src.programs.filter((p) => {
+      const progs = src.programs.filter((p) => {
         return p.channel == ch[i];
       });
       this.logger.log(
@@ -121,7 +124,7 @@ export class RadioService {
   }
 
   public async getStreams(uuid: string[]) {
-    let res = await this.streamModel
+    const res = await this.streamModel
       .find({ stationuuid: { $in: uuid } })
       .lean();
 
@@ -129,7 +132,7 @@ export class RadioService {
   }
 
   public async getStreamsByName(name: string, offset: number, limit: number) {
-    let res = await this.streamModel
+    const res = await this.streamModel
       .find({ name: { $regex: '.*' + name + '.*' } })
       .sort('name')
       .lean();
@@ -142,7 +145,7 @@ export class RadioService {
   }
 
   public async getStream(stationuuid: string) {
-    let res = await this.streamModel
+    const res = await this.streamModel
       .findOne({ stationuuid: stationuuid })
       .lean()
       .exec();
@@ -195,7 +198,7 @@ export class RadioService {
   }
 
   public async getChannel(stationuuid: string): Promise<any> {
-    let xmltvid = await this.xmlTvRadioLinkModel
+    const xmltvid = await this.xmlTvRadioLinkModel
       .findOne({ stationuuid: stationuuid })
       .lean()
       .exec();
@@ -224,7 +227,7 @@ export class RadioService {
   }
 
   public async getPresets(id: string): Promise<RadioPreset[]> {
-    let res: RadioPreset[] = (await this.radioPresetModel
+    const res: RadioPreset[] = (await this.radioPresetModel
       .find({ id: id })
       .sort({ name: 1 })
       .lean()
@@ -232,7 +235,7 @@ export class RadioService {
 
     for (let i = 0; i < res.length; i++) {
       if (res[i].image == '') {
-        let ch = await this.getChannel(res[i].stationuuid);
+        const ch = await this.getChannel(res[i].stationuuid);
         if (ch) {
           res[i].image = ch.icon_url;
         }

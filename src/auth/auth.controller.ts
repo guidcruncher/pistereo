@@ -103,7 +103,7 @@ export class AuthController {
 
     session.set('access_token', result.access_token);
     session.set('refresh_token', result.refresh_token);
-    let token: string = JSON.stringify({
+    const token: string = JSON.stringify({
       access_token: result.access_token,
       refresh_token: result.refresh_token,
     });
@@ -114,7 +114,7 @@ export class AuthController {
       targeturl = '/';
     }
     res.header('Content-Type', 'text/html');
-    let html =
+    const html =
       '<html><head><title>PiStereo</title></head><body><script type="text/javascript">' +
       'localStorage.setItem("token", ' +
       JSON.stringify(token) +

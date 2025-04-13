@@ -43,8 +43,8 @@ export class StreamerSocketService
 
     StreamerSocketService.socket.on('data', (data) => {
       try {
-        let json: any = JSON.parse(data.toString());
-        let ev: any = { type: 'streamer.' + json.event, data: json };
+        const json: any = JSON.parse(data.toString());
+        const ev: any = { type: 'streamer.' + json.event, data: json };
         if (json.event != 'metadata-update') {
           log.log('Emitting ' + data);
         }
@@ -88,7 +88,7 @@ export class StreamerSocketService
   ): Promise<any> {
     let commandText: any[] = [cmd];
     commandText = commandText.concat(parameters);
-    let json: string = JSON.stringify({
+    const json: string = JSON.stringify({
       command: commandText,
       request_id: requestId,
     });

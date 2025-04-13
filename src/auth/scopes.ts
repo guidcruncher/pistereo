@@ -13,7 +13,7 @@ export const scopes: string[] = [
 ];
 
 export const getScopes = (): Record<string, any> => {
-  let r: Record<string, any> = {};
+  const r: Record<string, any> = {};
 
   scopes.forEach((scope) => {
     r[scope] = scope;

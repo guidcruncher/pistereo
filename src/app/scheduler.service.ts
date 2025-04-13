@@ -37,7 +37,7 @@ export class SchedulerService {
 
   public listCronJobs() {
     const jobs = this.getCronJobs();
-    let result: any[] = [] as any[];
+    const result: any[] = [] as any[];
     jobs.forEach((value, key, map) => {
       let next;
       let last;
@@ -47,7 +47,7 @@ export class SchedulerService {
         next = '';
       }
       try {
-        let v = value.lastDate();
+        const v = value.lastDate();
         last = '';
         if (v) {
           last = v.toJSON();

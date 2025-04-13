@@ -10,7 +10,7 @@ export class SpotifyBaseService extends ServiceBase {
   }
 
   public createPagedList<T>(json: any): PagedList<T> {
-    let obj: PagedList<T> = {} as PagedList<T>;
+    const obj: PagedList<T> = {} as PagedList<T>;
 
     obj.paging = {
       offset: json.offset,
@@ -28,9 +28,9 @@ export class SpotifyBaseService extends ServiceBase {
   }
 
   private async createError(response): Promise<ApiResult<ApiError>> {
-    let error: ApiResult<ApiError> = {} as ApiResult<ApiError>;
-    let txt: any = await response.text();
-    let err: any = JSON.parse(txt);
+    const error: ApiResult<ApiError> = {} as ApiResult<ApiError>;
+    const txt: any = await response.text();
+    const err: any = JSON.parse(txt);
     error.status = response.status;
     error.statusText = response.statusText;
     error.result = { err: err, url: response.url };
@@ -55,14 +55,14 @@ export class SpotifyBaseService extends ServiceBase {
       return await this.createError(response);
     }
 
-    let result: ApiResult<PagedList<T>> = {} as ApiResult<PagedList<T>>;
-    let resultLength: number = await this.getResponseLength(response);
+    const result: ApiResult<PagedList<T>> = {} as ApiResult<PagedList<T>>;
+    const resultLength: number = await this.getResponseLength(response);
     result.status = response.status;
     result.statusText = response.statusText;
 
     if (resultLength > 0) {
       try {
-        let json: any = await response.json();
+        const json: any = await response.json();
         if (propName && propName != '') {
           result.result = this.createPagedList<T>(json[propName]);
         } else {
@@ -81,14 +81,14 @@ export class SpotifyBaseService extends ServiceBase {
       return await this.createError(response);
     }
 
-    let result: ApiResult<T> = {} as ApiResult<T>;
-    let resultLength: number = await this.getResponseLength(response);
+    const result: ApiResult<T> = {} as ApiResult<T>;
+    const resultLength: number = await this.getResponseLength(response);
     result.status = response.status;
     result.statusText = response.statusText;
 
     if (resultLength > 0) {
       try {
-        let json: any = await response.json();
+        const json: any = await response.json();
         result.result = json as T;
       } catch (err) {
         this.logger.error('Error parsing response', err);

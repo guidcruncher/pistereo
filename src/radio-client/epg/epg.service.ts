@@ -26,12 +26,12 @@ export class EpgService {
   private readonly log = new Logger(EpgService.name);
 
   public async getChannels(): Promise<Channel[]> {
-    let xmltvchannels: any = this.config.get<string>('radio.xmltvchannels');
+    const xmltvchannels: any = this.config.get<string>('radio.xmltvchannels');
     const result = await fetch(xmltvchannels, {
       method: 'GET',
     });
 
-    let c: any = (await result.json()).channels as Channel[];
+    const c: any = (await result.json()).channels as Channel[];
     this.log.debug('Found ' + c.length.toString() + ' channels');
     return c;
   }
@@ -44,40 +44,40 @@ export class EpgService {
   }
 
   public async executeScheduleJob() {
-    let channels: Channel[] = await this.getChannels();
+    const channels: Channel[] = await this.getChannels();
     await this.radioService.updateChannels(channels);
     await this.radioService.cleanupLinks();
     await this.downloadEpg();
   }
 
   private loadMappings(): any {
-    let filename = path.join(
+    const filename = path.join(
       process.env.NODE_CONFIG_DIR as string,
       'stationmappings.json',
     );
     if (fs.existsSync(filename)) {
-      let txt: string = fs.readFileSync(filename, 'utf8');
+      const txt: string = fs.readFileSync(filename, 'utf8');
       return JSON.parse(txt);
     }
     return {};
   }
 
   public async executeScheduleJobWithStationCheck() {
-    let mappings: any = this.loadMappings();
-    let channels: Channel[] = await this.getChannels();
+    const mappings: any = this.loadMappings();
+    const channels: Channel[] = await this.getChannels();
     await this.radioService.updateChannels(channels);
-    let ch = channels.reverse();
+    const ch = channels.reverse();
 
     const stationCheck = (channel, station) => {
       if (channel == station) {
         return true;
       }
-      let map = mappings[channel] ?? [];
+      const map = mappings[channel] ?? [];
       for (let i = 0; i < map.length; i++) {
         if (map[i] == station) {
           return true;
         }
-        let r = new RegExp(
+        const r = new RegExp(
           '\b' + map[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\b',
         );
         if (r.test(station)) {
@@ -88,16 +88,16 @@ export class EpgService {
     };
 
     for (let i = 0; i < ch.length; i++) {
-      let c = ch[i];
-      let stationuuidexists = await this.radioService.existsStationUuid(
+      const c = ch[i];
+      const stationuuidexists = await this.radioService.existsStationUuid(
         c.xmltv_id,
       );
       if (!stationuuidexists) {
-        let query: SearchRequest = new SearchRequest();
+        const query: SearchRequest = new SearchRequest();
         // query.language = c.lang;
         query.name = c.name;
         query.nameExact = true;
-        let res: Station[] = await this.radioBrowserService.search(
+        const res: Station[] = await this.radioBrowserService.search(
           query,
           0,
           50,
@@ -124,8 +124,8 @@ export class EpgService {
   }
 
   public async downloadEpg() {
-    let xmltvurl: any = this.config.get<string>('radio.xmltvurl');
-    let localFilename = path.join(process.env.APPCACHE as string, 'epg.xml');
+    const xmltvurl: any = this.config.get<string>('radio.xmltvurl');
+    const localFilename = path.join(process.env.APPCACHE as string, 'epg.xml');
     let xml: any = '';
     const result = await fetch(xmltvurl, {
       method: 'GET',
@@ -139,7 +139,7 @@ export class EpgService {
       fs.copyFileSync(localFilename, localFilename + '.bak');
     }
     fs.writeFileSync(localFilename, xml);
-    let parsed = parser.parse(xml);
+    const parsed = parser.parse(xml);
     await this.radioService.updateEpg(parsed);
   }
 
@@ -154,9 +154,9 @@ export class EpgService {
   }
 
   public async getEpgForChannel(stationuuid: string) {
-    let epg: any[] = await this.radioService.getEpg(stationuuid);
+    const epg: any[] = await this.radioService.getEpg(stationuuid);
     if (epg) {
-      for (var i = 0; i < epg.length; i++) {
+      for (let i = 0; i < epg.length; i++) {
         epg[i].sameDay =
           this.formatTinyDate(epg[i].start) == this.formatTinyDate(epg[i].stop);
       }

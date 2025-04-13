@@ -16,7 +16,7 @@ export class SpotifyResponseInterceptor implements NestInterceptor {
   constructor(private reflector: Reflector) {}
 
   private removeProps(obj: any, args: string[]): any {
-    let res = obj;
+    const res = obj;
     if (res.href) {
       delete res.href;
     }

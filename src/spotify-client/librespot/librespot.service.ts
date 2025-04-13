@@ -47,7 +47,7 @@ export class LibrespotService extends SpotifyBaseService {
       body: JSON.stringify({ volume: volume, relative: relative }),
       headers: { 'Content-Type': 'application/json' },
     });
-    let txt = await result.text();
+    const txt = await result.text();
 
     if (txt != '') {
       return JSON.parse(txt);
@@ -58,7 +58,7 @@ export class LibrespotService extends SpotifyBaseService {
 
   public async play(request: Play) {
     this.log.log(this.__caller() + ' =>play');
-    let status: any = await this.getStatus();
+    const status: any = await this.getStatus();
 
     const result = await fetch(this.getApiUrl('/player/play'), {
       method: 'POST',

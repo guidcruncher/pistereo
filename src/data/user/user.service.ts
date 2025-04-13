@@ -22,10 +22,10 @@ export class UserService {
   ) {}
 
   public async deleteLastPlayed() {
-    let current = await this.getLastPlayed();
+    const current = await this.getLastPlayed();
 
     if (current) {
-      let res = await this.playbackHistoryModel.findOneAndUpdate(
+      const res = await this.playbackHistoryModel.findOneAndUpdate(
         { $and: [{ uri: current.uri }, { finished: { $exists: false } }] },
         { finished: new Date() },
         { upsert: false },
@@ -68,9 +68,9 @@ export class UserService {
     token: string,
     refreshtoken: string,
   ) {
-    let expires: Date = new Date();
+    const expires: Date = new Date();
     expires.setSeconds(expires.getSeconds() + 3600);
-    let user: User = {
+    const user: User = {
       user: username,
       id: id,
       profile: profile,
@@ -87,7 +87,7 @@ export class UserService {
   }
 
   public async updateLastAccess(token: string) {
-    let lastAccess: Date = new Date();
+    const lastAccess: Date = new Date();
     return await this.userModel.findOneAndUpdate(
       { token: token },
       { lastAccess: lastAccess },
@@ -104,13 +104,13 @@ export class UserService {
     uri: string,
     detail: any,
   ) {
-    let current = await this.getLastPlayed();
+    const current = await this.getLastPlayed();
 
     if (current && current.uri == uri) {
       return current;
     }
 
-    let data: LastPlayed = {
+    const data: LastPlayed = {
       user: user,
       display_name: display_name,
       source: source,
@@ -119,7 +119,7 @@ export class UserService {
     };
 
     if (display_name === '') {
-      let userProfile: any = await this.getUserById(user);
+      const userProfile: any = await this.getUserById(user);
       if (userProfile) {
         data.display_name = userProfile.user;
       }

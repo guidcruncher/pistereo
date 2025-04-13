@@ -41,7 +41,7 @@ export class LibrespotController {
   @Get()
   @ApiOperation({ summary: 'Get device status' })
   async getStatus() {
-    let res: any = await this.librespotService.getStatus();
+    const res: any = await this.librespotService.getStatus();
 
     if (res) {
       return res;

@@ -50,10 +50,10 @@ export class LibrespotSocketService extends SpotifyBaseService {
     });
 
     LibrespotSocketService.socket.on('message', (message) => {
-      let messageText: string = message.toString().trim();
+      const messageText: string = message.toString().trim();
       try {
         log.debug('Message => ' + messageText);
-        let ev: any = JSON.parse(messageText);
+        const ev: any = JSON.parse(messageText);
         ev.type = 'spotify.' + ev.type;
 
         if (ev.type == 'spotify.metadata') {

@@ -38,7 +38,7 @@ export class RadioBrowserController {
   @ApiOperation({ summary: 'Get a channels EPG' })
   @ApiParam({ name: 'uuid' })
   async getEpgForChannel(@Param('uuid') stationuuid: string) {
-    let res = await this.epgService.getEpgForChannel(stationuuid);
+    const res = await this.epgService.getEpgForChannel(stationuuid);
 
     if (res == null) {
       throw new NotFoundException();
@@ -63,7 +63,7 @@ export class RadioBrowserController {
   @ApiOperation({ summary: 'Get a stations details' })
   @ApiParam({ name: 'uuid' })
   async getStation(@Param('uuid') uuid: string) {
-    let result: any = await this.radioBrowserService.searchByUuid([uuid]);
+    const result: any = await this.radioBrowserService.searchByUuid([uuid]);
     if (result.length > 0) {
       return result[0];
     }
