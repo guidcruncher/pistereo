@@ -70,7 +70,9 @@ export class JackService extends ServiceBase {
   async eject() {
     this.log.log(this.__caller() + ' => eject');
     let playing: any = await this.userService.getLastPlayed();
-    await this.stopDevice(playing.source);
+    if (playing) {
+      await this.stopDevice(playing.source);
+    }
     return await this.userService.deleteLastPlayed();
   }
 

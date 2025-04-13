@@ -73,7 +73,7 @@ export class TunerService extends ServiceBase {
       source: 'streamer',
       trigger: 'playStation',
       context: '',
-      uri: uiid,
+      uri: uuid,
     });
     return response.data;
   }

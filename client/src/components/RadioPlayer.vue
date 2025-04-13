@@ -40,7 +40,17 @@ export default {
     on('streamer.stream-changed', (data: any) => {
       this.paused = false;
       this.stopped = false;
-      this.station = data.station;
+//      this.station = data.station;
+    });
+
+    on('audio_changed', (data: any) => {
+      if (data.source == 'streamer') {
+        const tunerService = new TunerService();
+        tunerService.getStation(data.uri).then((station) => {
+          this.station = station;
+          this.hasData = true;
+        });
+      }
     });
 
     on('source_changed', (data: any) => {
@@ -61,6 +71,7 @@ export default {
   beforeUnmount() {
     off('eject');
     off('source_changed');
+    off('audio_changed');
     off('streamer.stream-changed');
   },
   methods: {

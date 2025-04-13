@@ -60,8 +60,8 @@
         </v-list-item>
         <v-divider />
         <v-list-item>
-          <CompactPlayer />
-          <RadioPlayer />
+          <CompactPlayer v-if="source=='spotify'"/>
+          <RadioPlayer v-if="source=='streamer'" />
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -133,13 +133,23 @@ function onPinClick() {
 
 <script lang="ts">
 export default {
-  name: 'Default',
+  name: 'Defaultlayout',
   data() {
     return {
+      source:'',
       tab: 1,
     };
   },
-  mounted() {},
+  mounted() {
+const playerStore = usePlayerStore();
+this.source=playerStore.getSource();
+
+on('audio_changed', (data: any) => {
+this.source=data.source;});
+},
+beforeUnmount() {
+    off('audio_changed');
+  },
   methods: {
     goto(url, tab) {
       const themeStore = useThemeStore();
