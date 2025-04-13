@@ -63,7 +63,11 @@ export default {
 <template>
   <v-card>
     <v-list>
-      <v-list-group v-for="item in albums" :key="item" :value="item">
+      <v-list-group
+        v-for="item in albums"
+        :key="item"
+        :value="item"
+      >
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -76,7 +80,7 @@ export default {
                   :src="item.album.images[1].url"
                   width="64"
                   height="64"
-                />
+                >
               </div>
             </template>
             <v-list-item-title v-text="item.album.name" />
@@ -90,7 +94,10 @@ export default {
               }}
             </v-list-item-subtitle>
             <template #append>
-              <v-row align="center" justify="center">
+              <v-row
+                align="center"
+                justify="center"
+              >
                 <v-col cols="auto">
                   <v-btn
                     icon="mdi-play"
@@ -127,7 +134,10 @@ export default {
             {{ track.track_number }}. {{ track.name }}
           </v-list-item-title>
           <template #append>
-            <v-row align="center" justify="center">
+            <v-row
+              align="center"
+              justify="center"
+            >
               <v-col cols="auto">
                 <v-btn
                   icon="mdi-play"

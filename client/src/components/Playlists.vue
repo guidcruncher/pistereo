@@ -54,10 +54,19 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
-    <v-card-title sticky> My Playlists </v-card-title>
+  <v-card
+    v-if="hasData"
+    class="mx-auto"
+  >
+    <v-card-title sticky>
+      My Playlists
+    </v-card-title>
     <v-list nav>
-      <v-list-item v-for="item in playlists" :key="item.id" :value="item">
+      <v-list-item
+        v-for="item in playlists"
+        :key="item.id"
+        :value="item"
+      >
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">
             <img
@@ -65,13 +74,16 @@ export default {
               :src="item.images[0].url"
               width="64"
               height="64"
-            />
+            >
           </div>
         </template>
         <v-list-item-title v-text="item.name" />
         <v-list-item-subtitle v-text="item.owner.display_name" />
         <template #append>
-          <v-row align="center" justify="center">
+          <v-row
+            align="center"
+            justify="center"
+          >
             <v-col cols="auto">
               <v-btn
                 icon="mdi-play"

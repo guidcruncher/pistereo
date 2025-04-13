@@ -36,7 +36,10 @@
       <template #append>
         <v-menu>
           <template #activator="{ props }">
-            <v-btn icon="mdi-dots-vertical" v-bind="props" />
+            <v-btn
+              icon="mdi-dots-vertical"
+              v-bind="props"
+            />
           </template>
           <v-list>
             <v-list-item @click="onThemeChooserClick">
@@ -54,7 +57,10 @@
       :permanent="pinned"
       :temporary="!pinned"
     >
-      <v-list slim density="compact">
+      <v-list
+        slim
+        density="compact"
+      >
         <v-list-item>
           <MyProfileBanner />
         </v-list-item>

@@ -43,8 +43,11 @@ function navigateToUrl(url: string) {
 
 <template>
   <div style="display: table">
-    <div class="profileimg" style="display: table-cell">
-      <img :src="profileImage.url" />
+    <div
+      class="profileimg"
+      style="display: table-cell"
+    >
+      <img :src="profileImage.url">
     </div>
     <div style="display: table-cell; padding-left: 5px; vertical-align: middle">
       <h3>{{ profile.display_name }}</h3>

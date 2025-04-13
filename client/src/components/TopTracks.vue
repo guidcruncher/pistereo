@@ -55,9 +55,16 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
+  <v-card
+    v-if="hasData"
+    class="mx-auto"
+  >
     <v-list nav>
-      <v-list-item v-for="item in tracks" :key="item" :value="item">
+      <v-list-item
+        v-for="item in tracks"
+        :key="item"
+        :value="item"
+      >
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">
             <img
@@ -65,13 +72,16 @@ export default {
               :src="item.album.images[0].url"
               width="64"
               height="64"
-            />
+            >
           </div>
         </template>
         <v-list-item-title v-text="item.name" />
         <v-list-item-subtitle v-text="item.album.name" />
         <template #append>
-          <v-row align="center" justify="center">
+          <v-row
+            align="center"
+            justify="center"
+          >
             <v-col cols="auto">
               <v-btn
                 icon="mdi-play"

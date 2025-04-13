@@ -75,13 +75,20 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
+  <v-card
+    v-if="hasData"
+    class="mx-auto"
+  >
     <v-card-title sticky>
       {{ playlist.name }}
     </v-card-title>
     <v-card-subtitle>By {{ playlist.owner.display_name }} </v-card-subtitle>
     <v-list nav>
-      <v-list-item v-for="item in tracks" :key="item.track.id" :value="item">
+      <v-list-item
+        v-for="item in tracks"
+        :key="item.track.id"
+        :value="item"
+      >
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">
             <img
@@ -89,13 +96,16 @@ export default {
               :src="item.track.album.images[0].url"
               width="64"
               height="64"
-            />
+            >
           </div>
         </template>
         <v-list-item-title v-text="item.track.name" />
         <v-list-item-subtitle v-text="item.track.album.name" />
         <template #append>
-          <v-row align="center" justify="center">
+          <v-row
+            align="center"
+            justify="center"
+          >
             <v-col cols="auto">
               <v-btn
                 icon="mdi-play"

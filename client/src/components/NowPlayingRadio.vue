@@ -97,7 +97,7 @@ export default {
         <v-col cols="12">
           <div class="centre">
             <div class="albumimgbig">
-              <img :src="station.favicon" />
+              <img :src="station.favicon">
             </div>
           </div>
         </v-col>
@@ -121,9 +121,15 @@ export default {
     </v-container>
 
     <v-card v-if="hasEpg">
-      <v-card-title sticky> Program Guide </v-card-title>
+      <v-card-title sticky>
+        Program Guide
+      </v-card-title>
       <v-list nav>
-        <v-list-item v-for="item in epg" :key="item" :value="item">
+        <v-list-item
+          v-for="item in epg"
+          :key="item"
+          :value="item"
+        >
           <v-list-item-title v-text="item.title" />
           <v-list-item-subtitle v-text="item.desc" />
           <template #append>
@@ -138,13 +144,13 @@ export default {
                 <tr>
                   <td>
                     <div>
-                      {{ formatTinyDate(item.start) }}<br />
+                      {{ formatTinyDate(item.start) }}<br>
                       {{ formatTime(item.start) }}
                     </div>
                   </td>
                   <td>
                     <div>
-                      {{ formatTinyDate(item.stop) }}<br />
+                      {{ formatTinyDate(item.stop) }}<br>
                       {{ formatTime(item.stop) }}
                     </div>
                   </td>
@@ -160,7 +166,10 @@ export default {
             >
               <tbody>
                 <tr>
-                  <td class="text-center" colspan="2">
+                  <td
+                    class="text-center"
+                    colspan="2"
+                  >
                     <div>{{ formatTinyDate(item.start) }}</div>
                   </td>
                 </tr>
