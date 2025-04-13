@@ -18,7 +18,7 @@ docker buildx create \
 if [ "$prodbuild" == "dev" ]; then
 tags="guidcruncher/$package:development"
 echo $tags
-docker buildx build -f ./Dockerfile.dev . \
+docker buildx build -f ./Dockerfile.production . \
   --builder pistereoBuilder \
   -t guidcruncher/$package:development \
   --pull \
