@@ -70,10 +70,6 @@ export default {
       this.getPlayerState();
     });
 
-    on('spotify.volume', (data: any) => {
-      this.player.volume = data.value;
-    });
-
     on('spotify.playing', (data: any) => {
       const jackService = new JackService();
       jackService.stopDevice('streamer');
@@ -123,9 +119,6 @@ export default {
       spotifyService
         .setDeviceVolume(volume)
         .then((response) => {
-          if (response) {
-            this.getPlayerState();
-          }
         })
         .catch((e) => {
           console.log(e);
