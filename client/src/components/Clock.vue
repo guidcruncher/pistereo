@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     tick() {
-      let date = new Date();
+      const date = new Date();
       let changed = false;
       const dateFormat = new Intl.DateTimeFormat('default', {
         weekday: 'long',
@@ -66,6 +66,10 @@ export default {
 </script>
 
 <template>
-  <div class="text-h1 text-center font-weight-thin">{{ time }}</div>
-  <div class="text-subtitle-1 text-center text-uppercase">{{ date }}</div>
+  <div class="text-h1 text-center font-weight-thin">
+    {{ time }}
+  </div>
+  <div class="text-subtitle-1 text-center text-uppercase">
+    {{ date }}
+  </div>
 </template>

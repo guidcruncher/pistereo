@@ -34,11 +34,11 @@ interface DeviceObject {
 }
 
 interface Pager {
-offset: number;
-limit: number;
-total: number;
-page: number;
-pageCount: number;
+  offset: number;
+  limit: number;
+  total: number;
+  page: number;
+  pageCount: number;
 }
 
 interface PagedList<T> {

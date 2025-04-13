@@ -23,7 +23,7 @@ export default {
     const playerStore = usePlayerStore();
     const authStore = useAuthStore();
 
-    let token = JSON.parse(
+    const token = JSON.parse(
       localStorage.getItem('token') ??
         '{"access_token": "", "refresh_token": ""}',
     ) || { access_token: '', refresh_token: '' };
@@ -32,7 +32,7 @@ export default {
       return;
     } else {
       const spotifyService = new SpotifyService();
-      let tokenValid = spotifyService.isTokenValid();
+      const tokenValid = spotifyService.isTokenValid();
       if (!tokenValid) {
         localStorage.setItem(
           'token',
@@ -101,6 +101,11 @@ export default {
     if (themeStore.tab > 0) {
       this.$router.push(this.$router.options.routes[themeStore.tab].path);
     }
+
+    on('audio_changed', (data: any) => {
+      const playerStore = usePlayerStore();
+      this.source = playerStore.setSource(data.source);
+    });
   },
   methods: {},
 };

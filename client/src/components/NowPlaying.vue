@@ -84,7 +84,7 @@ export default {
     },
     setTrack(s: any) {
       if (s) {
-        let track = s;
+        const track = s;
         track.progressPercent = Math.abs(
           (100 / track.duration) * track.position,
         );
@@ -128,7 +128,7 @@ export default {
         </v-col>
       </v-row>
       <v-card>
-        <v-card-title sticky>Queue</v-card-title>
+        <v-card-title sticky> Queue </v-card-title>
         <v-list nav>
           <v-list-item v-for="item in queue" :key="item.id" :value="item">
             <template v-if="item" #prepend>

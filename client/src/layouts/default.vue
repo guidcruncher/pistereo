@@ -5,14 +5,14 @@
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
         <template v-if="drawer">
           <v-btn
-            size="small"
             v-if="!pinned"
+            size="small"
             icon="mdi-pin"
             @click.stop="onPinClick()"
           />
           <v-btn
-            size="small"
             v-if="pinned"
+            size="small"
             icon="mdi-pin-off"
             @click.stop="onPinClick()"
           />
@@ -40,8 +40,8 @@
           </template>
           <v-list>
             <v-list-item @click="onThemeChooserClick">
-              <v-list-item-title>Toggle Theme</v-list-item-title></v-list-item
-            >
+              <v-list-item-title>Toggle Theme</v-list-item-title>
+            </v-list-item>
             <v-list-item @click="onLogoutClick">
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item>

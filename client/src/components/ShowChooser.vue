@@ -28,10 +28,9 @@ export default {
       this.showTracks();
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     off('podcast.picker');
   },
-  beforeUnmount() {},
   methods: {
     playShow() {
       const spotifyService = new SpotifyService();
@@ -74,29 +73,34 @@ export default {
 </script>
 
 <template>
-  <v-dialog v-model="isActive" width="auto" fullscreen>
+  <v-dialog v-model="isActive" width="auto" scrollable persistent>
     <v-card>
       <v-toolbar>
-        <v-btn icon="mdi-close" @click="isActive = false"></v-btn>
+        <v-btn icon="mdi-close" @click="isActive = false" />
         <v-toolbar-title>Podcast</v-toolbar-title>
       </v-toolbar>
-      <v-row
-        ><v-col cols="2">
-          <div style="width: 100px; height: 100px; margin: 16px">
-            <img
-              v-if="show.show.images"
-              :src="show.show.images[1].url"
-              width="100"
-              height="100"
-            />
-          </div> </v-col
-        ><v-col cols="10"
-          ><div style="margin-top: 16px">
-            <h3>{{ show.show.name }}</h3>
-            <h5>{{ show.show.publisher }}</h5>
-          </div></v-col
-        ></v-row
-      >
+      <table border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+          <tr>
+            <td>
+              <div style="width: 80px; height: 80px; margin: 16px">
+                <img
+                  v-if="show.show.images"
+                  :src="show.show.images[1].url"
+                  width="80"
+                  height="80"
+                />
+              </div>
+            </td>
+            <td>
+              <div style="margin-top: 16px">
+                <h3>{{ show.show.name }}</h3>
+                <h5>{{ show.show.publisher }}</h5>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <v-list>
         <v-list-item v-for="item in shows" :key="item" :value="item">
@@ -119,8 +123,9 @@ export default {
                   icon="mdi-play"
                   size="normal"
                   @click="playShowTrack(item)"
-                /> </v-col
-            ></v-row>
+                />
+              </v-col>
+            </v-row>
           </template>
         </v-list-item>
       </v-list>

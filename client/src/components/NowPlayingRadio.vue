@@ -20,31 +20,6 @@ export default {
       epg: [] as any[],
     };
   },
-  methods: {
-    tick() {
-      const jackService = new JackService();
-      jackService.getStreamerStatus().then((state) => {
-        this.nowplaying = state;
-      });
-    },
-    getPlayerState() {
-      const jackService = new JackService();
-      jackService.getStatus().then((state) => {
-        if (state.playing && state.playing.source == 'streamer') {
-          const tunerService = new TunerService();
-          tunerService.getStation(state.playing.stationuuid).then((station) => {
-            this.station = station;
-            this.hasData = true;
-          });
-          this.hasEpg = false;
-          tunerService.getEpg(state.playing.stationuuid).then((epg) => {
-            this.epg = epg;
-            this.hasEpg = true;
-          });
-        }
-      });
-    },
-  },
   mounted() {
     const playerStore = usePlayerStore();
     this.hasData = false;
@@ -82,12 +57,36 @@ export default {
       }
     });
   },
-  beforeUnmount() {},
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer);
     this.timer = 0;
     off('source_changed');
     off('streamer.stream-changed');
+  },
+  methods: {
+    tick() {
+      const jackService = new JackService();
+      jackService.getStreamerStatus().then((state) => {
+        this.nowplaying = state;
+      });
+    },
+    getPlayerState() {
+      const jackService = new JackService();
+      jackService.getStatus().then((state) => {
+        if (state.playing && state.playing.source == 'streamer') {
+          const tunerService = new TunerService();
+          tunerService.getStation(state.playing.stationuuid).then((station) => {
+            this.station = station;
+            this.hasData = true;
+          });
+          this.hasEpg = false;
+          tunerService.getEpg(state.playing.stationuuid).then((epg) => {
+            this.epg = epg;
+            this.hasEpg = true;
+          });
+        }
+      });
+    },
   },
 };
 </script>
@@ -122,7 +121,7 @@ export default {
     </v-container>
 
     <v-card v-if="hasEpg">
-      <v-card-title sticky>Program Guide</v-card-title>
+      <v-card-title sticky> Program Guide </v-card-title>
       <v-list nav>
         <v-list-item v-for="item in epg" :key="item" :value="item">
           <v-list-item-title v-text="item.title" />

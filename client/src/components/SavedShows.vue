@@ -85,7 +85,7 @@ export default {
   <v-card>
     <v-list>
       <v-list-group v-for="item in shows" :key="item" :value="item">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-list-item v-bind="props" @click="browse(item)">
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">
@@ -98,8 +98,8 @@ export default {
               </div>
             </template>
             <v-list-item-title v-text="item.show.name" />
-            <v-list-item-subtitle
-              >{{ item.show.publisher }}
+            <v-list-item-subtitle>
+              {{ item.show.publisher }}
             </v-list-item-subtitle>
             <template #append>
               <v-row align="center" justify="center">
@@ -114,8 +114,9 @@ export default {
                     icon="mdi-play"
                     size="normal"
                     @click="playShow(item)"
-                  /> </v-col
-              ></v-row>
+                  />
+                </v-col>
+              </v-row>
             </template>
           </v-list-item>
         </template>

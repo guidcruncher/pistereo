@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels multiple v-model="panel">
+  <v-expansion-panels v-model="panel" multiple>
     <v-expansion-panel>
       <v-expansion-panel-title>Presets</v-expansion-panel-title>
       <v-expansion-panel-text>
@@ -39,9 +39,9 @@ export default {
       panel: [0],
     };
   },
-  methods: {},
   mounted() {},
-  beforeDestroy() {},
+  beforeUnmount() {},
+  methods: {},
 };
 </script>
 <script lang="ts" setup></script>
