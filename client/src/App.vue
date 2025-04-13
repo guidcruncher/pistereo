@@ -104,7 +104,7 @@ export default {
 
     on('audio_changed', (data: any) => {
       const playerStore = usePlayerStore();
-      this.source = playerStore.setSource(data.source);
+      playerStore.setSource(data.source);
     });
   },
   methods: {},
