@@ -60,8 +60,8 @@
         </v-list-item>
         <v-divider />
         <v-list-item>
-          <CompactPlayer v-if="source=='spotify'"/>
-          <RadioPlayer v-if="source=='streamer'" />
+          <CompactPlayer v-if="source == 'spotify'" />
+          <RadioPlayer v-if="source == 'streamer'" />
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -106,6 +106,7 @@ import { ref, watch } from 'vue';
 import { usePlayerStore } from '@/stores/player';
 import { useThemeStore } from '@/stores/theme';
 import { on, emit, off } from '../composables/useeventbus';
+import { JackService } from '../services/jack.service';
 
 const playerStore = usePlayerStore();
 const themeStore = useThemeStore();
@@ -133,21 +134,30 @@ function onPinClick() {
 
 <script lang="ts">
 export default {
-  name: 'Defaultlayout',
+  name: 'Default',
   data() {
     return {
-      source:'',
+      source: '',
       tab: 1,
     };
   },
   mounted() {
-const playerStore = usePlayerStore();
-this.source=playerStore.getSource();
-
-on('audio_changed', (data: any) => {
-this.source=data.source;});
-},
-beforeUnmount() {
+    const playerStore = usePlayerStore();
+    this.source = playerStore.getSource();
+    const jackService = new JackService();
+    jackService.getStatus().then((s) => {
+      if (s.playing) {
+        this.source = s.playing.source;
+        playerStore.setSource(s.playing.source);
+      }
+    });
+    on('audio_changed', (data: any) => {
+      const playerStore = usePlayerStore();
+      playerStore.setSource(data.source);
+      this.source = data.source;
+    });
+  },
+  beforeUnmount() {
     off('audio_changed');
   },
   methods: {

@@ -3,6 +3,7 @@ import axios, { type AxiosResponse } from 'axios';
 import { LocationService } from './location.service';
 import { JackService } from './jack.service';
 import { on, emit, off } from '../composables/useeventbus';
+import { usePlayerStore } from '@/stores/player';
 
 export class TunerService extends ServiceBase {
   constructor() {
@@ -69,6 +70,7 @@ export class TunerService extends ServiceBase {
     const response: AxiosResponse<any> = await this.client('/api/radio').put(
       '/' + uuid,
     );
+    usePlayerStore().setSource('streamer');
     emit('audio_changed', {
       source: 'streamer',
       trigger: 'playStation',

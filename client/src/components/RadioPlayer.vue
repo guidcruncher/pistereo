@@ -40,7 +40,7 @@ export default {
     on('streamer.stream-changed', (data: any) => {
       this.paused = false;
       this.stopped = false;
-//      this.station = data.station;
+      //      this.station = data.station;
     });
 
     on('audio_changed', (data: any) => {

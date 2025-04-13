@@ -2,6 +2,7 @@ import { ServiceBase } from './service-base';
 import axios, { type AxiosResponse } from 'axios';
 import { JackService } from './jack.service';
 import { on, emit, off } from '../composables/useeventbus';
+import { usePlayerStore } from '@/stores/player';
 
 export class SpotifyService extends ServiceBase {
   constructor() {
@@ -151,6 +152,7 @@ export class SpotifyService extends ServiceBase {
         positionMs: 0,
       },
     );
+    usePlayerStore().setSource('spotify');
     emit('audio_changed', {
       source: 'spotify',
       trigger: 'playItemOnPlayer',
@@ -168,6 +170,7 @@ export class SpotifyService extends ServiceBase {
     const response: AxiosResponse = await this.client({
       baseUrl: '/api/librespot',
     }).put('/play?' + params.toString());
+    usePlayerStore().setSource('spotify');
     emit('audio_changed', {
       source: 'spotify',
       trigger: 'playTrack',
@@ -189,6 +192,8 @@ export class SpotifyService extends ServiceBase {
     const response: AxiosResponse = await this.client({
       baseUrl: '/api/librespot',
     }).put('/play?' + params.toString());
+
+    usePlayerStore().setSource('spotify');
     emit('audio_changed', {
       source: 'spotify',
       trigger: 'playTrackInPlayList',
@@ -206,6 +211,7 @@ export class SpotifyService extends ServiceBase {
     const response: AxiosResponse = await this.client({
       baseUrl: '/api/librespot',
     }).put('/play?' + params.toString());
+    usePlayerStore().setSource('spotify');
     emit('audio_changed', {
       source: 'spotify',
       trigger: 'playPlayList',
