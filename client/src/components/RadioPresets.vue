@@ -8,7 +8,7 @@ export default {
   name: 'Radiopresets',
   data() {
     return {
-      presets: null,
+      presets: [] as any[],
       hasData: false,
     };
   },

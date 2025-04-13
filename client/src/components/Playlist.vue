@@ -6,9 +6,9 @@ export default {
   name: 'Playlist',
   data() {
     return {
-      playlist: null,
+      playlist: {} as anzy,
       hasData: false,
-      tracks: null,
+      tracks: {} as any,
       paging: { offset: 0, limit: 10, page: 1, pageCount: 0 },
     };
   },
@@ -17,7 +17,7 @@ export default {
     this.tracks = null;
     this.paging = { offset: 0, limit: 10, page: 1, pageCount: 0 };
 
-    on('view_playlist', (data) => {
+    on('view_playlist', (data:any) => {
       this.playlist = data.playlist;
       this.getPlaylistTracks();
     });
@@ -80,7 +80,7 @@ export default {
       {{ playlist.name }}
     </v-card-title>
     <v-card-subtitle>By {{ playlist.owner.display_name }} </v-card-subtitle>
-    <v-list lines="false" nav>
+    <v-list nav>
       <v-list-item v-for="item in tracks" :key="item.track.id" :value="item">
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">

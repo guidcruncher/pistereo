@@ -15,7 +15,7 @@ export default {
       hasEpg: false,
       source: {} as any,
       station: {} as any,
-      nowplaying: {},
+      nowplaying: {} as any,
       timer: 0,
       epg: [] as any[],
     };
@@ -84,7 +84,7 @@ export default {
   },
   beforeUnmount() {},
   beforeDestroy() {
-    this.clearInterval(this.timer);
+    clearInterval(this.timer);
     this.timer = 0;
     off('source_changed');
     off('streamer.stream-changed');

@@ -36,12 +36,12 @@ export default {
         hourCycle: 'h23',
       });
       if (this.date != dateFormat.format(date)) {
-        this.changed = true;
+        changed = true;
         this.date = dateFormat.format(date);
       }
 
       if (this.time != timeFormat.format(date)) {
-        this.changed = true;
+        changed = true;
         this.time = timeFormat.format(date);
       }
 
@@ -57,7 +57,7 @@ export default {
               0,
             ),
           ),
-          local: new Date(date.setSeconds(0).toJSON()),
+          local: new Date(date.setSeconds(0)),
         });
       }
     },

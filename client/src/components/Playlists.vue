@@ -7,13 +7,12 @@ export default {
   data() {
     return {
       hasData: false,
-      playlists: null,
+      playlists: [] as any[],
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0 },
     };
   },
   mounted() {
     this.hasData = false;
-    this.playlists = null;
     this.paging = { offset: 0, limit: 6, page: 1, pageCount: 0 };
     this.loadPlaylists();
   },
@@ -57,7 +56,7 @@ export default {
 <template>
   <v-card v-if="hasData" class="mx-auto">
     <v-card-title sticky>My Playlists</v-card-title>
-    <v-list lines="false" nav>
+    <v-list nav>
       <v-list-item v-for="item in playlists" :key="item.id" :value="item">
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">

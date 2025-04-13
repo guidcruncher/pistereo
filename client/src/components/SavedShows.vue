@@ -8,8 +8,8 @@ export default {
   name: 'SavedShows',
   data() {
     return {
-      shows: null,
-      show: null,
+      shows: {} as any,
+      show: {} as any,
       hasData: false,
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0, total: 0 },
     };

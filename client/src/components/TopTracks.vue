@@ -6,9 +6,9 @@ export default {
   name: 'TopTracks',
   data() {
     return {
-      playlist: null,
+      playlist: {} as any,
       hasData: false,
-      tracks: null,
+      tracks: {} as any,
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0 },
     };
   },

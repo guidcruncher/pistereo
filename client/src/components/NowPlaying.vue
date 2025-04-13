@@ -30,7 +30,7 @@ export default {
     });
 
     on('context_change', (data: any) => {
-      this.context = context;
+      this.context = data.context;
       this.getPlayerQueue();
     });
 
@@ -94,10 +94,10 @@ export default {
     },
     playTrack(item) {
       const spotifyService = new SpotifyService();
-      if (context === '') {
+      if (this.context === '') {
         spotifyService.playTrack(item.uri);
       } else {
-        spotifyService.playTrackInPlayList(context, item.uri);
+        spotifyService.playTrackInPlayList(this.context, item.uri);
       }
     },
     viewTrack(item) {
