@@ -56,7 +56,7 @@ export default {
 
 <template>
   <v-card v-if="hasData" class="mx-auto">
-    <v-list lines="false" nav>
+    <v-list nav>
       <v-list-item v-for="item in tracks" :key="item" :value="item">
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">

@@ -63,7 +63,7 @@ export default {
 
 <template>
   <v-card>
-    <v-list lines="false">
+    <v-list>
       <v-list-group v-for="item in albums" :key="item" :value="item">
         <template v-slot:activator="{ props }">
           <v-list-item

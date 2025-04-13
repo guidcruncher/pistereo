@@ -6,7 +6,7 @@ export default {
   name: 'Playlist',
   data() {
     return {
-      playlist: {} as anzy,
+      playlist: {} as any,
       hasData: false,
       tracks: {} as any,
       paging: { offset: 0, limit: 10, page: 1, pageCount: 0 },
@@ -17,7 +17,7 @@ export default {
     this.tracks = null;
     this.paging = { offset: 0, limit: 10, page: 1, pageCount: 0 };
 
-    on('view_playlist', (data:any) => {
+    on('view_playlist', (data: any) => {
       this.playlist = data.playlist;
       this.getPlaylistTracks();
     });

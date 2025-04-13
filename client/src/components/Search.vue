@@ -126,7 +126,7 @@ export default {
     },
     loadSearchPage() {
       if (this.query.searchTypes == 'radio') {
-        this.loadRadioSearchPage({});
+        this.loadRadioSearchPage({((arg)=>{})});
       } else {
         this.loadSpotifySearchPage();
       }
@@ -224,7 +224,7 @@ export default {
   </v-form>
   <template v-if="query.searchTypes != 'radio'">
     <v-skeleton-loader :loading="loading" type="list-item-two-line">
-      <v-list lines="false" nav v-if="hasData">
+      <v-list nav v-if="hasData">
         <v-list-item v-for="item in results.items" :key="item" :value="item">
           <template #prepend>
             <div style="width: 64px; height: 64px; margin-right: 16px">
@@ -283,7 +283,7 @@ export default {
       @load="loadRadioSearchPage"
     >
       <v-skeleton-loader :loading="loading" type="list-item-two-line">
-        <v-list lines="false">
+        <v-list>
           <v-list-item v-for="item in results" :key="item" :value="item">
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">

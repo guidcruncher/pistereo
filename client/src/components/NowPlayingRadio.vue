@@ -123,7 +123,7 @@ export default {
 
     <v-card v-if="hasEpg">
       <v-card-title sticky>Program Guide</v-card-title>
-      <v-list lines="false" nav>
+      <v-list nav>
         <v-list-item v-for="item in epg" :key="item" :value="item">
           <v-list-item-title v-text="item.title" />
           <v-list-item-subtitle v-text="item.desc" />

@@ -33,13 +33,16 @@ interface DeviceObject {
   supports_volume: boolean;
 }
 
+interface Pager {
+offset: number;
+limit: number;
+total: number;
+page: number;
+pageCount: number;
+}
+
 interface PagedList<T> {
-  href: string;
-  limit: number;
-  next: any;
-  offset: number;
-  previous: any;
-  total: number;
+  paging: Pager;
   items: T[];
 }
 
