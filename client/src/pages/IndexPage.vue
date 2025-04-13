@@ -1,10 +1,7 @@
 <template>
   <Clock />
 
-  <v-expansion-panels
-    v-model="panel"
-    multiple
-  >
+  <v-expansion-panels v-model="panel" multiple>
     <v-expansion-panel>
       <v-expansion-panel-title>Presets</v-expansion-panel-title>
       <v-expansion-panel-text>

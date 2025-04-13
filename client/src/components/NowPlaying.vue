@@ -113,7 +113,7 @@ export default {
         <v-col cols="12">
           <div class="centre">
             <div class="albumimgbig">
-              <img :src="track.album_cover_url">
+              <img :src="track.album_cover_url" />
             </div>
           </div>
         </v-col>
@@ -128,19 +128,10 @@ export default {
         </v-col>
       </v-row>
       <v-card>
-        <v-card-title sticky>
-          Queue
-        </v-card-title>
+        <v-card-title sticky> Queue </v-card-title>
         <v-list nav>
-          <v-list-item
-            v-for="item in queue"
-            :key="item.id"
-            :value="item"
-          >
-            <template
-              v-if="item"
-              #prepend
-            >
+          <v-list-item v-for="item in queue" :key="item.id" :value="item">
+            <template v-if="item" #prepend>
               <div
                 v-if="item.album"
                 style="width: 64px; height: 64px; margin-right: 16px"
@@ -150,7 +141,7 @@ export default {
                   :src="item.album.images[0].url"
                   width="64"
                   height="64"
-                >
+                />
               </div>
               <div
                 v-if="item.show"
@@ -161,19 +152,13 @@ export default {
                   :src="item.show.images[0].url"
                   width="64"
                   height="64"
-                >
+                />
               </div>
             </template>
             <v-list-item-title v-text="item.name" />
-            <v-list-item-subtitle
-              v-if="item.album"
-              v-text="item.album.name"
-            />
+            <v-list-item-subtitle v-if="item.album" v-text="item.album.name" />
             <template #append>
-              <v-row
-                align="center"
-                justify="center"
-              >
+              <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn
                     icon="mdi-play"

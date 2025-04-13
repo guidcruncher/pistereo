@@ -36,10 +36,7 @@
       <template #append>
         <v-menu>
           <template #activator="{ props }">
-            <v-btn
-              icon="mdi-dots-vertical"
-              v-bind="props"
-            />
+            <v-btn icon="mdi-dots-vertical" v-bind="props" />
           </template>
           <v-list>
             <v-list-item @click="onThemeChooserClick">
@@ -57,10 +54,7 @@
       :permanent="pinned"
       :temporary="!pinned"
     >
-      <v-list
-        slim
-        density="compact"
-      >
+      <v-list slim density="compact">
         <v-list-item>
           <MyProfileBanner />
         </v-list-item>
@@ -145,18 +139,14 @@ export default {
     return {
       source: '',
       tab: 1,
+      timer: 0,
     };
   },
   mounted() {
-    const playerStore = usePlayerStore();
-    this.source = playerStore.getSource();
-    const jackService = new JackService();
-    jackService.getStatus().then((s) => {
-      if (s.playing) {
-        this.source = s.playing.source;
-        playerStore.setSource(s.playing.source);
-      }
-    });
+    this.getStatus();
+    this.timer = setInterval(() => {
+      this.getStatus();
+    }, 5000);
     on('audio_changed', (data: any) => {
       const playerStore = usePlayerStore();
       playerStore.setSource(data.source);
@@ -165,8 +155,20 @@ export default {
   },
   beforeUnmount() {
     off('audio_changed');
+    clearInterval(this.timer);
   },
   methods: {
+    getStatus() {
+      const playerStore = usePlayerStore();
+      this.source = playerStore.getSource();
+      const jackService = new JackService();
+      jackService.getStatus().then((s) => {
+        if (s.playing) {
+          this.source = s.playing.source;
+          playerStore.setSource(s.playing.source);
+        }
+      });
+    },
     goto(url, tab) {
       const themeStore = useThemeStore();
       themeStore.setTab(tab);

@@ -242,7 +242,7 @@ export default {
       <v-col cols="12">
         <div class="centre">
           <div class="albumimg">
-            <img :src="track.album_cover_url">
+            <img :src="track.album_cover_url" />
           </div>
         </div>
       </v-col>
@@ -259,11 +259,7 @@ export default {
   </v-container>
   <v-row v-if="hasData">
     <v-col cols="12">
-      <table
-        border="0"
-        cellpadding="4"
-        cellspacing="4"
-      >
+      <table border="0" cellpadding="4" cellspacing="4">
         <tbody>
           <tr>
             <td>

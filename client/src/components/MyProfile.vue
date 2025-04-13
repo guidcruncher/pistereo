@@ -49,7 +49,7 @@ function navigateToUrl(url: string) {
     <v-card-item>
       {{ profile.id }}
       <div class="profileimg">
-        <img :src="profileImage.url">
+        <img :src="profileImage.url" />
       </div>
     </v-card-item>
     <v-card-actions>

@@ -84,16 +84,9 @@ export default {
 <template>
   <v-card>
     <v-list>
-      <v-list-group
-        v-for="item in shows"
-        :key="item"
-        :value="item"
-      >
+      <v-list-group v-for="item in shows" :key="item" :value="item">
         <template #activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            @click="browse(item)"
-          >
+          <v-list-item v-bind="props" @click="browse(item)">
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">
                 <img
@@ -101,7 +94,7 @@ export default {
                   :src="item.show.images[1].url"
                   width="64"
                   height="64"
-                >
+                />
               </div>
             </template>
             <v-list-item-title v-text="item.show.name" />
@@ -109,10 +102,7 @@ export default {
               {{ item.show.publisher }}
             </v-list-item-subtitle>
             <template #append>
-              <v-row
-                align="center"
-                justify="center"
-              >
+              <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn
                     icon="mdi-podcast"

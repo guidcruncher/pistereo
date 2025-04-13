@@ -192,10 +192,7 @@ export default {
 </script>
 
 <template>
-  <v-form
-    v-model="query.valid"
-    @submit.prevent
-  >
+  <v-form v-model="query.valid" @submit.prevent>
     <v-text-field
       v-model="query.text"
       :rules="[rules.required]"
@@ -227,19 +224,9 @@ export default {
     </v-btn>
   </v-form>
   <template v-if="query.searchTypes != 'radio'">
-    <v-skeleton-loader
-      :loading="loading"
-      type="list-item-two-line"
-    >
-      <v-list
-        v-if="hasData"
-        nav
-      >
-        <v-list-item
-          v-for="item in results.items"
-          :key="item"
-          :value="item"
-        >
+    <v-skeleton-loader :loading="loading" type="list-item-two-line">
+      <v-list v-if="hasData" nav>
+        <v-list-item v-for="item in results.items" :key="item" :value="item">
           <template #prepend>
             <div style="width: 64px; height: 64px; margin-right: 16px">
               <img
@@ -247,25 +234,19 @@ export default {
                 :src="item.images[0].url"
                 width="64"
                 height="64"
-              >
+              />
               <img
                 v-if="item.album"
                 :src="item.album.images[0].url"
                 width="64"
                 height="64"
-              >
+              />
             </div>
           </template>
           <v-list-item-title v-text="item.name" />
-          <v-list-item-subtitle
-            v-if="item.album"
-            v-text="item.album.name"
-          />
+          <v-list-item-subtitle v-if="item.album" v-text="item.album.name" />
           <template #append>
-            <v-row
-              align="center"
-              justify="center"
-            >
+            <v-row align="center" justify="center">
               <v-col cols="auto">
                 <v-btn
                   icon="mdi-play"
@@ -302,16 +283,9 @@ export default {
       :items="results"
       @load="loadRadioSearchPage"
     >
-      <v-skeleton-loader
-        :loading="loading"
-        type="list-item-two-line"
-      >
+      <v-skeleton-loader :loading="loading" type="list-item-two-line">
         <v-list>
-          <v-list-item
-            v-for="item in results"
-            :key="item"
-            :value="item"
-          >
+          <v-list-item v-for="item in results" :key="item" :value="item">
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">
                 <img
@@ -319,22 +293,19 @@ export default {
                   :src="item.favicon"
                   width="64"
                   height="64"
-                >
+                />
               </div>
             </template>
             <v-list-item-title v-text="item.name" />
             <v-list-item-subtitle>
               codec={{ item.codec }}, bitrate={{ item.bitrate }}kbps, votes={{
                 item.votes
-              }}, clicks={{ item.clickcount }}<br><a :href="item.homepage">{{
+              }}, clicks={{ item.clickcount }}<br /><a :href="item.homepage">{{
                 item.homepage
               }}</a>
             </v-list-item-subtitle>
             <template #append>
-              <v-row
-                align="center"
-                justify="center"
-              >
+              <v-row align="center" justify="center">
                 <v-col cols="auto">
                   <v-btn
                     icon="mdi-play"

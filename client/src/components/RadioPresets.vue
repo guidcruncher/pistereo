@@ -54,15 +54,8 @@ export default {
         v-slot="{ isSelected, toggle }"
       >
         <div class="spacer">
-          <div
-            class="stationlogo"
-            @click="playRadio(item)"
-          >
-            <img
-              :src="item.image"
-              :alt="item.name"
-              @click="playRadio(item)"
-            >
+          <div class="stationlogo" @click="playRadio(item)">
+            <img :src="item.image" :alt="item.name" @click="playRadio(item)" />
           </div>
         </div>
       </v-slide-group-item>

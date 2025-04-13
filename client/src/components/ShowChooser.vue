@@ -73,25 +73,13 @@ export default {
 </script>
 
 <template>
-  <v-dialog
-    v-model="isActive"
-    width="auto"
-    scrollable
-    persistent
-  >
+  <v-dialog v-model="isActive" width="auto" scrollable persistent>
     <v-card>
       <v-toolbar>
-        <v-btn
-          icon="mdi-close"
-          @click="isActive = false"
-        />
+        <v-btn icon="mdi-close" @click="isActive = false" />
         <v-toolbar-title>Podcast</v-toolbar-title>
       </v-toolbar>
-      <table
-        border="0"
-        cellspacing="0"
-        cellpadding="0"
-      >
+      <table border="0" cellspacing="0" cellpadding="0">
         <tbody>
           <tr>
             <td>
@@ -101,7 +89,7 @@ export default {
                   :src="show.show.images[1].url"
                   width="80"
                   height="80"
-                >
+                />
               </div>
             </td>
             <td>
@@ -115,11 +103,7 @@ export default {
       </table>
 
       <v-list>
-        <v-list-item
-          v-for="item in shows"
-          :key="item"
-          :value="item"
-        >
+        <v-list-item v-for="item in shows" :key="item" :value="item">
           <template #prepend>
             <div style="width: 64px; height: 64px; margin-right: 16px">
               <img
@@ -127,16 +111,13 @@ export default {
                 :src="item.images[1].url"
                 width="64"
                 height="64"
-              >
+              />
             </div>
           </template>
           <v-list-item-title v-text="item.name" />
           <v-list-item-subtitle>{{ item.publisher }} </v-list-item-subtitle>
           <template #append>
-            <v-row
-              align="center"
-              justify="center"
-            >
+            <v-row align="center" justify="center">
               <v-col cols="auto">
                 <v-btn
                   icon="mdi-play"
