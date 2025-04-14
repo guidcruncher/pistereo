@@ -54,9 +54,9 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
-    <v-card-title sticky> My Playlists </v-card-title>
-    <v-list nav>
+    <v-list nav v-if="hasData">
+    <v-list-subheader>My Playlists</v-list-subheader>
+
       <v-list-item v-for="item in playlists" :key="item.id" :value="item">
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">
@@ -97,5 +97,4 @@ export default {
       :length="paging.pageCount"
       @update:model-value="onPageChange"
     />
-  </v-card>
 </template>

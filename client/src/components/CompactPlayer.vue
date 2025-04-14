@@ -118,8 +118,7 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService
         .setDeviceVolume(volume)
-        .then((response) => {
-        })
+        .then((response) => {})
         .catch((e) => {
           console.log(e);
         });

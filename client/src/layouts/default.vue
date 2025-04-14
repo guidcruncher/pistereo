@@ -80,11 +80,6 @@
             @click.stop="goto('/nowplaying', 1)"
           />
           <v-tab
-            prepend-icon="mdi-view-list"
-            text="Playlists"
-            @click.stop="goto('/playlists', 2)"
-          />
-          <v-tab
             prepend-icon="mdi-library"
             text="Library"
             @click.stop="goto('/library', 3)"
@@ -138,6 +133,7 @@ export default {
   data() {
     return {
       source: '',
+      playing: {} as any,
       tab: 1,
       timer: 0,
     };
@@ -164,6 +160,25 @@ export default {
       const jackService = new JackService();
       jackService.getStatus().then((s) => {
         if (s.playing) {
+          if (s.playing.source == 'streamer') {
+            if (
+              !this.playing.stationuuid ||
+              s.playing.stationuuid != this.playing.stationuuid
+            ) {
+              emit('audio_changed', {
+                source: 'streamer',
+                uri: s.playing.stationuuid,
+              });
+            }
+          }
+
+          if (s.playing.source == 'spotify') {
+            if (!this.playing.uri || s.playing.uri != this.playing.uri) {
+              emit('audio_changed', { source: 'spotify', uri: s.playing.uri });
+            }
+          }
+
+          this.playing = s.playing;
           this.source = s.playing.source;
           playerStore.setSource(s.playing.source);
         }

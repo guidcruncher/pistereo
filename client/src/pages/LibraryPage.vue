@@ -13,15 +13,23 @@
       </v-expansion-panel-text>
     </v-expansion-panel>
     <v-expansion-panel>
-      <v-expansion-panel-title>Saved Podcasts</v-expansion-panel-title>
+      <v-expansion-panel-title>Playlists</v-expansion-panel-title>
       <v-expansion-panel-text>
-        <SavedShows />
+        <Playlists />
+
+        <Playlist />
       </v-expansion-panel-text>
     </v-expansion-panel>
     <v-expansion-panel>
       <v-expansion-panel-title>Saved Albums</v-expansion-panel-title>
       <v-expansion-panel-text>
         <SavedAlbums />
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+    <v-expansion-panel>
+      <v-expansion-panel-title>Saved Podcasts</v-expansion-panel-title>
+      <v-expansion-panel-text>
+        <SavedShows />
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>

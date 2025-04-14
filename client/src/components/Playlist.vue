@@ -75,12 +75,11 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
-    <v-card-title sticky>
-      {{ playlist.name }}
-    </v-card-title>
-    <v-card-subtitle>By {{ playlist.owner.display_name }} </v-card-subtitle>
-    <v-list nav>
+    <v-list nav v-if="hasData">
+<v-list-subheader>
+ {{ playlist.name }}
+ By {{ playlist.owner.display_name }}
+</v-list-subheader>
       <v-list-item v-for="item in tracks" :key="item.track.id" :value="item">
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">
@@ -121,5 +120,4 @@ export default {
       :length="paging.pageCount"
       @update:model-value="onPageChange"
     />
-  </v-card>
 </template>
