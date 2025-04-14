@@ -69,32 +69,40 @@ export class StreamerService extends ServiceBase {
     this.log.log(this.__caller() + ' => sendCommand ' + jsonCmd);
 
     return new Promise((resolve, reject) => {
-      if (cmd == 'get_property' && parameters.length > 0) {
-        if (parameters[0] == '') {
-          this.log.error(
-            'ERROR ' + this.__caller() + ' Missing property name => ' + jsonCmd,
-          );
-          reject();
-          return;
-        }
-      }
-
-      exec(cmdText)
-        .then((result) => {
-          const json: any = JSON.parse(result.stdout);
-          if (json.error) {
-            json.statusCode = errorCodes[json.error] ?? 500;
-            json.command = jsonCmd;
-            json.caller = this.__caller();
-            resolve(json);
-          } else {
-            resolve(json);
+      try {
+        if (cmd == 'get_property' && parameters.length > 0) {
+          if (parameters[0] == '') {
+            this.log.error(
+              'ERROR ' +
+                this.__caller() +
+                ' Missing property name => ' +
+                jsonCmd,
+            );
+            reject();
+            return;
           }
-        })
-        .catch((err) => {
-          this.log.error('Error executing command ' + cmdText, err);
-          reject(err);
-        });
+        }
+
+        exec(cmdText)
+          .then((result) => {
+            const json: any = JSON.parse(result.stdout);
+            if (json.error) {
+              json.statusCode = errorCodes[json.error] ?? 500;
+              json.command = jsonCmd;
+              json.caller = this.__caller();
+              resolve(json);
+            } else {
+              resolve(json);
+            }
+          })
+          .catch((err) => {
+            this.log.error('Error executing command ' + cmdText, err);
+            reject(err);
+          });
+      } catch (err) {
+        this.log.error('Error executing command', err);
+        reject(err);
+      }
     });
   }
 

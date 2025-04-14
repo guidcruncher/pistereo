@@ -86,13 +86,17 @@ export class StreamerSocketService
     cmd: string,
     parameters: any[] = [],
   ): Promise<any> {
-    let commandText: any[] = [cmd];
-    commandText = commandText.concat(parameters);
-    const json: string = JSON.stringify({
-      command: commandText,
-      request_id: requestId,
-    });
-    this.log.debug('sendSocketCommand ' + json);
-    await StreamerSocketService.socket.write(json, 'utf8', (res) => {});
+    try {
+      let commandText: any[] = [cmd];
+      commandText = commandText.concat(parameters);
+      const json: string = JSON.stringify({
+        command: commandText,
+        request_id: requestId,
+      });
+      this.log.debug('sendSocketCommand ' + json);
+      await StreamerSocketService.socket.write(json, 'utf8', (res) => {});
+    } catch (err) {
+     this.log.error('Error running StreamerSockect.sendSocketCommand', err);
+    }
   }
 }
