@@ -58,41 +58,53 @@ export class LibrespotService extends SpotifyBaseService {
     return {};
   }
 
-  public async play(request: Play) {
+  public play(request: Play) {
     this.log.log(this.__caller() + ' =>play');
 
     return new Promise((resolve, reject) => {
-      const result = await fetch(this.getApiUrl('/player/play'), {
+      fetch(this.getApiUrl('/player/play'), {
         method: 'POST',
         body: JSON.stringify(request),
         headers: { 'Content-Type': 'application/json' },
+      }).then((result) => {
+        if (!result.ok) {
+          this.log.error(
+            'Error playing ' + result.status + ' / ' + result.text(),
+          );
+          reject();
+          return;
+        }
+
+        this.getStatus()
+          .then((state: any) => {
+            this.userService
+              .updateLastPlayed(
+                state ? state.username : '',
+                '',
+                'spotify',
+                state.track.uri,
+                {
+                  source: 'spotify',
+                  uri: state.track.uri,
+                  name: state.track.name,
+                  description: state.track.album_name,
+                  owner: state.trasck.artist_names.join(' '),
+                  image: state.track.album_cover_url,
+                },
+              )
+              .then(() => {
+                resolve(state);
+              })
+              .catch((err) => {
+                this.log.error('Error updatimg lastplayed', err);
+                reject(err);
+              });
+          })
+          .catch((err) => {
+            this.log.error('Error getting status', err);
+            reject(err);
+          });
       });
-
-      if (!result.ok) {
-        this.log.error(
-          'Error playing ' + result.status + ' / ' + (await result.text()),
-        );
-        reject();
-        return;
-      }
-
-      this.getStatus().then((state: any) => {
-        await userService.updateLastPlayed(
-          state ? state.username : '',
-          '',
-          'spotify',
-          ev.data.uri,
-          {
-            source: 'spotify',
-            uri: ev.data.uri,
-            name: ev.data.name,
-            description: ev.data.album_name,
-            owner: ev.data.artist_names.join(' '),
-            image: ev.data.album_cover_url,
-          },
-        );
-        resolve(state);
-      }).catch((err) => { this.log.error("Error getting status", err); reject(err);});
     });
   }
 
