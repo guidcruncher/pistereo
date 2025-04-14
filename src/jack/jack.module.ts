@@ -10,6 +10,7 @@ import { TokenGuard } from '@auth/token.guard';
 import { AuthModule } from '@auth/auth.module';
 import { SpotifyClientModule } from '../spotify-client/spotify-client.module';
 import { StreamerClientModule } from '../streamer-client/streamer-client.module';
+import { JackEqualiserService } from './jack-equaliser.service';
 
 @Module({
   providers: [
@@ -17,6 +18,7 @@ import { StreamerClientModule } from '../streamer-client/streamer-client.module'
     StreamerService,
     JackService,
     JackListenerService,
+    JackEqualiserService,
   ],
   controllers: [JackController],
   imports: [AuthModule, DataModule, StreamerClientModule, SpotifyClientModule],

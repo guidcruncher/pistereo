@@ -96,7 +96,7 @@ export class StreamerSocketService
       this.log.debug('sendSocketCommand ' + json);
       await StreamerSocketService.socket.write(json, 'utf8', (res) => {});
     } catch (err) {
-     this.log.error('Error running StreamerSockect.sendSocketCommand', err);
+      this.log.error('Error running StreamerSockect.sendSocketCommand', err);
     }
   }
 }

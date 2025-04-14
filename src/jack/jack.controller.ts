@@ -21,11 +21,34 @@ import {
   Controller,
 } from '@nestjs/common';
 import { Public } from '@auth/public.decorator';
+import { JackEqualiserService } from './jack-equaliser.service';
 
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/jack')
 export class JackController {
-  constructor(private readonly jackService: JackService) {}
+  constructor(
+    private readonly jackService: JackService,
+    private readonly jackEqualiser: JackEqualiserService,
+  ) {}
+
+  @Get('equaliser')
+  @ApiOperation({ summary: 'Get configured Equaliser values' })
+  async getEqualiser() {
+    return await this.jackEqualiser.getControls();
+  }
+
+  @Put('equaliser/:control')
+  @ApiOperation({ summary: 'Set an equaliser value' })
+  @ApiParam({ name: 'control' })
+  @ApiQuery({ name: 'left' })
+  @ApiQuery({ name: 'right' })
+  async setEqualiser(
+    @Param('control') index: number,
+    @Query('left') left: number,
+    @Query('right') right: number,
+  ) {
+    return await this.jackEqualiser.setControl(index, left, right);
+  }
 
   @Put('stop')
   @ApiOperation({ summary: 'Stop all devices' })
