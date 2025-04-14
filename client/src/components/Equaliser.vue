@@ -30,13 +30,13 @@ export default {
         });
     },
     setEqualiser(value) {
-      alert(value.left);
+      const jackService = new JackService();
+      jackService.setEqualiser(value.index, value.left, value.left);
     },
   },
 };
 </script>
 <template>
-  {{ levels }}
   <v-row v-if="hasData">
     <v-col v-for="item in levels" :key="item" :value="item">
       <v-slider
