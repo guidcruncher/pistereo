@@ -3,9 +3,6 @@ FROM guidcruncher/pistereo-base:latest AS base
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH
 ENV TZ=UTC
-
-RUN npm cache clean --force
-
 USER appuser
 
 ENV NODE_ENV=development
