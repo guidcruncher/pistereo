@@ -1,6 +1,8 @@
 <template>
   <Clock />
 
+  <Equaliser />
+
   <v-expansion-panels v-model="panel" multiple>
     <v-expansion-panel>
       <v-expansion-panel-title
