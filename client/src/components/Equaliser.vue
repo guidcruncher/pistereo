@@ -45,8 +45,10 @@ export default {
         min="0"
         max="100"
         step="1"
+        :label="shortname"
         @end="setEqualiser(item)"
-      ></v-slider>
+      >
+</v-slider>
     </v-col>
   </v-row>
 </template>
