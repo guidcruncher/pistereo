@@ -157,7 +157,7 @@ export class SpotifyService extends ServiceBase {
       source: 'spotify',
       trigger: 'playItemOnPlayer',
       context: contextUri,
-      uri: '',
+      uri: contextUri,
     });
     return response.data;
   }
@@ -175,7 +175,7 @@ export class SpotifyService extends ServiceBase {
       source: 'spotify',
       trigger: 'playTrack',
       context: track_uri,
-      uri: '',
+      uri: track_uri,
     });
     return response.data;
   }
@@ -197,8 +197,8 @@ export class SpotifyService extends ServiceBase {
     emit('audio_changed', {
       source: 'spotify',
       trigger: 'playTrackInPlayList',
-      context: track_uri,
-      uri: playlist_uri,
+      context: playlist_uri,
+      uri: track_uri,
     });
     return response.data;
   }
@@ -215,7 +215,7 @@ export class SpotifyService extends ServiceBase {
     emit('audio_changed', {
       source: 'spotify',
       trigger: 'playPlayList',
-      context: '',
+      context: playlist_uri,
       uri: playlist_uri,
     });
     return response.data;

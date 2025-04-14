@@ -54,47 +54,47 @@ export default {
 </script>
 
 <template>
-    <v-list nav v-if="hasData">
+  <v-list nav v-if="hasData">
     <v-list-subheader>My Playlists</v-list-subheader>
 
-      <v-list-item v-for="item in playlists" :key="item.id" :value="item">
-        <template #prepend>
-          <div style="width: 64px; height: 64px; margin-right: 16px">
-            <img
-              v-if="item.images"
-              :src="item.images[0].url"
-              width="64"
-              height="64"
+    <v-list-item v-for="item in playlists" :key="item.id" :value="item">
+      <template #prepend>
+        <div style="width: 64px; height: 64px; margin-right: 16px">
+          <img
+            v-if="item.images"
+            :src="item.images[0].url"
+            width="64"
+            height="64"
+          />
+        </div>
+      </template>
+      <v-list-item-title v-text="item.name" />
+      <v-list-item-subtitle v-text="item.owner.display_name" />
+      <template #append>
+        <v-row align="center" justify="center">
+          <v-col cols="auto">
+            <v-btn
+              icon="mdi-play"
+              density="compact"
+              size="normal"
+              @click="loadPlaylist(item)"
             />
-          </div>
-        </template>
-        <v-list-item-title v-text="item.name" />
-        <v-list-item-subtitle v-text="item.owner.display_name" />
-        <template #append>
-          <v-row align="center" justify="center">
-            <v-col cols="auto">
-              <v-btn
-                icon="mdi-play"
-                density="compact"
-                size="normal"
-                @click="loadPlaylist(item)"
-              />
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                icon="mdi-view-list"
-                density="compact"
-                size="normal"
-                @click="viewPlaylist(item)"
-              />
-            </v-col>
-          </v-row>
-        </template>
-      </v-list-item>
-    </v-list>
-    <v-pagination
-      v-model="paging.page"
-      :length="paging.pageCount"
-      @update:model-value="onPageChange"
-    />
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              icon="mdi-view-list"
+              density="compact"
+              size="normal"
+              @click="viewPlaylist(item)"
+            />
+          </v-col>
+        </v-row>
+      </template>
+    </v-list-item>
+  </v-list>
+  <v-pagination
+    v-model="paging.page"
+    :length="paging.pageCount"
+    @update:model-value="onPageChange"
+  />
 </template>

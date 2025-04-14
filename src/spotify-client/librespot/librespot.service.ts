@@ -4,6 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
 import { SpotifyBaseService } from '../spotify-base.service';
 import { GetStatusResponse, Play } from '../spotify-client.d';
+import { UserService } from '@data/user/user.service';
 
 const exec = util.promisify(require('node:child_process').exec);
 
@@ -14,6 +15,7 @@ export class LibrespotService extends SpotifyBaseService {
   constructor(
     private readonly config: ConfigService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly userService: UserService,
   ) {
     super();
   }
@@ -58,21 +60,40 @@ export class LibrespotService extends SpotifyBaseService {
 
   public async play(request: Play) {
     this.log.log(this.__caller() + ' =>play');
-    const status: any = await this.getStatus();
 
-    const result = await fetch(this.getApiUrl('/player/play'), {
-      method: 'POST',
-      body: JSON.stringify(request),
-      headers: { 'Content-Type': 'application/json' },
+    return new Promise((resolve, reject) => {
+      const result = await fetch(this.getApiUrl('/player/play'), {
+        method: 'POST',
+        body: JSON.stringify(request),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!result.ok) {
+        this.log.error(
+          'Error playing ' + result.status + ' / ' + (await result.text()),
+        );
+        reject();
+        return;
+      }
+
+      this.getStatus().then((state: any) => {
+        await userService.updateLastPlayed(
+          state ? state.username : '',
+          '',
+          'spotify',
+          ev.data.uri,
+          {
+            source: 'spotify',
+            uri: ev.data.uri,
+            name: ev.data.name,
+            description: ev.data.album_name,
+            owner: ev.data.artist_names.join(' '),
+            image: ev.data.album_cover_url,
+          },
+        );
+        resolve(state);
+      }).catch((err) => { this.log.error("Error getting status", err); reject(err);});
     });
-
-    if (!result.ok) {
-      this.log.error(
-        'Error playing ' + result.status + ' / ' + (await result.text()),
-      );
-      return;
-    }
-    return await this.getStatus();
   }
 
   public async playpause() {
