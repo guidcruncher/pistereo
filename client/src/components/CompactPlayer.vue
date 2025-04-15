@@ -14,6 +14,102 @@ export default {
       player: {} as any,
     };
   },
+  mounted() {
+    const playerStore = usePlayerStore();
+    this.hasData = false;
+
+    this.track = { progressPercent: 0 };
+    this.player = { is_loaded: false, is_playing: false };
+
+    this.getPlayerState();
+
+    on('source_changed', (data: any) => {
+      if (data.playing) {
+        if (data.playing.source == 'spotify') {
+          const jackService = new JackService();
+          jackService.stopDevice('streamer');
+          this.hasData = true;
+          this.getPlayerState();
+          if (this.timer == 0) {
+            this.timer = setInterval(() => {
+              this.getPlayerState();
+            }, 10000);
+          }
+        } else {
+          clearInterval(this.timer);
+          this.timer = 0;
+          this.hasData = false;
+        }
+      } else {
+        this.hasData = false;
+        clearInterval(this.timer);
+        this.timer = 0;
+        this.timer = setInterval(() => {
+          this.getPlayerState();
+        }, 10000);
+      }
+    });
+
+    on('eject', (data: any) => {
+      this.hasData = false;
+      clearInterval(this.timer);
+      this.timer = 0;
+    });
+
+    on('streamer.file-loaded', (data: any) => {
+      const jackService = new JackService();
+      jackService.stopDevice('spotify');
+      const spotifyService = new SpotifyService();
+      // spotifyService.playerOp(this.player.device_id, 'stop').then(() => {
+      clearInterval(this.timer);
+      this.timer = 0;
+      this.hasData = false;
+    });
+
+    on('spotify.metadata', (data: any) => {
+      this.getPlayerState();
+    });
+
+    on('spotify.playing', (data: any) => {
+      const jackService = new JackService();
+      jackService.stopDevice('streamer');
+      if (this.timer == 0) {
+        this.timer = setInterval(() => {
+          this.getPlayerState();
+        }, 10000);
+      }
+      this.getPlayerState();
+    });
+
+    on('spotify.paused', (data: any) => {
+      this.getPlayerState();
+      clearInterval(this.timer);
+      this.timer = 0;
+    });
+
+    on('spotify.seek', (data: any) => {
+      this.getPlayerState();
+    });
+
+    on('spotify.stopped', (data: any) => {
+      this.getPlayerState();
+      clearInterval(this.timer);
+      this.timer = 0;
+    });
+  },
+  beforeUnmount() {
+    off('eject');
+    off('source_changed');
+    off('spotify.metadata');
+
+    off('spotify.volume');
+    off('spotify.playing');
+    off('spotify.paused');
+    off('spotify.seek');
+    off('spotify.stopped');
+    off('streamer.file-loaded');
+    clearInterval(this.timer);
+  },
   methods: {
     setVolumeFromModel() {
       this.setVolume(this.player.volume);
@@ -22,11 +118,7 @@ export default {
       const spotifyService = new SpotifyService();
       spotifyService
         .setDeviceVolume(volume)
-        .then((response) => {
-          if (response) {
-            this.getPlayerState();
-          }
-        })
+        .then((response) => {})
         .catch((e) => {
           console.log(e);
         });
@@ -57,7 +149,7 @@ export default {
     },
     setTrack(s: any) {
       if (s) {
-        let track = s;
+        const track = s;
         track.progressPercent = Math.abs(
           (100 / track.duration) * track.position,
         );
@@ -134,106 +226,6 @@ export default {
       emit('eject', { source: 'spotify' });
     },
   },
-  mounted() {
-    const playerStore = usePlayerStore();
-    this.hasData = false;
-
-    this.track = { progressPercent: 0 };
-    this.player = { is_loaded: false, is_playing: false };
-
-    this.getPlayerState();
-
-    on('source_changed', (data: any) => {
-      if (data.playing) {
-        if (data.playing.source == 'spotify') {
-          const jackService = new JackService();
-          jackService.stopDevice('streamer');
-          this.hasData = true;
-          this.getPlayerState();
-          if (this.timer == 0) {
-            this.timer = setInterval(() => {
-              this.getPlayerState();
-            }, 10000);
-          }
-        } else {
-          clearInterval(this.timer);
-          this.timer = 0;
-          this.hasData = false;
-        }
-      } else {
-        this.hasData = false;
-        clearInterval(this.timer);
-        this.timer = 0;
-        this.timer = setInterval(() => {
-          this.getPlayerState();
-        }, 10000);
-      }
-    });
-
-    on('eject', (data: any) => {
-      this.hasData = false;
-      clearInterval(this.timer);
-      this.timer = 0;
-    });
-
-    on('streamer.file-loaded', (data: any) => {
-      const jackService = new JackService();
-      jackService.stopDevice('spotify');
-      const spotifyService = new SpotifyService();
-      // spotifyService.playerOp(this.player.device_id, 'stop').then(() => {
-      clearInterval(this.timer);
-      this.timer = 0;
-      this.hasData = false;
-    });
-
-    on('spotify.metadata', (data: any) => {
-      this.getPlayerState();
-    });
-
-    on('spotify.volume', (data: any) => {
-      this.player.volume = data.value;
-    });
-
-    on('spotify.playing', (data: any) => {
-      const jackService = new JackService();
-      jackService.stopDevice('streamer');
-      if (this.timer == 0) {
-        this.timer = setInterval(() => {
-          this.getPlayerState();
-        }, 10000);
-      }
-      this.getPlayerState();
-    });
-
-    on('spotify.paused', (data: any) => {
-      this.getPlayerState();
-      clearInterval(this.timer);
-      this.timer = 0;
-    });
-
-    on('spotify.seek', (data: any) => {
-      this.getPlayerState();
-    });
-
-    on('spotify.stopped', (data: any) => {
-      this.getPlayerState();
-      clearInterval(this.timer);
-      this.timer = 0;
-    });
-  },
-  beforeDestroy() {
-    off('eject');
-    off('source_changed');
-    off('spotify.metadata');
-
-    off('spotify.volume');
-    off('spotify.playing');
-    off('spotify.paused');
-    off('spotify.seek');
-    off('spotify.stopped');
-    off('streamer.file-loaded');
-    clearInterval(this.timer);
-  },
 };
 </script>
 <template>
@@ -244,70 +236,71 @@ export default {
           <div class="albumimg">
             <img :src="track.album_cover_url" />
           </div>
-        </div> </v-col
-    ></v-row>
+        </div>
+      </v-col>
+    </v-row>
     <v-row>
-      <v-col cols="12"
-        ><div class="centre">
+      <v-col cols="12">
+        <div class="centre">
           <h4>{{ track.album_nameħeszŵ }}</h4>
           <h5>{{ track.name }}</h5>
           <h6>{{ track.artist }}</h6>
         </div>
-      </v-col></v-row
-    >
+      </v-col>
+    </v-row>
   </v-container>
   <v-row v-if="hasData">
-    <v-col cols="12"
-      ><table border="0" cellpadding="4" cellspacing="4">
+    <v-col cols="12">
+      <table border="0" cellpadding="4" cellspacing="4">
         <tbody>
           <tr>
             <td>
               <v-btn
-                @click="previous()"
                 color="primary"
                 size="small"
                 icon="mdi-skip-previous"
-              ></v-btn>
+                @click="previous()"
+              />
             </td>
             <td>
               <v-btn
-                @click="stop()"
                 size="small"
                 color="primary"
                 icon="mdi-stop"
-              ></v-btn>
+                @click="stop()"
+              />
             </td>
             <td>
               <v-btn
-                @click="play()"
                 v-if="!player.is_playing"
                 color="primary"
                 size="small"
                 icon="mdi-play"
-              ></v-btn>
+                @click="play()"
+              />
               <v-btn
-                @click="pause()"
                 v-if="player.is_playing"
                 color="primary"
                 size="small"
                 icon="mdi-pause"
-              ></v-btn>
+                @click="pause()"
+              />
             </td>
             <td>
               <v-btn
-                @click="eject()"
                 color="primary"
                 size="small"
                 icon="mdi-eject"
-              ></v-btn>
+                @click="eject()"
+              />
             </td>
             <td>
               <v-btn
-                @click="next()"
                 color="primary"
                 size="small"
                 icon="mdi-skip-next"
-              ></v-btn>
+                @click="next()"
+              />
             </td>
           </tr>
         </tbody>
@@ -323,23 +316,25 @@ export default {
         min="0"
         max="100"
         readonly
-      ></v-slider> </v-col
-  ></v-row>
+      />
+    </v-col>
+  </v-row>
   <v-row v-if="hasData">
-    <v-col cols="12"
-      ><v-slider
+    <v-col cols="12">
+      <v-slider
         v-model="player.volume"
         append-icon="mdi-volume-high"
         prepend-icon="mdi-volume-mute"
-        @click:append="setVolume(100)"
-        @click:prepend="setVolume(0)"
         track-color="primary"
         step="1"
         min="0"
         max="100"
+        @click:append="setVolume(100)"
+        @click:prepend="setVolume(0)"
         @end="setVolumeFromModel()"
-      ></v-slider> </v-col
-  ></v-row>
+      />
+    </v-col>
+  </v-row>
 </template>
 
 <style>

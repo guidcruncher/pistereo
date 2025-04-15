@@ -1,6 +1,8 @@
 import { ServiceBase } from './service-base';
 import axios, { type AxiosResponse } from 'axios';
 import { JackService } from './jack.service';
+import { on, emit, off } from '../composables/useeventbus';
+import { usePlayerStore } from '@/stores/player';
 
 export class SpotifyService extends ServiceBase {
   constructor() {
@@ -141,19 +143,6 @@ export class SpotifyService extends ServiceBase {
     return response.data;
   }
 
-  public async getSavedShows(
-    offset: number,
-    limit: number,
-  ): Promise<PagedList<any>> {
-    const params = new URLSearchParams();
-    params.append('offset', offset.toString());
-    params.append('limit', limit.toString());
-    const response: AxiosResponse<PagedList<any>> = await this.client().get(
-      '/profile/me/shows?' + params.toString(),
-    );
-    return response.data;
-  }
-
   public async playItemOnPlayer(contextUri: string): Promise<any> {
     const response: AxiosResponse = await this.client().put(
       '/player/default/play',
@@ -163,17 +152,31 @@ export class SpotifyService extends ServiceBase {
         positionMs: 0,
       },
     );
+    usePlayerStore().setSource('spotify');
+    emit('audio_changed', {
+      source: 'spotify',
+      trigger: 'playItemOnPlayer',
+      context: contextUri,
+      uri: contextUri,
+    });
     return response.data;
   }
 
   public async playTrack(track_uri: string): Promise<any> {
     const jackService = new JackService();
     await jackService.stop();
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('context', track_uri);
     const response: AxiosResponse = await this.client({
       baseUrl: '/api/librespot',
     }).put('/play?' + params.toString());
+    usePlayerStore().setSource('spotify');
+    emit('audio_changed', {
+      source: 'spotify',
+      trigger: 'playTrack',
+      context: track_uri,
+      uri: track_uri,
+    });
     return response.data;
   }
 
@@ -183,23 +186,38 @@ export class SpotifyService extends ServiceBase {
   ): Promise<any> {
     const jackService = new JackService();
     await jackService.stop();
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('context', track_uri);
     params.append('uri', playlist_uri);
     const response: AxiosResponse = await this.client({
       baseUrl: '/api/librespot',
     }).put('/play?' + params.toString());
+
+    usePlayerStore().setSource('spotify');
+    emit('audio_changed', {
+      source: 'spotify',
+      trigger: 'playTrackInPlayList',
+      context: playlist_uri,
+      uri: track_uri,
+    });
     return response.data;
   }
 
   public async playPlaylist(playlist_uri: string): Promise<any> {
     const jackService = new JackService();
     await jackService.stop();
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('uri', playlist_uri);
     const response: AxiosResponse = await this.client({
       baseUrl: '/api/librespot',
     }).put('/play?' + params.toString());
+    usePlayerStore().setSource('spotify');
+    emit('audio_changed', {
+      source: 'spotify',
+      trigger: 'playPlayList',
+      context: playlist_uri,
+      uri: playlist_uri,
+    });
     return response.data;
   }
 
@@ -237,7 +255,7 @@ export class SpotifyService extends ServiceBase {
           }).put('stop', {});
           return response.data;
         case 'next':
-          let queue = await this.getPlayerQueue();
+          const queue = await this.getPlayerQueue();
           let nextTrack = queue.currently_playing.uri;
           if (queue && queue.queue.length > 0) {
             nextTrack = queue.queue[0].uri;
@@ -258,6 +276,29 @@ export class SpotifyService extends ServiceBase {
         console.log(e);
         throw e;
       });
+  }
+
+  public async getShowEpisodes(id: string, offset: number, limit: number) {
+    const params = new URLSearchParams();
+    params.append('offset', offset.toString());
+    params.append('limit', limit.toString());
+
+    const response: AxiosResponse<PagedList<any>> = await this.client().get(
+      '/shows/' + id + '/episodes?' + params.toString(),
+    );
+    return response.data;
+  }
+  public async getSavedShows(
+    offset: number,
+    limit: number,
+  ): Promise<PagedList<any>> {
+    const params = new URLSearchParams();
+    params.append('offset', offset.toString());
+    params.append('limit', limit.toString());
+    const response: AxiosResponse<PagedList<any>> = await this.client().get(
+      '/profile/me/shows?' + params.toString(),
+    );
+    return response.data;
   }
 }
 

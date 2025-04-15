@@ -10,6 +10,7 @@ export default {
   data() {
     return {
       hasData: false,
+      context: '',
       track: {} as any,
       queue: [] as any[],
       player: {} as any,
@@ -19,11 +20,17 @@ export default {
   mounted() {
     const playerStore = usePlayerStore();
     this.hasData = false;
+    this.context = '';
     this.track = { is_loaded: false, is_playing: false };
     this.player = {};
     this.queue = [] as any[];
     this.source = playerStore.getSource();
     on('playing', (data: any) => {
+      this.getPlayerQueue();
+    });
+
+    on('context_change', (data: any) => {
+      this.context = data.context;
       this.getPlayerQueue();
     });
 
@@ -39,6 +46,8 @@ export default {
   },
   beforeUnmount() {
     off('playing');
+    off('source_changed');
+    off('context_change');
   },
   methods: {
     getPlayerState() {
@@ -75,7 +84,7 @@ export default {
     },
     setTrack(s: any) {
       if (s) {
-        let track = s;
+        const track = s;
         track.progressPercent = Math.abs(
           (100 / track.duration) * track.position,
         );
@@ -85,7 +94,11 @@ export default {
     },
     playTrack(item) {
       const spotifyService = new SpotifyService();
-      spotifyService.playTrack(item.uri);
+      if (this.context === '') {
+        spotifyService.playTrack(item.uri);
+      } else {
+        spotifyService.playTrackInPlayList(this.context, item.uri);
+      }
     },
     viewTrack(item) {
       window.open(item.external_urls.spotify);
@@ -115,11 +128,14 @@ export default {
         </v-col>
       </v-row>
       <v-card>
-        <v-card-title sticky>Queue</v-card-title>
+        <v-card-title sticky> Queue </v-card-title>
         <v-list nav>
           <v-list-item v-for="item in queue" :key="item.id" :value="item">
             <template v-if="item" #prepend>
-              <div style="width: 64px; height: 64px; margin-right: 16px">
+              <div
+                v-if="item.album"
+                style="width: 64px; height: 64px; margin-right: 16px"
+              >
                 <img
                   v-if="item.album.images"
                   :src="item.album.images[0].url"
@@ -127,9 +143,20 @@ export default {
                   height="64"
                 />
               </div>
+              <div
+                v-if="item.show"
+                style="width: 64px; height: 64px; margin-right: 16px"
+              >
+                <img
+                  v-if="item.show.images"
+                  :src="item.show.images[0].url"
+                  width="64"
+                  height="64"
+                />
+              </div>
             </template>
             <v-list-item-title v-text="item.name" />
-            <v-list-item-subtitle v-text="item.album.name" />
+            <v-list-item-subtitle v-if="item.album" v-text="item.album.name" />
             <template #append>
               <v-row align="center" justify="center">
                 <v-col cols="auto">

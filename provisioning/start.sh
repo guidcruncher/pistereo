@@ -25,6 +25,7 @@ fi
 fi
 
 if [ "$NODE_ENV" == "development" ]; then
+cd "$BASE"/app
   cp ./mediaserver/config.yml ../mediaserver/config/
   rm -rf ./node_modules
   mkdir -p ./.npm

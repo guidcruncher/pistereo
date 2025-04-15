@@ -7,7 +7,7 @@ RUN <<EOF
  apt update > /dev/null
  apt install -y tzdata ca-certificates > /dev/null
  apt install -y --no-install-recommends curl bash golang alsa-utils alsa-tools \
-    libasound2 jq sudo libogg-dev libvorbis-dev libasound2-dev \
+    libasound2 jq sudo libogg-dev libvorbis-dev libasound2-dev libasound2-plugin-equal \
     acl procps nano mpv socat > /dev/null
  apt install -y glibc-source libsodium23 libsodium-dev build-essential libssl-dev libgdbm-dev libdb-dev libexpat-dev libncurses5-dev libbz2-dev zlib1g-dev gawk bison > /dev/null
  apt clean -y > /dev/null
@@ -26,7 +26,7 @@ RUN <<EOF
  echo $TZ > /etc/timezone
 
  npm install -g npm@11.2.0
- npm i -g @nestjs/cli rimraf concurrently pm2 prettier
+ npm i -g @nestjs/cli rimraf pm2 prettier
  npm cache clean --force
 EOF
 

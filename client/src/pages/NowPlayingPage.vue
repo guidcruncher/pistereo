@@ -15,16 +15,18 @@ export default {
       source: '',
     };
   },
-  methods: {},
   mounted() {
     const playerStore = usePlayerStore();
     this.source = playerStore.getSource();
-
     const jackService = new JackService();
     jackService.getStatus().then((currentSource) => {
       if (currentSource && currentSource.playing) {
         this.source = currentSource.playing.source;
       }
+    });
+
+    on('audio_changed', (data: any) => {
+      this.source = data.source;
     });
 
     on('eject', (data: any) => {
@@ -46,13 +48,15 @@ export default {
       this.source = data.source;
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     off('eject');
     off('spotify.metadata');
     off('streamer.file-loaded');
     off('streamer.stream-changed');
     off('source_changed');
+    off('audio_changed');
   },
+  methods: {},
 };
 </script>
 <script lang="ts" setup></script>

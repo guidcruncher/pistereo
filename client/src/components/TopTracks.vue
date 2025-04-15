@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 import { on, emit, off } from '../composables/useeventbus';
 
@@ -6,9 +6,9 @@ export default {
   name: 'TopTracks',
   data() {
     return {
-      playlist: null,
+      playlist: {} as any,
       hasData: false,
-      tracks: null,
+      tracks: {} as any,
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0 },
     };
   },
@@ -56,7 +56,7 @@ export default {
 
 <template>
   <v-card v-if="hasData" class="mx-auto">
-    <v-list lines="false" nav>
+    <v-list nav>
       <v-list-item v-for="item in tracks" :key="item" :value="item">
         <template #prepend>
           <div style="width: 64px; height: 64px; margin-right: 16px">

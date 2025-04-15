@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 import { on, emit, off } from '../composables/useeventbus';
 
@@ -7,13 +7,12 @@ export default {
   data() {
     return {
       hasData: false,
-      playlists: null,
+      playlists: [] as any[],
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0 },
     };
   },
   mounted() {
     this.hasData = false;
-    this.playlists = null;
     this.paging = { offset: 0, limit: 6, page: 1, pageCount: 0 };
     this.loadPlaylists();
   },
@@ -37,6 +36,7 @@ export default {
     loadPlaylist(playlist) {
       const spotifyService = new SpotifyService();
       spotifyService.playPlaylist(playlist.uri);
+      emit('context_change', { context: playlist.uri });
     },
     viewPlaylist(playlist) {
       emit('view_playlist', { playlist: playlist });
@@ -54,48 +54,47 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
-    <v-card-title sticky>My Playlists</v-card-title>
-    <v-list lines="false" nav>
-      <v-list-item v-for="item in playlists" :key="item.id" :value="item">
-        <template #prepend>
-          <div style="width: 64px; height: 64px; margin-right: 16px">
-            <img
-              v-if="item.images"
-              :src="item.images[0].url"
-              width="64"
-              height="64"
+  <v-list nav v-if="hasData">
+    <v-list-subheader>My Playlists</v-list-subheader>
+
+    <v-list-item v-for="item in playlists" :key="item.id" :value="item">
+      <template #prepend>
+        <div style="width: 64px; height: 64px; margin-right: 16px">
+          <img
+            v-if="item.images"
+            :src="item.images[0].url"
+            width="64"
+            height="64"
+          />
+        </div>
+      </template>
+      <v-list-item-title v-text="item.name" />
+      <v-list-item-subtitle v-text="item.owner.display_name" />
+      <template #append>
+        <v-row align="center" justify="center">
+          <v-col cols="auto">
+            <v-btn
+              icon="mdi-play"
+              density="compact"
+              size="normal"
+              @click="loadPlaylist(item)"
             />
-          </div>
-        </template>
-        <v-list-item-title v-text="item.name" />
-        <v-list-item-subtitle v-text="item.owner.display_name" />
-        <template #append>
-          <v-row align="center" justify="center">
-            <v-col cols="auto">
-              <v-btn
-                icon="mdi-play"
-                density="compact"
-                size="normal"
-                @click="loadPlaylist(item)"
-              />
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                icon="mdi-view-list"
-                density="compact"
-                size="normal"
-                @click="viewPlaylist(item)"
-              />
-            </v-col>
-          </v-row>
-        </template>
-      </v-list-item>
-    </v-list>
-    <v-pagination
-      v-model="paging.page"
-      :length="paging.pageCount"
-      @update:model-value="onPageChange"
-    />
-  </v-card>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              icon="mdi-view-list"
+              density="compact"
+              size="normal"
+              @click="viewPlaylist(item)"
+            />
+          </v-col>
+        </v-row>
+      </template>
+    </v-list-item>
+  </v-list>
+  <v-pagination
+    v-model="paging.page"
+    :length="paging.pageCount"
+    @update:model-value="onPageChange"
+  />
 </template>

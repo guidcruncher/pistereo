@@ -58,7 +58,7 @@ export class AuthService extends SpotifyBaseService {
         ? this.config.get('host.baseurl') + '/api/auth/callback'
         : redirectUri,
     );
-    params.append('code_verifier', verifier!);
+    params.append('code_verifier', verifier);
 
     const result = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
@@ -127,7 +127,7 @@ export class AuthService extends SpotifyBaseService {
       return;
     }
 
-    let user: any = await this.fetchMyProfile(token);
+    const user: any = await this.fetchMyProfile(token);
 
     if (oldtoken != '') {
       await this.userService.deleteUserByToken(oldtoken);
@@ -144,7 +144,7 @@ export class AuthService extends SpotifyBaseService {
 
   private generateCodeVerifier(length: number) {
     let text = '';
-    let possible =
+    const possible =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     for (let i = 0; i < length; i++) {

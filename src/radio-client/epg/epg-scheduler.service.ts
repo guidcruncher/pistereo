@@ -15,7 +15,7 @@ export class EpgSchedulerService {
   ) {}
 
   public registerJobs(schedulerRegistry: SchedulerRegistry) {
-    let xmltvrefresh: string[] = (
+    const xmltvrefresh: string[] = (
       this.config.get<string>('radio.xmltvrefresh') as string
     ).split(',');
     xmltvrefresh.forEach((hour) => {
@@ -37,7 +37,7 @@ export class EpgSchedulerService {
           });
       });
 
-      let name: string = 'EPG Refresh ' + hour.padStart(2, '0') + ':05:00';
+      const name: string = 'EPG Refresh ' + hour.padStart(2, '0') + ':05:00';
       try {
         schedulerRegistry.deleteCronJob(name);
       } catch (err) {

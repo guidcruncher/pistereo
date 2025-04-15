@@ -5,7 +5,7 @@ import * as net from 'net';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ServiceBase } from '@/service-base';
 
-const exec = util.promisify(require('node:child_process').exec);
+const execFile = util.promisify(require('node:child_process').execFile);
 
 const errorCodes: Record<string, number> = {
   success: 200,
@@ -22,6 +22,26 @@ export class StreamerService extends ServiceBase {
     private readonly eventEmitter: EventEmitter2,
   ) {
     super();
+  }
+
+  public async getMetaData() {
+    const idleProp = await this.sendCommand('get_property', ['core-idle']);
+
+    if (idleProp && idleProp.statusCode == 200 && !idleProp.data) {
+      const metaData = await this.sendCommand('get_property', ['metadata']);
+      if (metaData && metaData.statusCode == 200) {
+        const iceData = metaData.data ?? {};
+        if (iceData['icy-title']) {
+          const nowPlaying: string = 'Now playing: ' + iceData['icy-title'];
+          this.emitEvent('now_playing', {
+            nowPlaying: nowPlaying,
+            metadata: iceData,
+          });
+        }
+      }
+    }
+
+    return '';
   }
 
   private async emitEvent(name: string, payload: any) {
@@ -43,43 +63,51 @@ export class StreamerService extends ServiceBase {
   public async sendCommand(cmd: string, parameters: any[] = []): Promise<any> {
     let commandText: any[] = [cmd];
     commandText = commandText.concat(parameters);
-    let jsonCmd: string = JSON.stringify({ command: commandText });
-    let socket: string = process.env.MPV_SOCKET as string;
-    let cmdText: string = "echo '" + jsonCmd + "' | socat - " + socket;
+    const jsonCmd: string = JSON.stringify({ command: commandText });
+    const socket: string = process.env.MPV_SOCKET as string;
+    const cmdArgs: string[] = ['-c', `echo '${jsonCmd}' | socat - ${socket}`];
     this.log.log(this.__caller() + ' => sendCommand ' + jsonCmd);
 
     return new Promise((resolve, reject) => {
-      if (cmd == 'get_property' && parameters.length > 0) {
-        if (parameters[0] == '') {
-          this.log.error(
-            'ERROR ' + this.__caller() + ' Missing property name => ' + jsonCmd,
-          );
-          reject();
-          return;
-        }
-      }
-
-      exec(cmdText)
-        .then((result) => {
-          let json: any = JSON.parse(result.stdout);
-          if (json.error) {
-            json.statusCode = errorCodes[json.error] ?? 500;
-            json.command = jsonCmd;
-            json.caller = this.__caller();
-            resolve(json);
-          } else {
-            resolve(json);
+      try {
+        if (cmd == 'get_property' && parameters.length > 0) {
+          if (parameters[0] == '') {
+            this.log.error(
+              'ERROR ' +
+                this.__caller() +
+                ' Missing property name => ' +
+                jsonCmd,
+            );
+            reject();
+            return;
           }
-        })
-        .catch((err) => {
-          this.log.error('Error executing command ' + cmdText, err);
-          reject(err);
-        });
+        }
+
+        execFile('sh', cmdArgs)
+          .then((result) => {
+            const json: any = JSON.parse(result.stdout);
+            if (json.error) {
+              json.statusCode = errorCodes[json.error] ?? 500;
+              json.command = jsonCmd;
+              json.caller = this.__caller();
+              resolve(json);
+            } else {
+              resolve(json);
+            }
+          })
+          .catch((err) => {
+            this.log.error('Error executing command ' + cmdArgs.join(' '), err);
+            reject(err);
+          });
+      } catch (err) {
+        this.log.error('Error executing command', err);
+        reject(err);
+      }
     });
   }
 
   public async getStatus() {
-    let result: any = {
+    const result: any = {
       playing: false,
       active: false,
       url: '',
@@ -87,17 +115,21 @@ export class StreamerService extends ServiceBase {
       position: 0.0,
     };
     this.log.log(this.__caller() + ' => getStatus');
-    let pathProp = await this.sendCommand('get_property', ['path']);
-    let volProp = await this.sendCommand('get_property', ['volume']);
-    let playbackProp = await this.sendCommand('get_property', [
+    const pathProp = await this.sendCommand('get_property', ['path']);
+    const volProp = await this.sendCommand('get_property', ['volume']);
+    const metaData = await this.sendCommand('get_property', ['metadata']);
+    const playbackProp = await this.sendCommand('get_property', [
       'playback-time',
     ]);
-    let idleProp = await this.sendCommand('get_property', ['core-idle']);
+    const idleProp = await this.sendCommand('get_property', ['core-idle']);
 
     if (playbackProp && playbackProp.statusCode == 200) {
       result.position = playbackProp.data;
     }
 
+    if (metaData && metaData.statusCode == 200) {
+      result.metadata = metaData.data;
+    }
     if (idleProp && idleProp.statusCode == 200) {
       result.playing = !idleProp.data;
     }
@@ -120,7 +152,7 @@ export class StreamerService extends ServiceBase {
 
   public async play(url: string) {
     this.log.log(this.__caller() + ' => play');
-    let state: any = await this.getStatus();
+    const state: any = await this.getStatus();
 
     if (!state.active) {
       this.eventEmitter.emit('jack.input_changes', 'streamer');

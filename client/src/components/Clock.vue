@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { on, emit, off } from '../composables/useeventbus';
 
 export default {
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     tick() {
-      let date = new Date();
+      const date = new Date();
       let changed = false;
       const dateFormat = new Intl.DateTimeFormat('default', {
         weekday: 'long',
@@ -36,12 +36,12 @@ export default {
         hourCycle: 'h23',
       });
       if (this.date != dateFormat.format(date)) {
-        this.changed = true;
+        changed = true;
         this.date = dateFormat.format(date);
       }
 
       if (this.time != timeFormat.format(date)) {
-        this.changed = true;
+        changed = true;
         this.time = timeFormat.format(date);
       }
 
@@ -57,7 +57,7 @@ export default {
               0,
             ),
           ),
-          local: new Date(date.setSeconds(0).toJSON()),
+          local: new Date(date.setSeconds(0)),
         });
       }
     },
@@ -66,6 +66,10 @@ export default {
 </script>
 
 <template>
-  <div class="text-h1 text-center font-weight-thin">{{ time }}</div>
-  <div class="text-subtitle-1 text-center text-uppercase">{{ date }}</div>
+  <div class="text-h1 text-center font-weight-thin">
+    {{ time }}
+  </div>
+  <div class="text-subtitle-1 text-center text-uppercase">
+    {{ date }}
+  </div>
 </template>

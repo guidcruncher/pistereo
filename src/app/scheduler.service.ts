@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { EpgSchedulerService } from '../radio-client/epg/epg-scheduler.service';
+import { StreamerService } from '../streamer-client/streamer/streamer.service';
+import { CronJob } from 'cron';
 
 @Injectable()
 export class SchedulerService {
   constructor(
     private schedulerRegistry: SchedulerRegistry,
     private readonly epgSchedulerService: EpgSchedulerService,
+    private readonly streamerService: StreamerService,
   ) {}
 
   public runStartupJobs() {
@@ -16,6 +19,12 @@ export class SchedulerService {
 
   public registerJobs() {
     this.epgSchedulerService.registerJobs(this.schedulerRegistry);
+
+    const job = new CronJob(`10 * * * * *`, async () => {
+      await this.streamerService.getMetaData();
+    });
+    this.schedulerRegistry.addCronJob('Stream Metadata monitor', job);
+    job.start();
   }
 
   public getJob(name: string) {
@@ -28,7 +37,7 @@ export class SchedulerService {
 
   public listCronJobs() {
     const jobs = this.getCronJobs();
-    let result: any[] = [] as any[];
+    const result: any[] = [] as any[];
     jobs.forEach((value, key, map) => {
       let next;
       let last;
@@ -38,7 +47,7 @@ export class SchedulerService {
         next = '';
       }
       try {
-        let v = value.lastDate();
+        const v = value.lastDate();
         last = '';
         if (v) {
           last = v.toJSON();

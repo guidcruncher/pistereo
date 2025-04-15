@@ -4,8 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH
 ENV TZ=UTC
 
-RUN npm i -g concurrently
-RUN npm cache clean --force
+COPY ./provisioning/asound.conf /etc/asound.conf
 
 USER appuser
 

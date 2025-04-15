@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 import { on, emit, off } from '../composables/useeventbus';
 
@@ -6,9 +6,9 @@ export default {
   name: 'Playlist',
   data() {
     return {
-      playlist: null,
+      playlist: {} as any,
       hasData: false,
-      tracks: null,
+      tracks: {} as any,
       paging: { offset: 0, limit: 10, page: 1, pageCount: 0 },
     };
   },
@@ -17,7 +17,7 @@ export default {
     this.tracks = null;
     this.paging = { offset: 0, limit: 10, page: 1, pageCount: 0 };
 
-    on('view_playlist', (data) => {
+    on('view_playlist', (data: any) => {
       this.playlist = data.playlist;
       this.getPlaylistTracks();
     });
@@ -56,6 +56,7 @@ export default {
     playTrack(item) {
       const spotifyService = new SpotifyService();
       spotifyService.playTrackInPlayList(this.playlist.uri, item.track.uri);
+      emit('context_change', { context: this.playlist.uri });
     },
     viewPlaylist(playlist) {
       this.playlist = playlist;
@@ -74,51 +75,49 @@ export default {
 </script>
 
 <template>
-  <v-card v-if="hasData" class="mx-auto">
-    <v-card-title sticky>
+  <v-list nav v-if="hasData">
+    <v-list-subheader>
       {{ playlist.name }}
-    </v-card-title>
-    <v-card-subtitle>By {{ playlist.owner.display_name }} </v-card-subtitle>
-    <v-list lines="false" nav>
-      <v-list-item v-for="item in tracks" :key="item.track.id" :value="item">
-        <template #prepend>
-          <div style="width: 64px; height: 64px; margin-right: 16px">
-            <img
-              v-if="item.track.album.images"
-              :src="item.track.album.images[0].url"
-              width="64"
-              height="64"
+      By {{ playlist.owner.display_name }}
+    </v-list-subheader>
+    <v-list-item v-for="item in tracks" :key="item.track.id" :value="item">
+      <template #prepend>
+        <div style="width: 64px; height: 64px; margin-right: 16px">
+          <img
+            v-if="item.track.album.images"
+            :src="item.track.album.images[0].url"
+            width="64"
+            height="64"
+          />
+        </div>
+      </template>
+      <v-list-item-title v-text="item.track.name" />
+      <v-list-item-subtitle v-text="item.track.album.name" />
+      <template #append>
+        <v-row align="center" justify="center">
+          <v-col cols="auto">
+            <v-btn
+              icon="mdi-play"
+              density="compact"
+              size="normal"
+              @click="playTrack(item)"
             />
-          </div>
-        </template>
-        <v-list-item-title v-text="item.track.name" />
-        <v-list-item-subtitle v-text="item.track.album.name" />
-        <template #append>
-          <v-row align="center" justify="center">
-            <v-col cols="auto">
-              <v-btn
-                icon="mdi-play"
-                density="compact"
-                size="normal"
-                @click="playTrack(item)"
-              />
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                icon="mdi-view-list"
-                density="compact"
-                size="normal"
-                @click="viewTrack(item)"
-              />
-            </v-col>
-          </v-row>
-        </template>
-      </v-list-item>
-    </v-list>
-    <v-pagination
-      v-model="paging.page"
-      :length="paging.pageCount"
-      @update:model-value="onPageChange"
-    />
-  </v-card>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              icon="mdi-view-list"
+              density="compact"
+              size="normal"
+              @click="viewTrack(item)"
+            />
+          </v-col>
+        </v-row>
+      </template>
+    </v-list-item>
+  </v-list>
+  <v-pagination
+    v-model="paging.page"
+    :length="paging.pageCount"
+    @update:model-value="onPageChange"
+  />
 </template>

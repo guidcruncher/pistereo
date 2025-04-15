@@ -9,7 +9,7 @@ export class ServiceBase {
   }
 
   client(options: any = {}) {
-    let opt: any = options ?? {};
+    const opt: any = options ?? {};
     if (opt.isPublic) {
       return axios.create({
         baseURL: opt.baseUrl ?? this.baseUrl,
@@ -46,7 +46,7 @@ export class ServiceBase {
           return Promise.reject(error);
         }
 
-        let token = JSON.parse(
+        const token = JSON.parse(
           localStorage.getItem('token') ??
             '{"access_token": "", "refresh_token": ""}',
         ) || { access_token: '', refresh_token: '' };

@@ -1,17 +1,22 @@
 <template>
   <Clock />
 
-  <v-expansion-panels multiple v-model="panel">
+  <v-expansion-panels v-model="panel" multiple>
     <v-expansion-panel>
-      <v-expansion-panel-title>Presets</v-expansion-panel-title>
+      <v-expansion-panel-title
+        ><v-icon icon="mdi-radio" />&nbsp; Presets</v-expansion-panel-title
+      >
       <v-expansion-panel-text>
         <RadioPresets />
       </v-expansion-panel-text>
     </v-expansion-panel>
     <v-expansion-panel>
-      <v-expansion-panel-title>Saved Albums</v-expansion-panel-title>
+      <v-expansion-panel-title
+        ><v-icon icon="mdi-equalizer" />&nbsp;
+        Equaliser</v-expansion-panel-title
+      >
       <v-expansion-panel-text>
-        <SavedAlbums />
+        <Equaliser />
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -28,9 +33,9 @@ export default {
       source: '',
     };
   },
-  methods: {},
   mounted() {},
-  beforeDestroy() {},
+  beforeUnmount() {},
+  methods: {},
 };
 </script>
 <script lang="ts" setup></script>

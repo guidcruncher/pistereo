@@ -7,7 +7,7 @@ export const AuthToken = createParamDecorator(
     const log = new Logger(AuthToken.name);
     const request = ctx.switchToHttp().getRequest();
     const [authType, token] = request.headers.authorization?.split(' ') ?? [];
-    let authToken = authType === 'Bearer' ? token : '';
+    const authToken = authType === 'Bearer' ? token : '';
     return authToken;
   },
 );

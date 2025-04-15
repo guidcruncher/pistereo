@@ -50,13 +50,13 @@ export class PlayerService extends SpotifyBaseService {
 
   public async getDeviceIdByName(token: string, name: string): Promise<any> {
     this.log.log(this.__caller() + ' =>getDeviceIdbyName');
-    let result = await this.getAvailableDevices(token);
+    const result = await this.getAvailableDevices(token);
     if (!result) {
       return '';
     }
 
     if (result.result.devices) {
-      let device = result.result.devices.find((device) => {
+      const device = result.result.devices.find((device) => {
         return device.name == name;
       });
 
@@ -239,7 +239,7 @@ export class PlayerService extends SpotifyBaseService {
       },
     );
 
-    let data = await this.createResponse<any>(result);
+    const data = await this.createResponse<any>(result);
 
     if (data.result.next) {
       data.result.next = data.result.next.replace(

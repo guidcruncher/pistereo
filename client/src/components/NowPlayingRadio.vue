@@ -1,4 +1,3 @@
-t
 <script lang="ts">
 import { SpotifyService } from '../services/spotify.service';
 import { TunerService } from '../services/tuner.service';
@@ -16,34 +15,22 @@ export default {
       hasEpg: false,
       source: {} as any,
       station: {} as any,
+      nowplaying: {} as any,
+      timer: 0,
       epg: [] as any[],
     };
-  },
-  methods: {
-    getPlayerState() {
-      const jackService = new JackService();
-      jackService.getStatus().then((state) => {
-        if (state.playing && state.playing.source == 'streamer') {
-          const tunerService = new TunerService();
-          tunerService.getStation(state.playing.stationuuid).then((station) => {
-            this.station = station;
-            this.hasData = true;
-          });
-          this.hasEpg = false;
-          tunerService.getEpg(state.playing.stationuuid).then((epg) => {
-            this.epg = epg;
-            this.hasEpg = true;
-          });
-        }
-      });
-    },
   },
   mounted() {
     const playerStore = usePlayerStore();
     this.hasData = false;
     this.station = {};
+    this.nowplaying = {};
     this.epg = [];
     this.hasEpg = false;
+    this.tick();
+    this.timer = setInterval(() => {
+      this.tick();
+    }, 5000);
 
     if (playerStore.getSource() == 'streamer') {
       this.getPlayerState();
@@ -70,10 +57,36 @@ export default {
       }
     });
   },
-  beforeUnmount() {},
-  beforeDestroy() {
+  beforeUnmount() {
+    clearInterval(this.timer);
+    this.timer = 0;
     off('source_changed');
     off('streamer.stream-changed');
+  },
+  methods: {
+    tick() {
+      const jackService = new JackService();
+      jackService.getStreamerStatus().then((state) => {
+        this.nowplaying = state;
+      });
+    },
+    getPlayerState() {
+      const jackService = new JackService();
+      jackService.getStatus().then((state) => {
+        if (state.playing && state.playing.source == 'streamer') {
+          const tunerService = new TunerService();
+          tunerService.getStation(state.playing.stationuuid).then((station) => {
+            this.station = station;
+            this.hasData = true;
+          });
+          this.hasEpg = false;
+          tunerService.getEpg(state.playing.stationuuid).then((epg) => {
+            this.epg = epg;
+            this.hasEpg = true;
+          });
+        }
+      });
+    },
   },
 };
 </script>
@@ -97,14 +110,19 @@ export default {
             <h4>
               <a :href="station.homepage">{{ station.homepage }}</a>
             </h4>
+            <h5 v-if="nowplaying && nowplaying.metadata">
+              Now playing - {{ nowplaying.metadata['icy-title'] }} ({{
+                nowplaying.metadata['icy-genre']
+              }})
+            </h5>
           </div>
         </v-col>
       </v-row>
     </v-container>
 
     <v-card v-if="hasEpg">
-      <v-card-title sticky>Program Guide</v-card-title>
-      <v-list lines="false" nav>
+      <v-card-title sticky> Program Guide </v-card-title>
+      <v-list nav>
         <v-list-item v-for="item in epg" :key="item" :value="item">
           <v-list-item-title v-text="item.title" />
           <v-list-item-subtitle v-text="item.desc" />

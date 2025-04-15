@@ -58,7 +58,7 @@ export class RadioBrowserService extends ServiceBase {
         },
       );
 
-      let tmp = (await result.json()) as Station[];
+      const tmp = (await result.json()) as Station[];
       json = json.concat(tmp);
     }
 
@@ -86,7 +86,7 @@ export class RadioBrowserService extends ServiceBase {
         if (typeof query[key] !== 'undefined' && query[key] !== null) {
           switch (key) {
             case 'language':
-              let lang: any = lookupLanguage(query[key]);
+              const lang: any = lookupLanguage(query[key]);
               if (lang.name != '') {
                 params.append(key, lang.name.toLowerCase());
               } else {
@@ -107,7 +107,7 @@ export class RadioBrowserService extends ServiceBase {
               params.append('countryExact', 'false');
               break;
             case 'tagList':
-              params.append(key, (query[key] as string[]).join(','));
+              params.append(key, query[key].join(','));
               params.append('tagExact', 'true');
               break;
             default:
@@ -132,7 +132,7 @@ export class RadioBrowserService extends ServiceBase {
 
     for (let i = 0; i < json.length; i++) {
       if (json[i].favicon == '') {
-        let ch = await this.radioService.getChannel(json[i].stationuuid);
+        const ch = await this.radioService.getChannel(json[i].stationuuid);
         if (ch) {
           json[i].favicon = ch.icon_url;
         }
@@ -142,7 +142,7 @@ export class RadioBrowserService extends ServiceBase {
   }
 
   public async streamStation(user: any, uuid: string) {
-    let result: any = await this.searchByUuid([uuid]);
+    const result: any = await this.searchByUuid([uuid]);
 
     this.log.log(this.__caller() + ' =>streamStatiom');
     if (result.length > 0) {
@@ -168,10 +168,10 @@ export class RadioBrowserService extends ServiceBase {
   }
 
   async savePreset(uuid: string, user: any) {
-    let result: any = await this.searchByUuid([uuid]);
+    const result: any = await this.searchByUuid([uuid]);
     if (result) {
       if (result[0].favicon == '') {
-        let ch = await this.radioService.getChannel(uuid);
+        const ch = await this.radioService.getChannel(uuid);
         if (ch) {
           result[0].favicon = ch.icon_url;
         }

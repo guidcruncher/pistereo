@@ -19,8 +19,8 @@ export class JackService extends ServiceBase {
   }
 
   async restartLastPlayed() {
-    let playing: any = await this.userService.getLastPlayed();
-
+    const playing: any = await this.userService.getLastPlayed();
+    this.log.log(this.__caller() + ' => restartLastPlayed');
     if (!playing || !playing.playing) {
       return;
     }
@@ -40,11 +40,14 @@ export class JackService extends ServiceBase {
 
   async getStatus() {
     try {
-      let spotifyStatus: any = await this.librespotService.getStatus();
-      let streamerStatus: any = await this.streamerService.getStatus();
-      let playing: any = await this.userService.getLastPlayed();
-      let results: any = { playing: playing ? playing.detail : {}, source: [] };
-      this.log.log(this.__caller() + ' =>getStatus');
+      const spotifyStatus: any = await this.librespotService.getStatus();
+      const streamerStatus: any = await this.streamerService.getStatus();
+      const playing: any = await this.userService.getLastPlayed();
+      const results: any = {
+        playing: playing ? playing.detail : {},
+        source: [],
+      };
+      this.log.log(this.__caller() + ' => getStatus');
       if (spotifyStatus && spotifyStatus.track) {
         results.source.push('spotify');
       }
@@ -69,8 +72,10 @@ export class JackService extends ServiceBase {
 
   async eject() {
     this.log.log(this.__caller() + ' => eject');
-    let playing: any = await this.userService.getLastPlayed();
-    await this.stopDevice(playing.source);
+    const playing: any = await this.userService.getLastPlayed();
+    if (playing) {
+      await this.stopDevice(playing.source);
+    }
     return await this.userService.deleteLastPlayed();
   }
 

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { JackService } from '../services/jack.service';
 import { SpotifyService } from '../services/spotify.service';
 import { on, emit, off } from '../composables/useeventbus';
@@ -8,7 +8,7 @@ export default {
   name: 'SavedAlbums',
   data() {
     return {
-      albums: null,
+      albums: {} as any,
       hasData: false,
       paging: { offset: 0, limit: 6, page: 1, pageCount: 0, total: 0 },
     };
@@ -26,10 +26,12 @@ export default {
         item.album.tracks.items[0].uri,
         item.album.uri,
       );
+      emit('context_change', { context: item.album.uri });
     },
     playAlbumTrack(track, item) {
       const spotifyService = new SpotifyService();
       spotifyService.playTrackInPlayList(track.uri, item.album.uri);
+      emit('context_change', { context: item.album.uri });
     },
     onPageChange() {
       let offset = 0;
@@ -47,7 +49,6 @@ export default {
           if (response.items.length > 0) {
             this.paging = response.paging;
             this.albums = response.items;
-            this.paging.total = response.total;
             this.hasData = true;
           }
         })
@@ -61,9 +62,9 @@ export default {
 
 <template>
   <v-card>
-    <v-list lines="false">
+    <v-list>
       <v-list-group v-for="item in albums" :key="item" :value="item">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-list-item
             v-bind="props"
             @click="item.showtracks = item.showtracks ? true : !item.showtracks"
@@ -79,8 +80,8 @@ export default {
               </div>
             </template>
             <v-list-item-title v-text="item.album.name" />
-            <v-list-item-subtitle
-              >{{
+            <v-list-item-subtitle>
+              {{
                 item.album.artists
                   .map((a) => {
                     return a.name;
@@ -98,20 +99,21 @@ export default {
                     @click="playAlbum(item)"
                   />
                   <v-btn
+                    v-if="item.showtracks"
                     icon="mdi-chevron-up"
                     density="compact"
                     size="normal"
-                    v-if="item.showtracks"
                     @click="item.showtracks = false"
                   />
                   <v-btn
+                    v-if="!item.showtracks"
                     icon="mdi-chevron-down"
                     density="compact"
                     size="normal"
-                    v-if="!item.showtracks"
                     @click="item.showtracks = true"
-                  /> </v-col
-              ></v-row>
+                  />
+                </v-col>
+              </v-row>
             </template>
           </v-list-item>
         </template>
@@ -121,9 +123,9 @@ export default {
           :key="track"
           :value="track"
         >
-          <v-list-item-title
-            >{{ track.track_number }}. {{ track.name }}</v-list-item-title
-          >
+          <v-list-item-title>
+            {{ track.track_number }}. {{ track.name }}
+          </v-list-item-title>
           <template #append>
             <v-row align="center" justify="center">
               <v-col cols="auto">
@@ -132,8 +134,9 @@ export default {
                   density="compact"
                   size="normal"
                   @click="playAlbumTrack(track, item)"
-                /> </v-col
-            ></v-row>
+                />
+              </v-col>
+            </v-row>
           </template>
         </v-list-item>
       </v-list-group>

@@ -30,8 +30,8 @@ export class AppController {
         filename = path.join(clientPath, '/index.html');
       }
 
-      let fileExtn: string = path.extname(filename);
-      let contentType: string = this.mimeType.lookup(filename);
+      const fileExtn: string = path.extname(filename);
+      const contentType: string = this.mimeType.lookup(filename);
 
       let options = {};
 

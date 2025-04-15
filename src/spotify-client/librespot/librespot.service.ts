@@ -4,6 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
 import { SpotifyBaseService } from '../spotify-base.service';
 import { GetStatusResponse, Play } from '../spotify-client.d';
+import { UserService } from '@data/user/user.service';
 
 const exec = util.promisify(require('node:child_process').exec);
 
@@ -14,6 +15,7 @@ export class LibrespotService extends SpotifyBaseService {
   constructor(
     private readonly config: ConfigService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly userService: UserService,
   ) {
     super();
   }
@@ -47,7 +49,7 @@ export class LibrespotService extends SpotifyBaseService {
       body: JSON.stringify({ volume: volume, relative: relative }),
       headers: { 'Content-Type': 'application/json' },
     });
-    let txt = await result.text();
+    const txt = await result.text();
 
     if (txt != '') {
       return JSON.parse(txt);
@@ -56,23 +58,54 @@ export class LibrespotService extends SpotifyBaseService {
     return {};
   }
 
-  public async play(request: Play) {
+  public play(request: Play) {
     this.log.log(this.__caller() + ' =>play');
-    let status: any = await this.getStatus();
 
-    const result = await fetch(this.getApiUrl('/player/play'), {
-      method: 'POST',
-      body: JSON.stringify(request),
-      headers: { 'Content-Type': 'application/json' },
+    return new Promise((resolve, reject) => {
+      fetch(this.getApiUrl('/player/play'), {
+        method: 'POST',
+        body: JSON.stringify(request),
+        headers: { 'Content-Type': 'application/json' },
+      }).then((result) => {
+        if (!result.ok) {
+          this.log.error(
+            'Error playing ' + result.status + ' / ' + result.text(),
+          );
+          reject();
+          return;
+        }
+
+        this.getStatus()
+          .then((state: any) => {
+            this.userService
+              .updateLastPlayed(
+                state ? state.username : '',
+                '',
+                'spotify',
+                state.track.uri,
+                {
+                  source: 'spotify',
+                  uri: state.track.uri,
+                  name: state.track.name,
+                  description: state.track.album_name,
+                  owner: state.trasck.artist_names.join(' '),
+                  image: state.track.album_cover_url,
+                },
+              )
+              .then(() => {
+                resolve(state);
+              })
+              .catch((err) => {
+                this.log.error('Error updatimg lastplayed', err);
+                reject(err);
+              });
+          })
+          .catch((err) => {
+            this.log.error('Error getting status', err);
+            reject(err);
+          });
+      });
     });
-
-    if (!result.ok) {
-      this.log.error(
-        'Error playing ' + result.status + ' / ' + (await result.text()),
-      );
-      return;
-    }
-    return await this.getStatus();
   }
 
   public async playpause() {

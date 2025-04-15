@@ -1,9 +1,9 @@
-<script setup>
+<script lang="ts" setup>
 const rules = {
   required: (value) => !!value || 'Required',
 };
 </script>
-<script>
+<script lang="ts">
 import { SearchTypes, SpotifyService } from '../services/spotify.service';
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';
@@ -17,8 +17,8 @@ export default {
       query: { text: '', valid: false, searchTypes: '', market: '' },
       hasData: false,
       loading: false,
-      data: {},
-      results: {},
+      data: {} as any,
+      results: {} as any,
       paging: { offset: 0, limit: 10, page: 1, pageCount: 0, total: 0 },
     };
   },
@@ -125,8 +125,9 @@ export default {
       });
     },
     loadSearchPage() {
+      const done = (arg) => {};
       if (this.query.searchTypes == 'radio') {
-        this.loadRadioSearchPage({});
+        this.loadRadioSearchPage({ done });
       } else {
         this.loadSpotifySearchPage();
       }
@@ -138,7 +139,7 @@ export default {
         }
       } else {
         if (this.data && this.data[this.query.searchTypes]) {
-          this.results = this.getReseults();
+          this.results = this.getResults();
           this.paging = this.results.paging;
         } else {
           if (this.query.valid) {
@@ -183,7 +184,7 @@ export default {
       if (!['playlist'].includes(this.query.searchTypes)) {
         window.open(item.external_urls.spotify);
       } else {
-        viewPlaylist(item);
+        this.viewPlaylist(item);
       }
     },
   },
@@ -224,7 +225,7 @@ export default {
   </v-form>
   <template v-if="query.searchTypes != 'radio'">
     <v-skeleton-loader :loading="loading" type="list-item-two-line">
-      <v-list lines="false" nav v-if="hasData">
+      <v-list v-if="hasData" nav>
         <v-list-item v-for="item in results.items" :key="item" :value="item">
           <template #prepend>
             <div style="width: 64px; height: 64px; margin-right: 16px">
@@ -277,13 +278,13 @@ export default {
 
   <template v-if="query.searchTypes == 'radio'">
     <v-infinite-scroll
-      :height="500"
       v-if="hasData"
+      :height="500"
       :items="results"
       @load="loadRadioSearchPage"
     >
       <v-skeleton-loader :loading="loading" type="list-item-two-line">
-        <v-list lines="false">
+        <v-list>
           <v-list-item v-for="item in results" :key="item" :value="item">
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { JackService } from '../services/jack.service';
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';
@@ -8,13 +8,12 @@ export default {
   name: 'Radiopresets',
   data() {
     return {
-      presets: null,
+      presets: [] as any[],
       hasData: false,
     };
   },
   mounted() {
     this.hasData = false;
-    this.tracks = null;
     this.getRadioPresets();
   },
   beforeUnmount() {},

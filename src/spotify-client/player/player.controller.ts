@@ -80,11 +80,11 @@ export class PlayerController {
     @AuthToken() token: string,
     @Query('play') play: boolean,
   ) {
-    let result: any = await this.playerService.getAvailableDevices(token);
-    let deviceName = this.config.get('spotify.playbackdevice');
+    const result: any = await this.playerService.getAvailableDevices(token);
+    const deviceName = this.config.get('spotify.playbackdevice');
 
     if (result.status == 200 && result.result.devices) {
-      let defaultDevice: any = result.result.devices.find((d) => {
+      const defaultDevice: any = result.result.devices.find((d) => {
         return d.name == deviceName;
       });
 
@@ -115,10 +115,10 @@ export class PlayerController {
   @Get('default')
   @ApiOperation({ summary: 'Get default configured playback device' })
   async getDefaultDevice(@AuthToken() token: string) {
-    let result: any = await this.playerService.getAvailableDevices(token);
-    let deviceName = this.config.get('spotify.playbackdevice');
+    const result: any = await this.playerService.getAvailableDevices(token);
+    const deviceName = this.config.get('spotify.playbackdevice');
     if (result.status == 200 && result.result.devices) {
-      let defaultDevice: any = result.result.devices.find((d) => {
+      const defaultDevice: any = result.result.devices.find((d) => {
         return d.name == deviceName;
       });
 
@@ -179,10 +179,10 @@ export class PlayerController {
     @AuthToken() token: string,
     @Body() formData: DefaultPlaybackRequest,
   ) {
-    let result: any = await this.playerService.getAvailableDevices(token);
-    let deviceName = this.config.get('spotify.playbackdevice');
+    const result: any = await this.playerService.getAvailableDevices(token);
+    const deviceName = this.config.get('spotify.playbackdevice');
     if (result.status == 200 && result.result.devices) {
-      let defaultDevice: any = result.result.devices.find((d) => {
+      const defaultDevice: any = result.result.devices.find((d) => {
         return d.name == deviceName;
       });
       if (!defaultDevice) {
@@ -221,11 +221,11 @@ export class PlayerController {
     @AuthToken() token: string,
     @Query('volume_percent') level: number,
   ) {
-    let result: any = await this.playerService.getAvailableDevices(token);
-    let deviceName = this.config.get('spotify.playbackdevice');
+    const result: any = await this.playerService.getAvailableDevices(token);
+    const deviceName = this.config.get('spotify.playbackdevice');
 
     if (result.status == 200 && result.result.devices) {
-      let defaultDevice: any = result.result.devices.find((d) => {
+      const defaultDevice: any = result.result.devices.find((d) => {
         return d.name == deviceName;
       });
 
@@ -292,7 +292,7 @@ export class PlayerController {
     @Query('access_token') token,
     @Res() res,
   ) {
-    let html = await this.playerService.getWebPlayer(
+    const html = await this.playerService.getWebPlayer(
       token ?? accessToken ?? session.get('access_token') ?? '',
     );
 

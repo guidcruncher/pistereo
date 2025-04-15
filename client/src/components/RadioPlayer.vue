@@ -16,6 +16,64 @@ export default {
       station: {} as any,
     };
   },
+  mounted() {
+    const tunerService = new TunerService();
+    const playerStore = usePlayerStore();
+    this.paused = false;
+    this.stopped = true;
+    this.station = {};
+
+    tunerService.getStatus().then((state) => {
+      this.volume = state.volume;
+    });
+
+    if (playerStore.getSource() == 'streamer') {
+      this.getPlayerState();
+    }
+
+    on('eject', (data: any) => {
+      this.hasData = false;
+      this.stopped = true;
+      this.station = {};
+    });
+
+    on('streamer.stream-changed', (data: any) => {
+      this.paused = false;
+      this.stopped = false;
+      //      this.station = data.station;
+    });
+
+    on('audio_changed', (data: any) => {
+      if (data.source == 'streamer') {
+        const tunerService = new TunerService();
+        tunerService.getStation(data.uri).then((station) => {
+          this.station = station;
+          this.hasData = true;
+        });
+      }
+    });
+
+    on('source_changed', (data: any) => {
+      if (data.source == 'streamer') {
+        const jackService = new JackService();
+        jackService.stopDevice('spotify');
+        this.getPlayerState();
+      } else {
+        const jackService = new JackService();
+        jackService.stopDevice('streamer');
+        this.paused = false;
+        this.stopped = true;
+        this.station = {};
+        this.hasData = false;
+      }
+    });
+  },
+  beforeUnmount() {
+    off('eject');
+    off('source_changed');
+    off('audio_changed');
+    off('streamer.stream-changed');
+  },
   methods: {
     getPlayerState() {
       const jackService = new JackService();
@@ -77,53 +135,6 @@ export default {
       emit('eject', { source: 'stream' });
     },
   },
-  mounted() {
-    const tunerService = new TunerService();
-    const playerStore = usePlayerStore();
-    this.paused = false;
-    this.stopped = true;
-    this.station = {};
-
-    tunerService.getStatus().then((state) => {
-      this.volume = state.volume;
-    });
-
-    if (playerStore.getSource() == 'streamer') {
-      this.getPlayerState();
-    }
-
-    on('eject', (data: any) => {
-      this.hasData = false;
-      this.stopped = true;
-      this.station = {};
-    });
-
-    on('streamer.stream-changed', (data: any) => {
-      this.paused = false;
-      this.stopped = false;
-      this.station = data.station;
-    });
-
-    on('source_changed', (data: any) => {
-      if (data.source == 'streamer') {
-        const jackService = new JackService();
-        jackService.stopDevice('spotify');
-        this.getPlayerState();
-      } else {
-        const jackService = new JackService();
-        jackService.stopDevice('streamer');
-        this.paused = false;
-        this.stopped = true;
-        this.station = {};
-        this.hasData = false;
-      }
-    });
-  },
-  beforeDestroy() {
-    off('eject');
-    off('source_changed');
-    off('streamer.stream-changed');
-  },
 };
 </script>
 <template>
@@ -134,55 +145,56 @@ export default {
           <div class="albumimg">
             <img :src="station.favicon" />
           </div>
-        </div> </v-col
-    ></v-row>
+        </div>
+      </v-col>
+    </v-row>
     <v-row>
-      <v-col cols="12"
-        ><div class="centre">
+      <v-col cols="12">
+        <div class="centre">
           <h4>{{ station.name }}</h4>
           <h5>{{ station.codec }}</h5>
           <h6>{{ station.bitrate }}kbps</h6>
         </div>
-      </v-col></v-row
-    >
+      </v-col>
+    </v-row>
   </v-container>
   <v-row v-if="hasData">
-    <v-col cols="2"></v-col>
-    <v-col cols="9"
-      ><table border="0" cellpadding="4" cellspacing="4">
+    <v-col cols="2" />
+    <v-col cols="9">
+      <table border="0" cellpadding="4" cellspacing="4">
         <tbody>
           <tr>
             <td>
               <v-btn
-                @click="play()"
+                v-if="paused"
                 color="primary"
                 icon="mdi-play"
                 size="small"
-                v-if="paused"
-              ></v-btn>
+                @click="play()"
+              />
               <v-btn
-                @click="pause()"
+                v-if="!paused"
                 color="primary"
                 icon="mdi-pause"
                 size="small"
-                v-if="!paused"
-              ></v-btn>
+                @click="pause()"
+              />
             </td>
             <td>
               <v-btn
-                @click="stop()"
                 size="small"
                 color="primary"
                 icon="mdi-stop"
-              ></v-btn>
+                @click="stop()"
+              />
             </td>
             <td>
               <v-btn
-                @click="eject()"
                 color="primary"
                 size="small"
                 icon="mdi-eject"
-              ></v-btn>
+                @click="eject()"
+              />
             </td>
           </tr>
         </tbody>
@@ -190,20 +202,21 @@ export default {
     </v-col>
   </v-row>
   <v-row v-if="hasData">
-    <v-col cols="12"
-      ><v-slider
+    <v-col cols="12">
+      <v-slider
         v-model="volume"
         append-icon="mdi-volume-high"
         prepend-icon="mdi-volume-mute"
-        @click:append="setVolume(100)"
-        @click:prepend="setVolume(0)"
         track-color="primary"
         step="1"
         min="0"
         max="100"
+        @click:append="setVolume(100)"
+        @click:prepend="setVolume(0)"
         @end="setVolume"
-      ></v-slider> </v-col
-  ></v-row>
+      />
+    </v-col>
+  </v-row>
 </template>
 
 <style>

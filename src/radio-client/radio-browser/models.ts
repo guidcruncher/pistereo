@@ -766,6 +766,6 @@ const languages = {
 };
 
 export const lookupLanguage = (code: string) => {
-  var parts = code.toLowerCase().split('-');
+  const parts = code.toLowerCase().split('-');
   return languages[parts[0]] ?? { name: '', nativeName: '' };
 };

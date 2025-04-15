@@ -65,7 +65,7 @@ export class PlaylistService extends SpotifyBaseService {
     limit: number,
   ): Promise<ApiResult<PagedList<Track>>> {
     this.log.log(this.__caller() + ' =>getPlaylistTracks');
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('offset', offset.toString());
     params.append('limit', limit.toString());
     const result = await fetch(

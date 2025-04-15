@@ -14,7 +14,7 @@ export class SearchService extends SpotifyBaseService {
   private readonly log = new Logger(SearchService.name);
 
   private normalise(inp: any): any {
-    let arr: any[] = [];
+    const arr: any[] = [];
     inp.items.forEach((item) => {
       arr.push(item ?? { id: '', type: '', name: '' });
     });
@@ -47,8 +47,8 @@ export class SearchService extends SpotifyBaseService {
       },
     );
 
-    let response: SearchResults = {} as SearchResults;
-    let json: any = await result.json();
+    const response: SearchResults = {} as SearchResults;
+    const json: any = await result.json();
 
     if (json.artists) {
       response.artists = this.createPagedList<any>(
