@@ -1,13 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Logger, Injectable } from '@nestjs/common';
 import * as cp from 'child_process';
+import { ServiceBase } from '@/service-base';
 
 @Injectable()
-export class JackEqualiserService {
+export class JackEqualiserService extends ServiceBase {
+  private readonly log = new Logger(JackEqualiserService.name);
+
   async getControls(): Promise<any[]> {
+    this.log.log(this.__caller() + ' => getControls');
     return await this.scontents();
   }
 
+  resetControls(level: number): Promise<any[]> {
+    return new Promise<any[]>((resolve, reject) => {
+      this.scontents().then((ctrls) => {
+        let p: Promise<any>[] = [];
+        for (var i = 0; i < ctrls.length; i++) {
+          p.push(this.sset(ctrls[i].name, level, level));
+        }
+
+        Promise.allSettled(p)
+          .then(() => {
+            this.getControls()
+              .then((res) => {
+                resolve(res);
+              })
+              .catch((err) => {
+                this.log.error('Error resetting equaliser', err);
+                reject(err);
+              });
+          })
+          .catch((err) => {
+            this.log.error('Error resetting equaliser', err);
+            reject(err);
+          });
+      });
+    });
+  }
+
   async setControl(index: number, left: number, right: number) {
+    this.log.log(this.__caller() + ' => setControl');
     return new Promise<any[]>((resolve, reject) => {
       this.getControls().then((controls) => {
         if (index <= controls.length) {
@@ -17,9 +49,11 @@ export class JackEqualiserService {
               resolve(state);
             })
             .catch((err) => {
+              this.log.error('Error in setControl', err);
               reject(err);
             });
         } else {
+          this.log.error('Out of range', index);
           reject('Out of range');
         }
       });
@@ -27,6 +61,7 @@ export class JackEqualiserService {
   }
 
   private sset(name: string, left: number, right: number) {
+    this.log.log(this.__caller() + ' => sset');
     return this.amixer([
       '-D',
       'equal',
@@ -37,16 +72,19 @@ export class JackEqualiserService {
   }
 
   private scontents(): Promise<any[]> {
+    this.log.log(this.__caller() + ' => scontents');
     return this.amixer(['-D', 'equal', 'scontents']).then((res: string) =>
       this.parseSimpleControls(res),
     );
   }
 
   private amixer(params): Promise<string> {
+    this.log.log(this.__caller() + ' => amixer');
     return new Promise<string>((resolve, reject) => {
       let stdout = '';
       let stderr = '';
 
+      this.log.log('Spawn => /usr/bin/amixer ' + params.join(' '));
       const amixer = cp.spawn('/usr/bin/amixer', params);
 
       amixer.stdout.on('data', (data) => {
@@ -61,6 +99,7 @@ export class JackEqualiserService {
         if (code === 0) {
           resolve(stdout);
         } else {
+          this.log.error('Error spawning amixer', stderr);
           reject(new Error(stderr));
         }
       });

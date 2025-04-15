@@ -37,6 +37,13 @@ export class JackController {
     return await this.jackEqualiser.getControls();
   }
 
+  @Put('equaliser')
+  @ApiOperation({ summary: 'Reset all equaliser value' })
+  @ApiQuery({ name: 'level' })
+  async resetEqualiser(@Query('level') level: number) {
+    return await this.jackEqualiser.resetControls(level);
+  }
+
   @Put('equaliser/:control')
   @ApiOperation({ summary: 'Set an equaliser value' })
   @ApiParam({ name: 'control' })

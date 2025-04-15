@@ -20,7 +20,7 @@ export class JackService extends ServiceBase {
 
   async restartLastPlayed() {
     const playing: any = await this.userService.getLastPlayed();
-
+    this.log.log(this.__caller() + ' => restartLastPlayed');
     if (!playing || !playing.playing) {
       return;
     }
@@ -47,7 +47,7 @@ export class JackService extends ServiceBase {
         playing: playing ? playing.detail : {},
         source: [],
       };
-      this.log.log(this.__caller() + ' =>getStatus');
+      this.log.log(this.__caller() + ' => getStatus');
       if (spotifyStatus && spotifyStatus.track) {
         results.source.push('spotify');
       }

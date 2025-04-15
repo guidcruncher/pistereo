@@ -15,6 +15,7 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   build: {
     outDir: '../dist/client',
+    chunkSizeWarningLimit: 1600,
     emptyOutDir: true,
 //    watch: {
 //      include: 'src/**/*.*',

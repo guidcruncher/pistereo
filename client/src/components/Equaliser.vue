@@ -31,24 +31,50 @@ export default {
     },
     setEqualiser(value) {
       const jackService = new JackService();
-      jackService.setEqualiser(value.index, value.left, value.left);
+      jackService
+        .setEqualiser(value.index, value.left, value.left)
+        .then(() => {
+          this.getEqualiser();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    resetEqualiser() {
+      const jackService = new JackService();
+      jackService
+        .resetEqualiser(50)
+        .then(() => {
+          this.getLevels();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };
 </script>
 <template>
-  <v-row v-if="hasData">
-    <v-col v-for="item in levels" :key="item" :value="item">
-      <v-slider
-        v-model="item.left"
-        direction="vertical"
-        min="0"
-        max="100"
-        step="1"
-        :label="shortname"
-        @end="setEqualiser(item)"
-      >
-</v-slider>
-    </v-col>
-  </v-row>
+  <v-card if="hasData">
+    <v-row>
+      <v-col v-for="item in levels" :key="item" :value="item">
+        <v-slider
+          v-model="item.left"
+          direction="vertical"
+          min="0"
+          max="100"
+          step="1"
+          density="compact"
+          @end="setEqualiser(item)"
+        >
+        </v-slider>
+        <div class="text-caption">{{ item.shortname }}</div>
+      </v-col>
+    </v-row>
+    <v-card-actions>
+      <v-btn text="Reset" @click="resetEqualiser()"></v-btn>
+
+      <v-spacer></v-spacer>
+    </v-card-actions>
+  </v-card>
 </template>

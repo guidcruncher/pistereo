@@ -1,8 +1,6 @@
 <template>
   <Clock />
 
-  <Equaliser />
-
   <v-expansion-panels v-model="panel" multiple>
     <v-expansion-panel>
       <v-expansion-panel-title
@@ -14,10 +12,11 @@
     </v-expansion-panel>
     <v-expansion-panel>
       <v-expansion-panel-title
-        ><v-icon icon="mdi-album" />&nbsp; Saved Albums</v-expansion-panel-title
+        ><v-icon icon="mdi-equalizer" />&nbsp;
+        Equaliser</v-expansion-panel-title
       >
       <v-expansion-panel-text>
-        <SavedAlbums />
+        <Equaliser />
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
