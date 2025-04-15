@@ -2,11 +2,13 @@
 <script lang="ts">
 import { on, emit, off } from '../composables/useeventbus';
 import { JackService } from '../services/jack.service';
+import { usePlayerStore } from '@/stores/player';
 
 export default {
   name: 'Equaliser',
   data() {
     return {
+      presets: [] as any[],
       levels: [] as any[],
       hasData: false,
     };
@@ -24,6 +26,19 @@ export default {
         .then((levels) => {
           this.levels = levels;
           this.hasData = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getPresets() {
+      const jackService = new JackService();
+      const playerStore = usePlayerStore();
+
+      jackService
+        .getEqualiserPresets(playerStore.getSource())
+        .then((presets: any[]) => {
+          this.presets = presets;
         })
         .catch((e) => {
           console.log(e);
@@ -73,6 +88,8 @@ export default {
     </v-row>
     <v-card-actions>
       <v-btn text="Reset" @click="resetEqualiser()"></v-btn>
+
+      <v-select label="Presets" :items="presets"></v-select>
 
       <v-spacer></v-spacer>
     </v-card-actions>
