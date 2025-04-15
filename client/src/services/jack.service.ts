@@ -34,6 +34,11 @@ export class JackService extends ServiceBase {
     return response.data;
   }
 
+  publiic async getEqualiserPresets(source: string) {
+ const response: AxiosResponse<any> = await this.client().get('/equaliser/' + source + '/presets');
+    return response.data;
+  }
+
   public async resetEqualiser(level: number) {
     const response: AxiosResponse<any> = await this.client().put(
       '/equaliser?level=' + level.toString(),
