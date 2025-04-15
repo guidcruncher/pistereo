@@ -85,14 +85,22 @@ export class StreamerService extends ServiceBase {
 
         execFile('sh', cmdArgs)
           .then((result) => {
-            const json: any = JSON.parse(result.stdout);
-            if (json.error) {
-              json.statusCode = errorCodes[json.error] ?? 500;
-              json.command = jsonCmd;
-              json.caller = this.__caller();
-              resolve(json);
-            } else {
-              resolve(json);
+            try {
+              const json: any = JSON.parse(result.stdout);
+              if (json.error) {
+                json.statusCode = errorCodes[json.error] ?? 500;
+                json.command = jsonCmd;
+                json.caller = this.__caller();
+                resolve(json);
+              } else {
+                resolve(json);
+              }
+            } catch (err) {
+              resolve({
+                statusCode: 500,
+                command: jsonCmd,
+                caller: this.__caller(),
+              });
             }
           })
           .catch((err) => {
