@@ -42,8 +42,11 @@ export class JackEqualiserService extends ServiceBase {
     this.log.log(this.__caller() + ' => setControl');
     return new Promise<any[]>((resolve, reject) => {
       this.getControls().then((controls) => {
-        if (index <= controls.length) {
-          this.sset(controls[index].name, left, right)
+        let ctrl: any = controls.find((c) => {
+          return c.num == index;
+        });
+        if (ctrl) {
+          this.sset(ctrl.name, left, right)
             .then(async (res) => {
               let state = await this.getControls();
               resolve(state);

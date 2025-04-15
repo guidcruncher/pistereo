@@ -32,7 +32,7 @@ export default {
     setEqualiser(value) {
       const jackService = new JackService();
       jackService
-        .setEqualiser(value.index, value.left, value.left)
+        .setEqualiser(value.num, value.left, value.left)
         .then(() => {
           this.getLevels();
         })

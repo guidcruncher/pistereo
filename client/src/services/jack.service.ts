@@ -35,11 +35,10 @@ export class JackService extends ServiceBase {
   }
 
   public async resetEqualiser(level: number) {
-	const response: AxiosResponse<any> = await this.client().put(
- '/equaliser?level=' +
-level.toString(),
-);
-  return response.data;
+    const response: AxiosResponse<any> = await this.client().put(
+      '/equaliser?level=' + level.toString(),
+    );
+    return response.data;
   }
 
   public async stopDevice(device: string) {
