@@ -34,7 +34,7 @@ export default {
       jackService
         .setEqualiser(value.index, value.left, value.left)
         .then(() => {
-          this.getEqualiser();
+          this.getLevels();
         })
         .catch((e) => {
           console.log(e);
