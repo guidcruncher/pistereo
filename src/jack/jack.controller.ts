@@ -37,6 +37,13 @@ export class JackController {
     return await this.jackEqualiser.getControls();
   }
 
+  @Get('equaliser/:source/presets')
+  @ApiOperation({ summary: 'Get configured Equaliser presets for a source' })
+  @ApiParam({ name: 'source' })
+  async getEqualiserPresets(@Param('source') source: string) {
+    return await this.jackEqualiser.getPresets(source);
+  }
+
   @Put('equaliser')
   @ApiOperation({ summary: 'Reset all equaliser value' })
   @ApiQuery({ name: 'level' })

@@ -1,6 +1,8 @@
 import { Logger, Injectable } from '@nestjs/common';
 import * as cp from 'child_process';
 import { ServiceBase } from '@/service-base';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class JackEqualiserService extends ServiceBase {
@@ -75,10 +77,19 @@ export class JackEqualiserService extends ServiceBase {
   }
 
   private scontents(): Promise<any[]> {
-    this.log.log(this.__caller() + ' => scontents');
-    return this.amixer(['-D', 'equal', 'scontents']).then((res: string) =>
-      this.parseSimpleControls(res),
-    );
+    return new Promise<any[]>((resolve, reject) => {
+      this.log.log(this.__caller() + ' => scontents');
+      this.amixer(['-D', 'equal', 'scontents']).then((res: string) =>
+        this.parseSimpleControls(res)
+          .then((contents: any[]) => {
+            resolve(contents);
+          })
+          .catch((err) => {
+            this.log.error('Error in scontents,', err);
+            reject(err);
+          }),
+      );
+    });
   }
 
   private amixer(params): Promise<string> {
@@ -156,5 +167,24 @@ export class JackEqualiserService extends ServiceBase {
 
       resolve(data);
     });
+  }
+
+  public getPresets(source: string): any[] {
+    let results: any[] = [];
+    let filename = path.join(
+      process.env.NODE_CONFIG_DIR as string,
+      'equaliser.json',
+    );
+
+    if (fs.existsSync(filename)) {
+      let rawJS: string = fs.readFileSync(filename, 'utf8');
+      let json: any = JSON.parse(rawJS);
+
+      if (json && json['presets-' + source]) {
+        results = json['presets-' + source];
+      }
+    }
+
+    return results;
   }
 }
