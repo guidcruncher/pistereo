@@ -5,7 +5,7 @@ import * as net from 'net';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ServiceBase } from '@/service-base';
 
-const exec = util.promisify(require('node:child_process').exec);
+const execFile = util.promisify(require('node:child_process').execFile);
 
 const errorCodes: Record<string, number> = {
   success: 200,
@@ -65,7 +65,7 @@ export class StreamerService extends ServiceBase {
     commandText = commandText.concat(parameters);
     const jsonCmd: string = JSON.stringify({ command: commandText });
     const socket: string = process.env.MPV_SOCKET as string;
-    const cmdText: string = "echo '" + jsonCmd + "' | socat - " + socket;
+    const cmdArgs: string[] = ['-c', `echo '${jsonCmd}' | socat - ${socket}`];
     this.log.log(this.__caller() + ' => sendCommand ' + jsonCmd);
 
     return new Promise((resolve, reject) => {
@@ -83,7 +83,7 @@ export class StreamerService extends ServiceBase {
           }
         }
 
-        exec(cmdText)
+        execFile('sh', cmdArgs)
           .then((result) => {
             const json: any = JSON.parse(result.stdout);
             if (json.error) {
@@ -96,7 +96,7 @@ export class StreamerService extends ServiceBase {
             }
           })
           .catch((err) => {
-            this.log.error('Error executing command ' + cmdText, err);
+            this.log.error('Error executing command ' + cmdArgs.join(' '), err);
             reject(err);
           });
       } catch (err) {
