@@ -62,7 +62,7 @@ export default {
         return p.name == this.preset;
       });
       if (ctrl) {
-        let p: Promise[] = [];
+        let p: Promise<any>[] = [];
         for (var i = 0; i < ctrl.values.length; i++) {
           if (ctrl.values[i].left && ctrl.values[i].right) {
             p.push(

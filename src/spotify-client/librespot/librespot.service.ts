@@ -62,6 +62,7 @@ export class LibrespotService extends SpotifyBaseService {
     this.log.log(this.__caller() + ' =>play');
 
     return new Promise((resolve, reject) => {
+ 
       fetch(this.getApiUrl('/player/play'), {
         method: 'POST',
         body: JSON.stringify(request),
@@ -88,7 +89,7 @@ export class LibrespotService extends SpotifyBaseService {
                   uri: state.track.uri,
                   name: state.track.name,
                   description: state.track.album_name,
-                  owner: state.trasck.artist_names.join(' '),
+                  owner: state.track.artist_names.join(' '),
                   image: state.track.album_cover_url,
                 },
               )
