@@ -74,7 +74,7 @@ RUN chmod +x ./provisioning/*.sh
 COPY ./ecosystem.config.production.js ./ecosystem.config.js
 
 ENV NODE_ENV=production
-ENV ALSA_MIXER_DEVICE=equal
+ENV ALSA_DEVICE=equal
 ENV BASE=/pistereo
 ENV NODE_CONFIG_DIR=/pistereo/app/config
 ENV PISTEREO_CLIENT_BASE=/pistereo/app/dist/client

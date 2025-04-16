@@ -11,7 +11,7 @@ COPY ./provisioning/asound.conf /etc/asound.conf
 
 USER appuser
 
-ENV ALSA_MIXER_DEVICE=equal
+ENV ALSA_DEVICE=equal
 ENV NODE_ENV=development
 
 WORKDIR /pistereo/mediaserver
