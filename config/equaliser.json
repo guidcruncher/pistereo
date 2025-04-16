@@ -13,7 +13,8 @@
   ],
   "presets-spotify": [
     {
-      "Default": [
+      "name": "Default",
+      "values": [
         85,
         70,
         60,
@@ -29,7 +30,8 @@
   ],
   "presets-streamer": [
     {
-      "Default": [
+      "name": "Default",
+      "values": [
         60,
         60,
         60,

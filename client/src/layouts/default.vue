@@ -160,6 +160,9 @@ export default {
       const jackService = new JackService();
       jackService.getStatus().then((s) => {
         if (s.playing) {
+          if (s.playing.source != this.source) {
+            emit('source_changed', { source: s.playing.source });
+          }
           if (s.playing.source == 'streamer') {
             if (
               !this.playing.stationuuid ||

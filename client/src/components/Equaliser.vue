@@ -8,6 +8,7 @@ export default {
   name: 'Equaliser',
   data() {
     return {
+      preset: '',
       presets: [] as any[],
       levels: [] as any[],
       hasData: false,
@@ -16,8 +17,15 @@ export default {
   mounted() {
     this.hasData = false;
     this.getLevels();
+    this.getPresets();
+
+    on('source_changed', (data: any) => {
+      this.getPresets();
+    });
   },
-  beforeUnmount() {},
+  beforeUnmount() {
+    off('source_changed');
+  },
   methods: {
     getLevels() {
       const jackService = new JackService();
@@ -34,15 +42,42 @@ export default {
     getPresets() {
       const jackService = new JackService();
       const playerStore = usePlayerStore();
-
+      let src = playerStore.getSource();
+      if (!src || src === '') {
+        src = 'spotify';
+      }
       jackService
-        .getEqualiserPresets(playerStore.getSource())
+        .getEqualiserPresets(src)
         .then((presets: any[]) => {
           this.presets = presets;
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    loadPreset() {
+      const jackService = new JackService();
+      let ctrl = this.presets.find((p) => {
+        return p.name == this.preset;
+      });
+      if (ctrl) {
+        let p: Promise[] = [];
+        for (var i = 0; i < ctrl.value.length; i++) {
+          if (ctrl[i].left && ctrl[i].right) {
+            p.push(jackService.setEqualiser(i, ctrl[i].left, ctrl[i].right));
+          } else {
+            p.push(jackService.setEqualiser(i, ctrl[i], ctrl[i]));
+          }
+        }
+
+        Promise.allSettled(p)
+          .then((res) => {
+            this.getStatus();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     setEqualiser(value) {
       const jackService = new JackService();
@@ -58,7 +93,7 @@ export default {
     resetEqualiser() {
       const jackService = new JackService();
       jackService
-        .resetEqualiser(50)
+        .resetEqualiser(60)
         .then(() => {
           this.getLevels();
         })
@@ -88,8 +123,14 @@ export default {
     </v-row>
     <v-card-actions>
       <v-btn text="Reset" @click="resetEqualiser()"></v-btn>
-
-      <v-select label="Presets" :items="presets"></v-select>
+      <v-select
+        label="Presets"
+        v-model="preset"
+        item-title="name"
+        item-value="name"
+        :items="presets"
+        @update:modelValue="loadPreset()"
+      ></v-select>
 
       <v-spacer></v-spacer>
     </v-card-actions>
