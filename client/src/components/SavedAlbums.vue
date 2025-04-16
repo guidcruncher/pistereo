@@ -79,8 +79,8 @@ export default {
                 />
               </div>
             </template>
-            <v-list-item-title v-text="item.album.name" />
-            <v-list-item-subtitle>
+            <v-list-item-title v-if="item.album" v-text="item.album.name" />
+            <v-list-item-subtitle v-if="item.album">
               {{
                 item.album.artists
                   .map((a) => {

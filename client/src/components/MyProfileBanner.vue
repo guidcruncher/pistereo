@@ -43,10 +43,10 @@ function navigateToUrl(url: string) {
 
 <template>
   <div style="display: table">
-    <div class="profileimg" style="display: table-cell">
+    <div v-if="profileImage" class="profileimg" style="display: table-cell">
       <img :src="profileImage.url" />
     </div>
-    <div style="display: table-cell; padding-left: 5px; vertical-align: middle">
+    <div v-if="profile" style="display: table-cell; padding-left: 5px; vertical-align: middle">
       <h3>{{ profile.display_name }}</h3>
     </div>
   </div>
