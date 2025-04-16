@@ -86,6 +86,7 @@ ENV APPCACHE=/cache/app
 EXPOSE 3000
 EXPOSE 3678
 
+VOLUME /pistereo/mediaserver/config
 VOLUME /pistereo/alsa
 VOLUME /pistereo/app/config
 
