@@ -115,23 +115,27 @@ export default {
 </script>
 <template>
   <v-card if="hasData">
-    <v-row>
-      <v-col v-for="item in levels" :key="item" :value="item">
+  <v-slide-group show-arrows>
+      <v-slide-group-item
+        v-for="item in levels"
+        :key="item" :value="item"
+        v-slot="{ isSelected, toggle }"
+     >
         <v-slider
           v-model="item.left"
           direction="vertical"
           min="0"
           max="100"
           step="1"
-          density="compact"
           @end="setEqualiser(item)"
         >
+  <template v-slot:label><div class="text-caption">{{item.shortname}}</div></template>
         </v-slider>
-        <div class="text-caption">{{ item.shortname }}</div>
-      </v-col>
-    </v-row>
+      </v-slide-group-item>
+    </v-slide-group>
     <v-card-actions>
       <v-btn text="Reset" @click="resetEqualiser()"></v-btn>
+      <v-spacer />
       <v-select
         label="Presets"
         v-model="preset"
@@ -140,7 +144,6 @@ export default {
         :items="presets"
         @update:modelValue="loadPreset()"
       ></v-select>
-
       <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>
