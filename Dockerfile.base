@@ -28,6 +28,9 @@ RUN <<EOF
  npm install -g npm@11.2.0
  npm i -g @nestjs/cli rimraf pm2 prettier
  npm cache clean --force
+ pm2 install pm2-logrotate
+ pm2 set pm2-logrotate:retain 2
+ pm2 set pm2-logrotate:max_size 5M
 EOF
 
 ENTRYPOINT [ "/bin/bash", "-E", "-c" ]
