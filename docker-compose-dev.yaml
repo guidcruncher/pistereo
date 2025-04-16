@@ -17,6 +17,7 @@ services:
       - 3000
     environment:
       - HOST_IP=${HOST_IP} # export HOST_IP=$(hostname -I | awk '{print $1}')
+      - ALSA_DEVICE=equal #equal=alsaequaliser, vdownmix=Virtual surround with alsaequaliser
       - TZ=Europe/London
     volumes:
       - ../dev-cache/cache:/cache

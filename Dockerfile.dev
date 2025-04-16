@@ -12,6 +12,10 @@ COPY ./provisioning/asound.conf /etc/asound.conf
 USER appuser
 
 ENV ALSA_DEVICE=equal
+ENV ALSA_MIXER_DEVICE=''
+ENV ALSA_MIXER_CONTROL=Master
+ENV PLAYBACK_BITRATE=160
+
 ENV NODE_ENV=development
 
 WORKDIR /pistereo/mediaserver

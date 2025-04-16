@@ -12,6 +12,7 @@ services:
       - 3000
     environment:
       - TZ=Europe/London
+      - ALSA_DEVICE=equal
     container_name: pistereo
     hostname: pistereo
     restart: unless-stopped
