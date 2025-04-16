@@ -23,6 +23,7 @@ RUN <<EOF
 EOF
 
 COPY ./mediaserver/config.yml ./mediaserver/config.yml
+COPY ./mediaserver/config.yml /pistereo/mediaserver/default-mediaserver.config
 COPY ./mediaserver/config.yml ./mediaserver/config/config.yml
 
 WORKDIR /pistereo/app
@@ -44,9 +45,9 @@ RUN npm run build
 
 FROM guidcruncher/pistereo-base:latest AS base
 
-RUN mkdir -p /etc/alsa/pcm
-COPY ./provisioning/equal.conf /etc/alsa/pcm/equal.conf
-COPY ./provisioning/vdownmix.conf /etc/alsa/pcm/vdownmix.conf 
+RUN mkdir -p /pistereo/alsa
+COPY ./provisioning/equal.conf /pistereo/alsa/equal.conf
+COPY ./provisioning/vdownmix.conf /pistereo/alsa/vdownmix.conf
 COPY ./provisioning/asound.conf /etc/asound.conf
 
 WORKDIR /pistereo/app
@@ -85,7 +86,7 @@ ENV APPCACHE=/cache/app
 EXPOSE 3000
 EXPOSE 3678
 
+VOLUME /pistereo/alsa
 VOLUME /pistereo/app/config
-VOLUME /pistereo/mediaserver/config
 
 CMD [ "/pistereo/app/provisioning/start.sh" ]

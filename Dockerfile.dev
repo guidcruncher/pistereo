@@ -4,9 +4,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH
 ENV TZ=UTC
 
-RUN mkdir -p /etc/alsa/pcm
-COPY ./provisioning/equal.conf /etc/alsa/pcm/equal.conf
-COPY ./provisioning/vdownmix.conf /etc/alsa/pcm/vdownmix.conf 
+RUN mkdir -p /pistereo/alsa
+COPY ./provisioning/equal.conf /pistereo/alsa/equal.conf
+COPY ./provisioning/vdownmix.conf /pistereo/alsa/vdownmix.conf 
 COPY ./provisioning/asound.conf /etc/asound.conf
 
 USER appuser
@@ -27,6 +27,7 @@ RUN <<EOF
 EOF
 
 COPY ./mediaserver/config.yml /pistereo/mediaserver/config/config.yml
+COPY ./mediaserver/config.yml /pistereo/mediaserver/default-mediaserver.config
 WORKDIR /pistereo/app
 RUN sudo mkdir -p /cache/app
 COPY ./provisioning/ ./provisioning
@@ -47,7 +48,7 @@ COPY ./config ./config
 EXPOSE 3000
 EXPOSE 3678
 
+VOLUME /pistereo/alsa
 VOLUME /pistereo/app/config
-VOLUME /pistereo/mediaserver/config
 
 CMD [ "/pistereo/app/provisioning/start.sh" ]
