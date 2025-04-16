@@ -44,6 +44,11 @@ RUN npm run build
 
 FROM guidcruncher/pistereo-base:latest AS base
 
+RUN mkdir -p /etc/alsa/pcm
+COPY ./provisioning/equal.conf /etc/alsa/pcm/equal.conf
+COPY ./provisioning/vdownmix.conf /etc/alsa/pcm/vdownmix.conf 
+COPY ./provisioning/asound.conf /etc/asound.conf
+
 WORKDIR /pistereo/app
 RUN mkdir config provisioning
 RUN mkdir -p /pistereo/app/config /pistereo/mediaserver/config /cache/app

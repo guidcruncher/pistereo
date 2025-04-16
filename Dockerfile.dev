@@ -4,6 +4,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH
 ENV TZ=UTC
 
+RUN mkdir -p /etc/alsa/pcm
+COPY ./provisioning/equal.conf /etc/alsa/pcm/equal.conf
+COPY ./provisioning/vdownmix.conf /etc/alsa/pcm/vdownmix.conf 
 COPY ./provisioning/asound.conf /etc/asound.conf
 
 USER appuser
