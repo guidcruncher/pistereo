@@ -12,32 +12,6 @@ export class PlaylistService extends SpotifyBaseService {
 
   private readonly log = new Logger(PlaylistService.name);
 
-  public async getFeaturedPlaylists(
-    token: string,
-    locale: string,
-    offset: number,
-    limit: number,
-  ): Promise<ApiResult<PagedList<Playlist>>> {
-    const params = new URLSearchParams();
-    params.append('limit', limit.toString());
-    params.append('offset', offset.toString());
-    if (locale && locale != '') {
-      params.append('locale', locale);
-    }
-
-    this.log.log(this.__caller() + ' =>getFeaturedPlaylists');
-    const result = await fetch(
-      'https://api.spotify.com/v1/browse/featured-playlists?' +
-        params.toString(),
-      {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-
-    return await this.createResponse<any>(result);
-  }
-
   public async getMyPlaylists(
     token: string,
     limit: number,

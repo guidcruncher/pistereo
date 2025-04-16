@@ -35,25 +35,6 @@ export class PlaylistController {
 
   private readonly log = new Logger(PlaylistController.name);
 
-  @Get('featured')
-  @ApiOperation({ summary: 'Get user featured playlists' })
-  @ApiQuery({ name: 'limit', type: Number, required: true, default: 20 })
-  @ApiQuery({ name: 'offset', type: Number, required: true, default: 0 })
-  @ApiQuery({ name: 'locale', type: String, required: false, default: 'en-GB' })
-  async getFeaturedPlaylists(
-    @AuthToken() token: string,
-    @Query('locale') locale: string,
-    @Query('offset') offset: number,
-    @Query('limit') limit: number,
-  ) {
-    return await this.playlistService.getFeaturedPlaylists(
-      token,
-      locale,
-      offset,
-      limit,
-    );
-  }
-
   @Get()
   @ApiOperation({ summary: 'Get user playlists' })
   @ApiQuery({ name: 'limit', type: Number, required: true, default: 20 })
