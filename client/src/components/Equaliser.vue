@@ -50,7 +50,7 @@ export default {
         .getEqualiserPresets(src)
         .then((presets: any[]) => {
           this.presets = presets;
-        })
+        }) 
         .catch((e) => {
           console.log(e);
         });
@@ -62,17 +62,17 @@ export default {
       });
       if (ctrl) {
         let p: Promise[] = [];
-        for (var i = 0; i < ctrl.value.length; i++) {
-          if (ctrl[i].left && ctrl[i].right) {
-            p.push(jackService.setEqualiser(i, ctrl[i].left, ctrl[i].right));
+        for (var i = 0; i < ctrl.values.length; i++) {
+          if (ctrl.values[i].left && ctrl.values[i].right) {
+            p.push(jackService.setEqualiser(i, ctrl.values[i].left, ctrl.values[i].right));
           } else {
-            p.push(jackService.setEqualiser(i, ctrl[i], ctrl[i]));
+            p.push(jackService.setEqualiser(i, ctrl.values[i], ctrl.values[i]));
           }
         }
 
         Promise.allSettled(p)
           .then((res) => {
-            this.getStatus();
+            this.getLevels();
           })
           .catch((err) => {
             console.log(err);
@@ -85,6 +85,7 @@ export default {
         .setEqualiser(value.num, value.left, value.left)
         .then(() => {
           this.getLevels();
+this.preset="";
         })
         .catch((e) => {
           console.log(e);
