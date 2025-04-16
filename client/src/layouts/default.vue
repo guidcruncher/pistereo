@@ -42,6 +42,9 @@
             <v-list-item @click="onThemeChooserClick">
               <v-list-item-title>Toggle Theme</v-list-item-title>
             </v-list-item>
+            <v-list-item @click="gotoPage('/about')">
+              <v-list-item-title>About</v-list-item-title>
+           </v-list-item>
             <v-list-item @click="onLogoutClick">
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item>
@@ -82,12 +85,12 @@
           <v-tab
             prepend-icon="mdi-library"
             text="Library"
-            @click.stop="goto('/library', 3)"
+            @click.stop="goto('/library', 2)"
           />
           <v-tab
             prepend-icon="mdi-magnify"
             text="Explore"
-            @click.stop="goto('/explore', 4)"
+            @click.stop="goto('/explore', 3)"
           />
         </v-tabs>
         <router-view />
@@ -184,6 +187,9 @@ export default {
         }
       });
     },
+    gotoPage(url) {
+      this.$router.push(url);
+    } ,
     goto(url, tab) {
       const themeStore = useThemeStore();
       themeStore.setTab(tab);
