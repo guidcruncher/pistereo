@@ -13,6 +13,7 @@ import IndexPage from '../pages/IndexPage.vue';
 import ExplorePage from '../pages/ExplorePage.vue';
 import LibraryPage from '../pages/LibraryPage.vue';
 import NowPlayingPage from '../pages/NowPlayingPage.vue';
+import AboutPage from '../pages/AboutPage.vue';
 
 const routes = [
   {
@@ -41,9 +42,13 @@ const routes = [
     component: ExplorePage,
   },
   {
+    path: '/about',
+    component: AboutPage
+  },
+  {
     path: '/:pathMatch(.*)*',
     component: IndexPage,
-  },
+  }
 ];
 
 const router = createRouter({
