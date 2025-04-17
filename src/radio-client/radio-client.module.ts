@@ -11,6 +11,7 @@ import { EpgSchedulerService } from './epg/epg-scheduler.service';
 import { TuneinService } from './tunein/tunein.service';
 import { TuneinController } from './tunein/tunein.controller';
 import { RadioController } from './radio.controller';
+import { RadioService } from './radio.service';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { RadioController } from './radio.controller';
     EpgService,
     EpgSchedulerService,
     TuneinService,
+    RadioService,
   ],
   controllers: [RadioBrowserController, TuneinController, RadioController],
   imports: [AuthModule, DataModule],

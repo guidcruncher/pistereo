@@ -76,7 +76,7 @@ export default {
           console.log(e);
         });
     },
-    loadRadioSearchPage({ done }) {
+    loadRadioSearchPage() {
       const searchStore = useSearchStore();
       const tunerService = new TunerService();
       searchStore.setQuery(this.query);
@@ -85,46 +85,22 @@ export default {
         .searchStations(this.query.text, this.paging.offset, 50)
         .then((response) => {
           if (response) {
-            if (done) {
-              if (response.length > 0) {
-                this.data = response;
-                this.results = response.items;
-                this.paging = response.paging;
-                searchStore.setPaging(this.paging);
-                this.hasData = true;
-                this.paging.offset += 50;
-                done('ok');
-              } else {
-                done('empty');
-              }
-            } else {
-              this.data = response;
-               this.results = response.items;
-              this.paging = response.paging;
-              searchStore.setPaging(this.paging);
-              this.loading = false;
-              this.hasData = true;
-            }
-          } else {
-            if (done) {
-              this.loading = false;
-              done('empty');
-            }
+            this.data = response;
+            this.results = response.items;
+            this.paging = response.paging;
+            searchStore.setPaging(this.paging);
+            this.loading = false;
+            this.hasData = true;
           }
         })
         .catch((e) => {
           console.log(e);
-          if (done) {
-            done('error');
-            this.loading = false;
-            this.hasData = false;
-          }
         });
     },
     loadSearchPage() {
       const done = (arg) => {};
       if (this.query.searchTypes == 'radio') {
-        this.loadRadioSearchPage({ done });
+        this.loadRadioSearchPage();
       } else {
         this.loadSpotifySearchPage();
       }
@@ -221,6 +197,7 @@ export default {
     </v-btn>
   </v-form>
   <template v-if="query.searchTypes != 'radio'">
+    {{ response }}
     <v-skeleton-loader :loading="loading" type="list-item-two-line">
       <v-list v-if="hasData" nav>
         <v-list-item v-for="item in results.items" :key="item" :value="item">
@@ -265,7 +242,7 @@ export default {
         </v-list-item>
       </v-list>
       <v-pagination
-        v-if="hasData"
+        v-if="hasDa34eta"
         v-model="paging.page"
         :length="paging.pageCount"
         @update:model-value="onPageChange"
@@ -274,62 +251,54 @@ export default {
   </template>
 
   <template v-if="query.searchTypes == 'radio'">
-    <v-infinite-scroll
-      v-if="hasData"
-      :height="500"
-      :items="results"
-      @load="loadRadioSearchPage"
-    >
-      <v-skeleton-loader :loading="loading" type="list-item-two-line">
-        <v-list>
-          <v-list-item v-for="item in results" :key="item" :value="item">
-            <template #prepend>
-              <div style="width: 64px; height: 64px; margin-right: 16px">
-                <img
-                  v-if="item.image"
-                  :src="item.image"
-                  width="64"
-                  height="64"
+    <v-skeleton-loader :loading="loading" type="list-item-two-line">
+      <v-list>
+        <v-list-item v-for="item in results" :key="item" :value="item">
+          <template #prepend>
+            <div style="width: 64px; height: 64px; margin-right: 16px">
+              <img v-if="item.image" :src="item.image" width="64" height="64" />
+            </div>
+          </template>
+          <v-list-item-title v-text="item.title" />
+          <v-list-item-subtitle>
+            <a :href="item.shareUrl">{{ item.shareUrl }}</a>
+          </v-list-item-subtitle>
+          <template #append>
+            <v-row align="center" justify="center">
+              <v-col cols="auto">
+                <v-btn
+                  icon="mdi-play"
+                  density="compact"
+                  size="normal"
+                  @click="playRadio(item)"
                 />
-              </div>
-            </template>
-            <v-list-item-title v-text="item.title" />
-            <v-list-item-subtitle>
-              <a :href="item.shareUrl">{{
-                item.shareUrl
-              }}</a>
-            </v-list-item-subtitle>
-            <template #append>
-              <v-row align="center" justify="center">
-                <v-col cols="auto">
-                  <v-btn
-                    icon="mdi-play"
-                    density="compact"
-                    size="normal"
-                    @click="playRadio(item)"
-                  />
-                </v-col>
-                <v-col cols="auto">
-                  <v-btn
-                    icon="mdi-view-list"
-                    density="compact"
-                    size="normal"
-                    @click="viewRadio(item)"
-                  />
-                </v-col>
-                <v-col cols="auto">
-                  <v-btn
-                    icon="mdi-content-save"
-                    density="compact"
-                    size="normal"
-                    @click="saveRadio(item)"
-                  />
-                </v-col>
-              </v-row>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-skeleton-loader>
-    </v-infinite-scroll>
+              </v-col>
+              <v-col cols="auto">
+                <v-btn
+                  icon="mdi-view-list"
+                  density="compact"
+                  size="normal"
+                  @click="viewRadio(item)"
+                />
+              </v-col>
+              <v-col cols="auto">
+                <v-btn
+                  icon="mdi-content-save"
+                  density="compact"
+                  size="normal"
+                  @click="saveRadio(item)"
+                />
+              </v-col>
+            </v-row>
+          </template>
+        </v-list-item>
+      </v-list>
+      <v-pagination
+        v-if="hasDa34eta"
+        v-model="paging.page"
+        :length="paging.pageCount"
+        @update:model-value="onPageChange"
+      />
+    </v-skeleton-loader>
   </template>
 </template>
