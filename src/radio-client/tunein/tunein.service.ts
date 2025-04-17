@@ -1,4 +1,5 @@
 import { Station } from './models';
+import { PagedList } from "@data/dto/pagedlist";
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +19,7 @@ export class TuneinService extends ServiceBase {
 
   private readonly log = new Logger(TuneinService.name);
 
-  public async Search(query: string) {
+  public async search(query: string, offset: number, limit: number) : Promise<PagedList<Station>> {
     let params = new URLSearchParams();
     params.append('fullTextSearch', 'true');
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
@@ -31,6 +32,27 @@ export class TuneinService extends ServiceBase {
     const result = await fetch(url, { method: 'GET' });
 
     const obj = await result.json();
-    return obj;
+
+    let view: Station[] = [];
+
+    for (const item of obj.Items) {
+      switch (item.ContainerType) {
+        case 'Stations':
+          item.Children.forEach((c) => {
+            let st: Station = {} as Station;
+            st.stationuuid = 'tunein:' + c.GuideId;
+            st.radioUrl = '';
+            st.guideId = c.GuideId;
+            st.image = c.Image;
+            st.title = c.Title;
+            st.shareUrl = c.Actions.Share.ShareUrl;
+
+            view.push(st);
+          });
+          break;
+      }
+    }
+
+    return PagedList.fromArray<Station>(view, offset, limit);
   }
 }

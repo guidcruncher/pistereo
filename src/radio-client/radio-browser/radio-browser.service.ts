@@ -41,12 +41,13 @@ export class RadioBrowserService extends ServiceBase {
     const baseUrl = await this.getBaseUrl();
     const params = new URLSearchParams();
     let json: any[] = [];
-    const stUUIds: string[] = uuids.filter((u) => {
-      return !u.startsWith('user-');
-    });
-    const userUUids: string[] = uuids.filter((u) => {
-      return u.startsWith('user-');
-    });
+    const stUUIds: string[] = uuids
+      .filter((u) => {
+        return u.startsWith('radiobrowser:');
+      })
+      .map((s) => {
+        return s.slice('radiobrowser:'.length);
+      });
 
     if (stUUIds.length > 0) {
       params.append('uuids', stUUIds.join(','));
@@ -62,15 +63,7 @@ export class RadioBrowserService extends ServiceBase {
       json = json.concat(tmp);
     }
 
-    if (userUUids.length > 0) {
-      json = json.concat(await this.radioService.getStreams(userUUids));
-    }
-
     return json;
-  }
-
-  private async userSearch(name: string, offset: number, limit: number) {
-    return await this.radioService.getStreamsByName(name, offset, limit);
   }
 
   public async search(query: SearchRequest, offset: number, limit: number) {
@@ -128,9 +121,9 @@ export class RadioBrowserService extends ServiceBase {
       },
     );
     let json: any = await result.json();
-    json = json.concat(await this.userSearch(query.name, offset, limit));
 
     for (let i = 0; i < json.length; i++) {
+      json[i].stationuuid = 'radiobrowser:' + json[i].stationuuid;
       if (json[i].favicon == '') {
         const ch = await this.radioService.getChannel(json[i].stationuuid);
         if (ch) {
