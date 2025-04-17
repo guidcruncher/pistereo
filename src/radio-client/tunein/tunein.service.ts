@@ -1,5 +1,5 @@
 import { Station } from './models';
-import { PagedList } from "@data/dto/pagedlist";
+import { PagedList } from '@data/dto/pagedlist';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -19,7 +19,11 @@ export class TuneinService extends ServiceBase {
 
   private readonly log = new Logger(TuneinService.name);
 
-  public async search(query: string, offset: number, limit: number) : Promise<PagedList<Station>> {
+  public async search(
+    query: string,
+    offset: number,
+    limit: number,
+  ): Promise<PagedList<Station>> {
     let params = new URLSearchParams();
     params.append('fullTextSearch', 'true');
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
