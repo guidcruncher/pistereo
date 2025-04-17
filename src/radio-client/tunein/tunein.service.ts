@@ -19,6 +19,22 @@ export class TuneinService extends ServiceBase {
 
   private readonly log = new Logger(TuneinService.name);
 
+  public async getStreamUrl(guideId: string) {
+    let params = new URLSearchParams();
+    params.append('id', guideId);
+    params.append('render', 'json');
+    params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
+    params.append('partnerId', 'RadioTime');
+    params.append('version', '4.4601');
+    params.append('itemUrlScheme', 'secure');
+    params.append('reqAttempt', '1');
+    let url = 'https://opml.radiotime.com/Tune.ashx?' + params.toString();
+    const result = await fetch(url, { method: 'GET' });
+
+    const obj = await result.json();
+    return obj;
+  }
+
   public async search(
     query: string,
     offset: number,

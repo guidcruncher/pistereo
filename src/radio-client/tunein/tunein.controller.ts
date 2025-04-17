@@ -29,6 +29,14 @@ import { User } from '@auth/auth-token.decorator';
 export class TuneinController {
   constructor(private readonly tuneinService: TuneinService) {}
 
+  @Get('/:guideid')
+  @ApiOperation({ summary: 'Get stream properties' })
+  @ApiParam({ name: 'guideid' })
+  public async getStreamUrl(@Param('guideid') guideId: string) {
+    return await this.tuneinService.getStreamUrl(guideId);
+  }
+
+
   @Get('/search')
   @ApiOperation({ summary: 'Search for a Radio station' })
   @ApiQuery({ name: 'query' })
