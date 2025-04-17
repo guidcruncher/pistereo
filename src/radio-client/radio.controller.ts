@@ -33,7 +33,7 @@ export class RadioController {
   @ApiOperation({ summary: 'Get a channels EPG' })
   @ApiQuery({ name: 'xmltvid' })
   async getEpgForChannel(@Query('xmltvid') xmltvid: string) {
-    const res = await this.epgService.getEpgForChannel(stationuuid);
+    const res = await this.epgService.getEpgForChannel(xmltvid);
 
     if (res == null) {
       throw new NotFoundException();

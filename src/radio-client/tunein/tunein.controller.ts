@@ -22,11 +22,17 @@ import {
 } from '@nestjs/common';
 import { TuneinService } from './tunein.service';
 import { Public, Private } from '@auth/public.decorator';
-import { SearchRequest } from './models';
 import { User } from '@auth/auth-token.decorator';
 
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/tunein')
 export class TuneinController {
   constructor(private readonly tuneinService: TuneinService) {}
+
+  @Get('/search')
+  @ApiOperation({ summary: 'Search for a Radio station' })
+  @ApiQuery({ name: 'query' })
+  public async search(@Query('query') query: string) {
+    return await this.tuneinService.search(query);
+  }
 }

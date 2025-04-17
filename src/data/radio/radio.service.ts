@@ -51,10 +51,7 @@ export class RadioService {
   }
 
   public async getEpg(xmltv_id: string) {
-    const res = await this.epgModel
-      .find({ channel: channel.xmltv_id })
-      .lean()
-      .exec();
+    const res = await this.epgModel.find({ channel: xmltv_id }).lean().exec();
     const now = this.toUTC(new Date());
     return res
       .filter((a) => {
