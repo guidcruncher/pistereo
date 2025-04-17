@@ -153,8 +153,8 @@ export class EpgService {
     return dateTimeFormat.format(date);
   }
 
-  public async getEpgForChannel(stationuuid: string) {
-    const epg: any[] = await this.radioService.getEpg(stationuuid);
+  public async getEpgForChannel(xmltvid: string) {
+    const epg: any[] = await this.radioService.getEpg(xmltvid);
     if (epg) {
       for (let i = 0; i < epg.length; i++) {
         epg[i].sameDay =

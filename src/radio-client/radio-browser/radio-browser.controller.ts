@@ -24,28 +24,13 @@ import { RadioBrowserService } from './radio-browser.service';
 import { Public, Private } from '@auth/public.decorator';
 import { SearchRequest } from './models';
 import { User } from '@auth/auth-token.decorator';
-import { EpgService } from '../epg/epg.service';
 
 @ApiOAuth2(['streaming'], 'Api')
-@Controller('/api/radio/')
+@Controller('/api/radiobrowser/')
 export class RadioBrowserController {
   constructor(
     private readonly radioBrowserService: RadioBrowserService,
-    private readonly epgService: EpgService,
   ) {}
-
-  @Get('epg/:uuid')
-  @ApiOperation({ summary: 'Get a channels EPG' })
-  @ApiParam({ name: 'uuid' })
-  async getEpgForChannel(@Param('uuid') stationuuid: string) {
-    const res = await this.epgService.getEpgForChannel(stationuuid);
-
-    if (res == null) {
-      throw new NotFoundException();
-    }
-
-    return res;
-  }
 
   @Post('search')
   @ApiOperation({ summary: 'Performs a search' })
@@ -83,17 +68,5 @@ export class RadioBrowserController {
   async listenStation(@User() user, @Param('uuid') uuid: string) {
     return await this.radioBrowserService.streamStation(user, uuid);
   }
-
-  @Put('/presets/:uuid')
-  @ApiOperation({ summary: 'Save a station preset' })
-  @ApiParam({ name: 'uuid' })
-  async savePreset(@Param('uuid') uuid: string, @User() user) {
-    return await this.radioBrowserService.savePreset(uuid, user);
-  }
-
-  @Get('/presets')
-  @ApiOperation({ summary: 'Get station presets' })
-  async getPresets(@User() user) {
-    return await this.radioBrowserService.getPresets(user);
-  }
 }
+

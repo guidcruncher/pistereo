@@ -50,13 +50,7 @@ export class RadioService {
     return utc;
   }
 
-  public async getEpg(stationuuid: string) {
-    const channel: Channel = (await this.getChannel(stationuuid)) as Channel;
-
-    if (!channel) {
-      return [];
-    }
-
+  public async getEpg(xmltv_id: string) {
     const res = await this.epgModel
       .find({ channel: channel.xmltv_id })
       .lean()

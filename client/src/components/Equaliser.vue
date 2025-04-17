@@ -135,7 +135,6 @@ export default {
     </v-slide-group>
     <v-card-actions>
       <v-btn text="Reset" @click="resetEqualiser()"></v-btn>
-      <v-spacer />
       <v-select
         label="Presets"
         v-model="preset"

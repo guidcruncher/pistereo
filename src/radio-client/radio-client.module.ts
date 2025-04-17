@@ -8,6 +8,9 @@ import { TokenGuard } from '@auth/token.guard';
 import { AuthModule } from '@auth/auth.module';
 import { EpgService } from './epg/epg.service';
 import { EpgSchedulerService } from './epg/epg-scheduler.service';
+import { TuneinService } from './tunein/tunein.service';
+import { TuneinController } from './tunein/tunein.controller';
+import { RadioController } from './radio.controller';
 
 @Module({
   providers: [
@@ -15,8 +18,9 @@ import { EpgSchedulerService } from './epg/epg-scheduler.service';
     StreamerService,
     EpgService,
     EpgSchedulerService,
+    TuneinService,
   ],
-  controllers: [RadioBrowserController],
+  controllers: [RadioBrowserController, TuneinController, RadioController],
   imports: [AuthModule, DataModule],
   exports: [EpgSchedulerService, RadioBrowserService],
 })
