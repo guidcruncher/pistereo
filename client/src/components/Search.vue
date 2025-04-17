@@ -88,8 +88,8 @@ export default {
             if (done) {
               if (response.length > 0) {
                 this.data = response;
-                this.results = response;
-                this.paging.total += response.length;
+                this.results = response.items;
+                this.paging = response.paging;
                 searchStore.setPaging(this.paging);
                 this.hasData = true;
                 this.paging.offset += 50;
@@ -99,8 +99,8 @@ export default {
               }
             } else {
               this.data = response;
-              this.results = response;
-              this.paging.total += response.length;
+               this.results = response.items;
+              this.paging = response.paging;
               searchStore.setPaging(this.paging);
               this.loading = false;
               this.hasData = true;
@@ -286,19 +286,17 @@ export default {
             <template #prepend>
               <div style="width: 64px; height: 64px; margin-right: 16px">
                 <img
-                  v-if="item.favicon"
-                  :src="item.favicon"
+                  v-if="item.image"
+                  :src="item.image"
                   width="64"
                   height="64"
                 />
               </div>
             </template>
-            <v-list-item-title v-text="item.name" />
+            <v-list-item-title v-text="item.title" />
             <v-list-item-subtitle>
-              codec={{ item.codec }}, bitrate={{ item.bitrate }}kbps, votes={{
-                item.votes
-              }}, clicks={{ item.clickcount }}<br /><a :href="item.homepage">{{
-                item.homepage
+              <a :href="item.shareUrl">{{
+                item.shareUrl
               }}</a>
             </v-list-item-subtitle>
             <template #append>
