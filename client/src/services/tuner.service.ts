@@ -32,7 +32,6 @@ export class TunerService extends ServiceBase {
     params.append('limit', limit.toString());
     const response: AxiosResponse<any> = await this.client('/api/radio').get(
       '/tunein/search?' + params.toString(),
-      query,
     );
     return response.data;
   }

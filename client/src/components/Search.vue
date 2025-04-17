@@ -15,7 +15,8 @@ export default {
     return {
       searchTypes: SearchTypes,
       query: { text: '', valid: false, searchTypes: '', market: '' },
-      hasData: false,
+      hasRadioData: false,
+      hasMusicData: false,
       loading: false,
       data: {} as any,
       results: {} as any,
@@ -25,7 +26,8 @@ export default {
   mounted() {
     const searchStore = useSearchStore();
     this.query = searchStore.query;
-    this.hasData = false;
+    this.hasMusicData = false;
+    this.hasRadioData = false;
     this.results = {};
     this.paging = searchStore.paging;
     if (this.paging.total > 0) {
@@ -56,7 +58,8 @@ export default {
     loadSpotifySearchPage() {
       const searchStore = useSearchStore();
       const spotifyService = new SpotifyService();
-      this.hasData = false;
+      this.hasMusicData = false;
+      this.hasRadioData = false;
       searchStore.setQuery(this.query);
       spotifyService
         .search(this.query, this.paging.offset, this.paging.limit)
@@ -67,12 +70,12 @@ export default {
             this.paging = this.results.paging;
             searchStore.setPaging(this.paging);
             this.loading = false;
-            this.hasData = true;
+            this.hasMusicData = true;
           }
         })
         .catch((e) => {
           this.loading = false;
-          this.hasData = false;
+          this.hasMusicData = false;
           console.log(e);
         });
     },
@@ -80,9 +83,10 @@ export default {
       const searchStore = useSearchStore();
       const tunerService = new TunerService();
       searchStore.setQuery(this.query);
+      this.hasRadioData = false;
 
       tunerService
-        .searchStations(this.query.text, this.paging.offset, 50)
+        .searchStations(this.query.text, this.paging.offset, this.paging.limit)
         .then((response) => {
           if (response) {
             this.data = response;
@@ -90,7 +94,7 @@ export default {
             this.paging = response.paging;
             searchStore.setPaging(this.paging);
             this.loading = false;
-            this.hasData = true;
+            this.hasRadioData = true;
           }
         })
         .catch((e) => {
@@ -123,7 +127,8 @@ export default {
     },
     doSearch() {
       this.loading = true;
-      this.hasData = false;
+      this.hasRadioData = false;
+      this.hasMusicData = false;
       this.paging.offset = 0;
       //  searchStore.setPaging(this.paging);
       this.paging.total = 0;
@@ -197,9 +202,7 @@ export default {
     </v-btn>
   </v-form>
   <template v-if="query.searchTypes != 'radio'">
-    {{ response }}
-    <v-skeleton-loader :loading="loading" type="list-item-two-line">
-      <v-list v-if="hasData" nav>
+      <v-list v-if="hasMusicData" nav>
         <v-list-item v-for="item in results.items" :key="item" :value="item">
           <template #prepend>
             <div style="width: 64px; height: 64px; margin-right: 16px">
@@ -242,16 +245,14 @@ export default {
         </v-list-item>
       </v-list>
       <v-pagination
-        v-if="hasDa34eta"
+        v-if="hasMusicData"
         v-model="paging.page"
         :length="paging.pageCount"
         @update:model-value="onPageChange"
       />
-    </v-skeleton-loader>
   </template>
 
   <template v-if="query.searchTypes == 'radio'">
-    <v-skeleton-loader :loading="loading" type="list-item-two-line">
       <v-list>
         <v-list-item v-for="item in results" :key="item" :value="item">
           <template #prepend>
@@ -294,11 +295,11 @@ export default {
         </v-list-item>
       </v-list>
       <v-pagination
-        v-if="hasDa34eta"
+        v-if="hasRadioData"
         v-model="paging.page"
         :length="paging.pageCount"
         @update:model-value="onPageChange"
       />
-    </v-skeleton-loader>
   </template>
 </template>
+
