@@ -6,12 +6,14 @@ import { ConfigService } from '@nestjs/config';
 import { StreamerService } from '../../streamer-client/streamer/streamer.service';
 import { ServiceBase } from '@/service-base';
 import { RadioService } from '@data/radio/radio.service';
+import { UserService } from '@data/user/user.service';
 
 @Injectable()
 export class TuneinService extends ServiceBase {
   constructor(
     private readonly config: ConfigService,
     private readonly streamerService: StreamerService,
+    private readonly userService: UserService,
     private readonly radioService: RadioService,
   ) {
     super();
@@ -19,9 +21,29 @@ export class TuneinService extends ServiceBase {
 
   private readonly log = new Logger(TuneinService.name);
 
+  private parseId(id: string) {
+    return id.replaceAll('tunein:', '');
+  }
+
+  public async getStation(guideId: string) {
+    let params = new URLSearchParams();
+    params.append('render', 'json');
+    params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
+    params.append('partnerId', 'RadioTime');
+    let url =
+      'https://api.radiotime.com/profiles/' +
+      this.parseId(guideId) +
+      '?' +
+      params.toString();
+    const result = await fetch(url, { method: 'GET' });
+
+    const obj = await result.json();
+    return obj.Item;
+  }
+
   public async getStreamUrl(guideId: string) {
     let params = new URLSearchParams();
-    params.append('id', guideId);
+    params.append('id', this.parseId(guideId));
     params.append('render', 'json');
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
     params.append('partnerId', 'RadioTime');
@@ -32,7 +54,29 @@ export class TuneinService extends ServiceBase {
     const result = await fetch(url, { method: 'GET' });
 
     const obj = await result.json();
-    return obj;
+    return obj.body;
+  }
+
+  public async streamStation(user: any, guideId: string) {
+    let streamdata = await this.getStreamUrl(guideId);
+    let station = await this.getStation(guideId);
+    this.log.log(this.__caller() + ' =>streamStatiom');
+    this.userService.updateLastPlayed(
+      user.id,
+      user.display_name,
+      'streamer',
+      streamdata[0].url,
+      {
+        source: 'streamer',
+        stationuuid: 'tunein:' + this.parseId(guideId),
+        uri: streamdata[0].url,
+        name: station.Title,
+        description: station.Subtitle,
+        owner: station.Title,
+        image: station.Image,
+      },
+    );
+    await this.streamerService.play(streamdata[0].url);
   }
 
   public async search(

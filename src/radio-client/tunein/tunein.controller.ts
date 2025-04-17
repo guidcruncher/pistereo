@@ -30,12 +30,25 @@ export class TuneinController {
   constructor(private readonly tuneinService: TuneinService) {}
 
   @Get('/:guideid')
+  @ApiOperation({ summary: 'Get station properties' })
+  @ApiParam({ name: 'guideid' })
+  public async getStation(@Param('guideid') guideId: string) {
+    return await this.tuneinService.getStation(guideId);
+  }
+
+  @Get('/:guideid/stream')
   @ApiOperation({ summary: 'Get stream properties' })
   @ApiParam({ name: 'guideid' })
   public async getStreamUrl(@Param('guideid') guideId: string) {
     return await this.tuneinService.getStreamUrl(guideId);
   }
 
+  @Put('/:guideid')
+  @ApiOperation({ summary: 'Listen to a station' })
+  @ApiParam({ name: 'guideid' })
+  async listenStation(@User() user, @Param('guideid') guideid: string) {
+    return await this.tuneinService.streamStation(user, guideid);
+  }
 
   @Get('/search')
   @ApiOperation({ summary: 'Search for a Radio station' })
