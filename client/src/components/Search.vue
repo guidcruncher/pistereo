@@ -82,7 +82,7 @@ export default {
       searchStore.setQuery(this.query);
 
       tunerService
-        .searchStations(thiss.query.text, this.paging.offset, 50)
+        .searchStations(this.query.text, this.paging.offset, 50)
         .then((response) => {
           if (response) {
             if (done) {
