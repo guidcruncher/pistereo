@@ -81,48 +81,45 @@ export default {
       const tunerService = new TunerService();
       searchStore.setQuery(this.query);
 
-      tunerService.getDefaultSearch().then((searchQuery) => {
-        searchQuery.name = this.query.text;
-        tunerService
-          .searchStations(searchQuery, this.paging.offset, 50)
-          .then((response) => {
-            if (response) {
-              if (done) {
-                if (response.length > 0) {
-                  this.data = response;
-                  this.results = response;
-                  this.paging.total += response.length;
-                  searchStore.setPaging(this.paging);
-                  this.hasData = true;
-                  this.paging.offset += 50;
-                  done('ok');
-                } else {
-                  done('empty');
-                }
-              } else {
+      tunerService
+        .searchStations(thiss.query.text, this.paging.offset, 50)
+        .then((response) => {
+          if (response) {
+            if (done) {
+              if (response.length > 0) {
                 this.data = response;
                 this.results = response;
                 this.paging.total += response.length;
                 searchStore.setPaging(this.paging);
-                this.loading = false;
                 this.hasData = true;
-              }
-            } else {
-              if (done) {
-                this.loading = false;
+                this.paging.offset += 50;
+                done('ok');
+              } else {
                 done('empty');
               }
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (done) {
-              done('error');
+            } else {
+              this.data = response;
+              this.results = response;
+              this.paging.total += response.length;
+              searchStore.setPaging(this.paging);
               this.loading = false;
-              this.hasData = false;
+              this.hasData = true;
             }
-          });
-      });
+          } else {
+            if (done) {
+              this.loading = false;
+              done('empty');
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          if (done) {
+            done('error');
+            this.loading = false;
+            this.hasData = false;
+          }
+        });
     },
     loadSearchPage() {
       const done = (arg) => {};

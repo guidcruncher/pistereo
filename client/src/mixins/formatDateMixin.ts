@@ -12,13 +12,17 @@ export default {
       return dateTimeFormat.format(date);
     },
     formatTinyDate(dateString) {
-      const date = new Date(dateString);
-      const options: Intl.DateTimeFormatOptions = {
-        weekday: 'short',
-        day: 'numeric',
-      };
-      const dateTimeFormat = new Intl.DateTimeFormat('default', options);
-      return dateTimeFormat.format(date);
+      try {
+        const date = new Date(dateString);
+        const options: Intl.DateTimeFormatOptions = {
+          weekday: 'short',
+          day: 'numeric',
+        };
+        const dateTimeFormat = new Intl.DateTimeFormat('default', options);
+        return dateTimeFormat.format(date);
+      } catch (e) {
+        return '';
+      }
     },
     formatTime(dateString) {
       const date = new Date(dateString);

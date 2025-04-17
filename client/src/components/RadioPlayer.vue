@@ -101,7 +101,7 @@ export default {
     },
     play() {
       const tunerService = new TunerService();
-      tunerService.playStation(this.station.stationuuid).then((station) => {
+      tunerService.playStation(this.station.GuideId).then((station) => {
         this.station = station;
         this.hasData = true;
         this.getPlayerState();
@@ -139,11 +139,11 @@ export default {
 </script>
 <template>
   <v-container v-if="hasData">
-    <v-row v-if="station.favicon">
+    <v-row v-if="station.Image">
       <v-col cols="12">
         <div class="centre">
           <div class="albumimg">
-            <img :src="station.favicon" />
+            <img :src="station.Image" />
           </div>
         </div>
       </v-col>
@@ -151,9 +151,7 @@ export default {
     <v-row>
       <v-col cols="12">
         <div class="centre">
-          <h4>{{ station.name }}</h4>
-          <h5>{{ station.codec }}</h5>
-          <h6>{{ station.bitrate }}kbps</h6>
+          <h4>{{ station.Title }}</h4>
         </div>
       </v-col>
     </v-row>

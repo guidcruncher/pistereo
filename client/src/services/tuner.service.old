@@ -18,20 +18,42 @@ export class TunerService extends ServiceBase {
   }
 
   public async getEpg(uuid: string) {
-    return [];
     const response: AxiosResponse<any> = await this.client().get(
       '/epg/' + uuid,
     );
     return response.data;
   }
 
-  public async searchStations(query: string, offset: number, limit: number) {
+  public async getDefaultSearch(): Promise<StationSearchRequest> {
+    const ls: LocationService = new LocationService();
+    const query: StationSearchRequest = {} as StationSearchRequest;
+
+    return query;
+
+    const locn = await ls.getCurrentIpAddressInfo();
+    const nav: any = navigator;
+    query.language = nav.language || nav.userLanguage;
+    if (locn) {
+      if (locn.country) {
+        const regionNames = new Intl.DisplayNames([query.language], {
+          type: 'region',
+        });
+        query.country = regionNames.of(locn.country) as string;
+      }
+    }
+    return query;
+  }
+
+  public async searchStations(
+    query: StationSearchRequest,
+    offset: number,
+    limit: number,
+  ) {
     const params = new URLSearchParams();
-    params.append('query', query);
     params.append('offset', offset.toString());
     params.append('limit', limit.toString());
-    const response: AxiosResponse<any> = await this.client('/api/radio').get(
-      '/tunein/search?' + params.toString(),
+    const response: AxiosResponse<any> = await this.client('/api/radio').post(
+      '/search?' + params.toString(),
       query,
     );
     return response.data;
@@ -39,14 +61,14 @@ export class TunerService extends ServiceBase {
 
   public async getStation(uuid: string): Promise<Station> {
     const response: AxiosResponse<any> = await this.client('/api/radio').get(
-      '/tunein/' + uuid,
+      '/' + uuid,
     );
     return response.data as Station;
   }
 
   public async playStation(uuid: string): Promise<any> {
     const response: AxiosResponse<any> = await this.client('/api/radio').put(
-      '/tunein/' + uuid,
+      '/' + uuid,
     );
     usePlayerStore().setSource('streamer');
     emit('audio_changed', {

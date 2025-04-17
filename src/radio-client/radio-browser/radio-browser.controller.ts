@@ -26,7 +26,7 @@ import { SearchRequest } from './models';
 import { User } from '@auth/auth-token.decorator';
 
 @ApiOAuth2(['streaming'], 'Api')
-@Controller('/api/radiobrowser/')
+@Controller('/api/radio/radiobrowser/')
 export class RadioBrowserController {
   constructor(private readonly radioBrowserService: RadioBrowserService) {}
 

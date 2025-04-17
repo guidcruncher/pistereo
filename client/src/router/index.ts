@@ -27,11 +27,6 @@ const routes = [
     component: NowPlayingPage,
   },
   {
-    name: 'playlists',
-    path: '/playlists',
-    component: PlaylistsPage,
-  },
-  {
     name: 'library',
     path: '/library',
     component: LibraryPage,

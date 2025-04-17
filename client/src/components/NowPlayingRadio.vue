@@ -93,11 +93,11 @@ export default {
 <template>
   <v-container v-if="hasData">
     <v-container v-if="hasData">
-      <v-row v-if="station.favicon">
+      <v-row v-if="station.Image">
         <v-col cols="12">
           <div class="centre">
             <div class="albumimgbig">
-              <img :src="station.favicon" />
+              <img :src="station.Image" />
             </div>
           </div>
         </v-col>
@@ -105,10 +105,12 @@ export default {
       <v-row>
         <v-col cols="12">
           <div class="centre">
-            <h2>{{ station.name }}</h2>
-            <h3>{{ station.codec }}, {{ station.bitrate }}kbps</h3>
+            <h2>{{ station.Title }}</h2>
+            <h3>{{ station.Subtitle }}</h3>
             <h4>
-              <a :href="station.homepage">{{ station.homepage }}</a>
+              <a :href="station.Actions.Share.ShareUrl">{{
+                station.Actions.Share.ShareUrl
+              }}</a>
             </h4>
             <h5 v-if="nowplaying && nowplaying.metadata">
               Now playing - {{ nowplaying.metadata['icy-title'] }} ({{

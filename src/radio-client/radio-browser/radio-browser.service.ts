@@ -46,7 +46,7 @@ export class RadioBrowserService extends ServiceBase {
         return u.startsWith('radiobrowser:');
       })
       .map((s) => {
-        return s.slice('radiobrowser:'.length);
+        return s.replaceAll('radiobrowser:', '');
       });
 
     if (stUUIds.length > 0) {

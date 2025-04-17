@@ -25,7 +25,7 @@ import { Public, Private } from '@auth/public.decorator';
 import { User } from '@auth/auth-token.decorator';
 
 @ApiOAuth2(['streaming'], 'Api')
-@Controller('/api/tunein')
+@Controller('/api/radio/tunein')
 export class TuneinController {
   constructor(private readonly tuneinService: TuneinService) {}
 
