@@ -202,104 +202,103 @@ export default {
     </v-btn>
   </v-form>
   <template v-if="query.searchTypes != 'radio'">
-      <v-list v-if="hasMusicData" nav>
-        <v-list-item v-for="item in results.items" :key="item" :value="item">
-          <template #prepend>
-            <div style="width: 64px; height: 64px; margin-right: 16px">
-              <img
-                v-if="item.images"
-                :src="item.images[0].url"
-                width="64"
-                height="64"
+    <v-list v-if="hasMusicData" nav>
+      <v-list-item v-for="item in results.items" :key="item" :value="item">
+        <template #prepend>
+          <div style="width: 64px; height: 64px; margin-right: 16px">
+            <img
+              v-if="item.images"
+              :src="item.images[0].url"
+              width="64"
+              height="64"
+            />
+            <img
+              v-if="item.album"
+              :src="item.album.images[0].url"
+              width="64"
+              height="64"
+            />
+          </div>
+        </template>
+        <v-list-item-title v-text="item.name" />
+        <v-list-item-subtitle v-if="item.album" v-text="item.album.name" />
+        <template #append>
+          <v-row align="center" justify="center">
+            <v-col cols="auto">
+              <v-btn
+                icon="mdi-play"
+                density="compact"
+                size="normal"
+                @click="playTrack(item)"
               />
-              <img
-                v-if="item.album"
-                :src="item.album.images[0].url"
-                width="64"
-                height="64"
+            </v-col>
+            <v-col cols="auto">
+              <v-btn
+                icon="mdi-view-list"
+                density="compact"
+                size="normal"
+                @click="viewTrack(item)"
               />
-            </div>
-          </template>
-          <v-list-item-title v-text="item.name" />
-          <v-list-item-subtitle v-if="item.album" v-text="item.album.name" />
-          <template #append>
-            <v-row align="center" justify="center">
-              <v-col cols="auto">
-                <v-btn
-                  icon="mdi-play"
-                  density="compact"
-                  size="normal"
-                  @click="playTrack(item)"
-                />
-              </v-col>
-              <v-col cols="auto">
-                <v-btn
-                  icon="mdi-view-list"
-                  density="compact"
-                  size="normal"
-                  @click="viewTrack(item)"
-                />
-              </v-col>
-            </v-row>
-          </template>
-        </v-list-item>
-      </v-list>
-      <v-pagination
-        v-if="hasMusicData"
-        v-model="paging.page"
-        :length="paging.pageCount"
-        @update:model-value="onPageChange"
-      />
+            </v-col>
+          </v-row>
+        </template>
+      </v-list-item>
+    </v-list>
+    <v-pagination
+      v-if="hasMusicData"
+      v-model="paging.page"
+      :length="paging.pageCount"
+      @update:model-value="onPageChange"
+    />
   </template>
 
   <template v-if="query.searchTypes == 'radio'">
-      <v-list>
-        <v-list-item v-for="item in results" :key="item" :value="item">
-          <template #prepend>
-            <div style="width: 64px; height: 64px; margin-right: 16px">
-              <img v-if="item.image" :src="item.image" width="64" height="64" />
-            </div>
-          </template>
-          <v-list-item-title v-text="item.title" />
-          <v-list-item-subtitle>
-            <a :href="item.shareUrl">{{ item.shareUrl }}</a>
-          </v-list-item-subtitle>
-          <template #append>
-            <v-row align="center" justify="center">
-              <v-col cols="auto">
-                <v-btn
-                  icon="mdi-play"
-                  density="compact"
-                  size="normal"
-                  @click="playRadio(item)"
-                />
-              </v-col>
-              <v-col cols="auto">
-                <v-btn
-                  icon="mdi-view-list"
-                  density="compact"
-                  size="normal"
-                  @click="viewRadio(item)"
-                />
-              </v-col>
-              <v-col cols="auto">
-                <v-btn
-                  icon="mdi-content-save"
-                  density="compact"
-                  size="normal"
-                  @click="saveRadio(item)"
-                />
-              </v-col>
-            </v-row>
-          </template>
-        </v-list-item>
-      </v-list>
-      <v-pagination
-        v-if="hasRadioData"
-        v-model="paging.page"
-        :length="paging.pageCount"
-        @update:model-value="onPageChange"
-      />
+    <v-list>
+      <v-list-item v-for="item in results" :key="item" :value="item">
+        <template #prepend>
+          <div style="width: 64px; height: 64px; margin-right: 16px">
+            <img v-if="item.image" :src="item.image" width="64" height="64" />
+          </div>
+        </template>
+        <v-list-item-title v-text="item.title" />
+        <v-list-item-subtitle>
+          <a :href="item.shareUrl">{{ item.shareUrl }}</a>
+        </v-list-item-subtitle>
+        <template #append>
+          <v-row align="center" justify="center">
+            <v-col cols="auto">
+              <v-btn
+                icon="mdi-play"
+                density="compact"
+                size="normal"
+                @click="playRadio(item)"
+              />
+            </v-col>
+            <v-col cols="auto">
+              <v-btn
+                icon="mdi-view-list"
+                density="compact"
+                size="normal"
+                @click="viewRadio(item)"
+              />
+            </v-col>
+            <v-col cols="auto">
+              <v-btn
+                icon="mdi-content-save"
+                density="compact"
+                size="normal"
+                @click="saveRadio(item)"
+              />
+            </v-col>
+          </v-row>
+        </template>
+      </v-list-item>
+    </v-list>
+    <v-pagination
+      v-if="hasRadioData"
+      v-model="paging.page"
+      :length="paging.pageCount"
+      @update:model-value="onPageChange"
+    />
   </template>
 </template>
-
