@@ -28,9 +28,7 @@ import { User } from '@auth/auth-token.decorator';
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radiobrowser/')
 export class RadioBrowserController {
-  constructor(
-    private readonly radioBrowserService: RadioBrowserService,
-  ) {}
+  constructor(private readonly radioBrowserService: RadioBrowserService) {}
 
   @Post('search')
   @ApiOperation({ summary: 'Performs a search' })
@@ -69,4 +67,3 @@ export class RadioBrowserController {
     return await this.radioBrowserService.streamStation(user, uuid);
   }
 }
-

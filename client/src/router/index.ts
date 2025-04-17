@@ -43,12 +43,12 @@ const routes = [
   },
   {
     path: '/about',
-    component: AboutPage
+    component: AboutPage,
   },
   {
     path: '/:pathMatch(.*)*',
     component: IndexPage,
-  }
+  },
 ];
 
 const router = createRouter({

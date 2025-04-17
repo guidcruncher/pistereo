@@ -44,7 +44,7 @@
             </v-list-item>
             <v-list-item @click="gotoPage('/about')">
               <v-list-item-title>About</v-list-item-title>
-           </v-list-item>
+            </v-list-item>
             <v-list-item @click="onLogoutClick">
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item>
@@ -189,7 +189,7 @@ export default {
     },
     gotoPage(url) {
       this.$router.push(url);
-    } ,
+    },
     goto(url, tab) {
       const themeStore = useThemeStore();
       themeStore.setTab(tab);

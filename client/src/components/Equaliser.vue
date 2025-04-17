@@ -115,12 +115,13 @@ export default {
 </script>
 <template>
   <v-card if="hasData">
-  <v-slide-group show-arrows>
+    <v-slide-group show-arrows>
       <v-slide-group-item
         v-for="item in levels"
-        :key="item" :value="item"
+        :key="item"
+        :value="item"
         v-slot="{ isSelected, toggle }"
-     >
+      >
         <v-slider
           v-model="item.left"
           direction="vertical"
@@ -129,7 +130,9 @@ export default {
           step="1"
           @end="setEqualiser(item)"
         >
-  <template v-slot:label><div class="text-caption">{{item.shortname}}</div></template>
+          <template v-slot:label
+            ><div class="text-caption">{{ item.shortname }}</div></template
+          >
         </v-slider>
       </v-slide-group-item>
     </v-slide-group>

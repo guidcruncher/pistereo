@@ -62,7 +62,6 @@ export class LibrespotService extends SpotifyBaseService {
     this.log.log(this.__caller() + ' =>play');
 
     return new Promise((resolve, reject) => {
- 
       fetch(this.getApiUrl('/player/play'), {
         method: 'POST',
         body: JSON.stringify(request),

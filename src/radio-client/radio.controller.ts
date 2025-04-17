@@ -27,9 +27,7 @@ import { EpgService } from './epg/epg.service';
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/')
 export class RadioController {
-  constructor(
-    private readonly epgService: EpgService,
-  ) {}
+  constructor(private readonly epgService: EpgService) {}
 
   @Get('epg')
   @ApiOperation({ summary: 'Get a channels EPG' })
@@ -47,11 +45,9 @@ export class RadioController {
   @Put('/presets/:uuid')
   @ApiOperation({ summary: 'Save a station preset' })
   @ApiParam({ name: 'uuid' })
-  async savePreset(@Param('uuid') uuid: string, @User() user) {
-  }
+  async savePreset(@Param('uuid') uuid: string, @User() user) {}
 
   @Get('/presets')
   @ApiOperation({ summary: 'Get station presets' })
-  async getPresets(@User() user) {
-  }
+  async getPresets(@User() user) {}
 }
