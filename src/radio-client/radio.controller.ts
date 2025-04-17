@@ -28,8 +28,10 @@ import { RadioService } from './radio.service';
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/')
 export class RadioController {
-  constructor(private readonly epgService: EpgService,
-              private readonly radioService: RadioService) {}
+  constructor(
+    private readonly epgService: EpgService,
+    private readonly radioService: RadioService,
+  ) {}
 
   @Get('epg')
   @ApiOperation({ summary: 'Get a channels EPG' })

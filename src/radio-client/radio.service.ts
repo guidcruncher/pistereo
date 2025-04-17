@@ -31,7 +31,7 @@ export class RadioService extends ServiceBase {
         sta = await this.tuneinService.getStation(args[1]);
         return {
           id: '',
-          stationuuid: "tunein:"+sta.GuideId,
+          stationuuid: 'tunein:' + sta.GuideId,
           name: sta.Title,
           image: sta.Image,
           info: sta,
