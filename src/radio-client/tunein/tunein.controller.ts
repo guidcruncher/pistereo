@@ -32,7 +32,13 @@ export class TuneinController {
   @Get('/search')
   @ApiOperation({ summary: 'Search for a Radio station' })
   @ApiQuery({ name: 'query' })
-  public async search(@Query('query') query: string) {
-    return await this.tuneinService.search(query);
+  @ApiQuery({ name: 'limit', type: Number, required: true, default: 20 })
+  @ApiQuery({ name: 'offset', type: Number, required: true, default: 0 })
+  public async search(
+    @Query('query') query: string,
+    @Query('limit') limit: number = 20,
+    @Query('offset') offset: number = 0,
+  ) {
+    return await this.tuneinService.search(query, offset, limit);
   }
 }
