@@ -13,6 +13,7 @@ import { TuneinController } from './tunein/tunein.controller';
 import { RadioController } from './radio.controller';
 import { RadioService } from './radio.service';
 import { MetadataService } from './metadata/metadata.service';
+import { MetadataController } from './metadata/metadata.controller';
 
 @Module({
   providers: [
@@ -24,7 +25,12 @@ import { MetadataService } from './metadata/metadata.service';
     RadioService,
     MetadataService,
   ],
-  controllers: [RadioBrowserController, TuneinController, RadioController],
+  controllers: [
+    RadioBrowserController,
+    TuneinController,
+    RadioController,
+    MetadataController,
+  ],
   imports: [AuthModule, DataModule],
   exports: [EpgSchedulerService, RadioBrowserService],
 })
