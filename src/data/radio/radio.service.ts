@@ -156,7 +156,7 @@ export class RadioService {
       {
         stationuuid: stationuuid,
         name: name,
-        resolved_url: resolvedurl,
+        url_resolved: resolvedurl,
         database: database,
         favicon: favicon,
       },

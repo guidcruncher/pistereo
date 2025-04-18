@@ -91,11 +91,36 @@ export class RadioService extends ServiceBase {
             .getMediaIconUrl(ch.name)
             .then((icon) => {
               item.favicon = icon;
-              res(item);
+              this.radioService
+                .updateStream(
+                  item.stationuuid,
+                  item.name,
+                  item.url_resolved,
+                  item.favicon,
+                  item.database,
+                )
+                .then(() => {
+                  res(item);
+                })
+                .catch(() => {
+                  res(item);
+                });
             })
             .catch((err) => {
-              item.favicon = '';
-              res(item);
+              this.radioService
+                .updateStream(
+                  item.stationuuid,
+                  item.name,
+                  item.url_resolved,
+                  item.favicon,
+                  item.database,
+                )
+                .then(() => {
+                  res(item);
+                })
+                .catch(() => {
+                  res(item);
+                });
             });
         });
       };
@@ -109,13 +134,6 @@ export class RadioService extends ServiceBase {
         .then((res) => {
           res.forEach((r) => {
             if (r.status == 'fulfilled') {
-              await this.radioService.updateStream(
-                r.stationuuid,
-                r.name,
-                r.url_resolved,
-                r.favicon,
-                r.database,
-              );
               result.push(r.value);
             }
           });
