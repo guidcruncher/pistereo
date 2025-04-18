@@ -26,7 +26,7 @@ const routes = [
     path: '/nowplaying',
     component: NowPlayingPage,
   },
-  {
+  {m
     name: 'library',
     path: '/library',
     component: LibraryPage,
@@ -35,6 +35,11 @@ const routes = [
     name: 'explore',
     path: '/explore',
     component: ExplorePage,
+  },
+  {
+    name: 'tools',
+    path: '/tools',
+    component: ToolsPage,
   },
   {
     path: '/about',
