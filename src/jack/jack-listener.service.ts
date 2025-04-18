@@ -1,6 +1,6 @@
 import { UserService } from '@data/user/user.service';
 import { Injectable, Logger } from '@nestjs/common';
-import {OnEvent } from '@nestjs/event-emitter';
+import { OnEvent } from '@nestjs/event-emitter';
 
 import { LibrespotService } from '../spotify-client/librespot/librespot.service';
 import { StreamerService } from '../streamer-client/streamer/streamer.service';

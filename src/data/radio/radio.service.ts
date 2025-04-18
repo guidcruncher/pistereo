@@ -122,17 +122,13 @@ export class RadioService {
     return res;
   }
 
-  public async getStreamsByName(name: string, offset: number, limit: number) {
+  public async getStreamsByName(name: string) {
     const res = await this.streamModel
       .find({ name: { $regex: '.*' + name + '.*' } })
       .sort('name')
       .lean();
 
-    if (offset > res.length) {
-      return [];
-    }
-
-    return res.slice(offset, offset + limit);
+    return res;
   }
 
   public async getStream(stationuuid: string) {

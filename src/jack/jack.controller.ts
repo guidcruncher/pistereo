@@ -1,16 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Put,
-  Query,
-} from '@nestjs/common';
-import {
-  ApiOAuth2,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { Controller, Get, Param, Put, Query } from '@nestjs/common';
+import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { JackService } from './jack.service';
 import { JackEqualiserService } from './jack-equaliser.service';

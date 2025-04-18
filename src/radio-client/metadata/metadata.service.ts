@@ -1,5 +1,4 @@
-
-import { Injectable,NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as htmlparser2 from 'htmlparser2';
 
 @Injectable()

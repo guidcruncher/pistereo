@@ -1,4 +1,4 @@
-import { Injectable,Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as cp from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';

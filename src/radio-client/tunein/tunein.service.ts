@@ -99,7 +99,7 @@ export class TuneinService extends ServiceBase {
 
     const obj = await result.json();
 
-    const view: Station[] = [];
+    let view: Station[] = [];
 
     for (const item of obj.Items) {
       switch (item.ContainerType) {
@@ -118,6 +118,25 @@ export class TuneinService extends ServiceBase {
           break;
       }
     }
+
+    let userStreams: any[] = await this.radioService.getStreamsByName(query);
+
+    if (userStreams) {
+      userStreams.forEach((s) => {
+        const st: Station = {} as Station;
+        st.stationuuid = s.stationuuid;
+        st.radioUrl = s.url_resolved;
+        st.guideId = s.stationuuid;
+        st.image = s.favicon;
+        st.title = s.name;
+        st.shareUrl = '';
+        view.push(st);
+      });
+    }
+
+    view = view.sort((a, b) => {
+      return a.title.localeCompare(b.title);
+    });
 
     return PagedList.fromArray<Station>(view, offset, limit);
   }

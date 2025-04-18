@@ -3,11 +3,7 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { SpotifyBaseService } from '../spotify-base.service';
-import {
-  ApiResult,
-  Episode,
-  PagedList,
-} from '../spotify-client.d';
+import { ApiResult, Episode, PagedList } from '../spotify-client.d';
 
 @Injectable()
 export class ShowsService extends SpotifyBaseService {

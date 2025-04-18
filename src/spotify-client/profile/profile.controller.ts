@@ -1,5 +1,5 @@
 import { AuthToken } from '@auth/auth-token.decorator';
-import { Controller,Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {

@@ -1,12 +1,7 @@
 import { Public } from '@auth/public.decorator';
-import {
-  Controller,
-  Logger,
-  MessageEvent,
-  Sse,
-} from '@nestjs/common';
+import { Controller, Logger, MessageEvent, Sse } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { fromEvent, map,Observable } from 'rxjs';
+import { fromEvent, map, Observable } from 'rxjs';
 
 import { LibrespotService } from './librespot.service';
 

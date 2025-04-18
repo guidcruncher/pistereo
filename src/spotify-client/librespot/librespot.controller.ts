@@ -8,11 +8,7 @@ import {
 } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  ApiOAuth2,
-  ApiOperation,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiOAuth2, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 import { Play } from '../spotify-client.d';
 import { LibrespotService } from './librespot.service';

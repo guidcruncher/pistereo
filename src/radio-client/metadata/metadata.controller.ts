@@ -1,14 +1,6 @@
-import {Public } from '@auth/public.decorator';
-import {
-  Controller,
-  Get,
-  Header,
-  Query,
-} from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { Public } from '@auth/public.decorator';
+import { Controller, Get, Header, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 import { MetadataService } from './metadata.service';
 

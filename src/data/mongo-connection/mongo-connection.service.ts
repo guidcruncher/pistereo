@@ -6,9 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { ClientSession, Connection } from 'mongoose';
 
-
-
-
 const mongoose = require('mongoose');
 
 @Injectable()

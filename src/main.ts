@@ -2,7 +2,7 @@ import { getScopes } from '@auth/scopes';
 import compression from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
 import secureSession from '@fastify/secure-session';
-import { ConsoleLogger,LogLevel } from '@nestjs/common';
+import { ConsoleLogger, LogLevel } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -10,10 +10,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import {
-  DocumentBuilder,
-  SwaggerModule,
-} from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
 import { AppService } from './app/app.service';

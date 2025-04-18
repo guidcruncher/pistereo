@@ -9,12 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import {
-  ApiOAuth2,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { SearchRequest } from './models';
 import { RadioBrowserService } from './radio-browser.service';

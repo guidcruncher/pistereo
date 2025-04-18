@@ -10,11 +10,7 @@ import {
 } from '@nestjs/common';
 import { Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';

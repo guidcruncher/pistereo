@@ -1,7 +1,7 @@
 import { AuthModule } from '@auth/auth.module';
 import { DataModule } from '@data/data.module';
 import { Module } from '@nestjs/common';
-import {APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 import { AlbumController } from './album/album.controller';
 import { AlbumService } from './album/album.service';

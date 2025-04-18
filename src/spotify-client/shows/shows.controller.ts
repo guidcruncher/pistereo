@@ -1,13 +1,8 @@
 import { AuthToken } from '@auth/auth-token.decorator';
-import { Controller,Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  ApiOAuth2,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { Spotify } from '../spotify.decorator';
 import { ShowsService } from './shows.service';

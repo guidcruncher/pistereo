@@ -30,7 +30,7 @@ export class PlaybackRequest {
   uris: string[];
 
   @ApiProperty()
-  positionMs = 0;
+  positionMs: number = 0;
 }
 
 export class DefaultPlaybackRequest {
@@ -41,5 +41,5 @@ export class DefaultPlaybackRequest {
   uris: string[];
 
   @ApiProperty()
-  positionMs = 0;
+  positionMs: number = 0;
 }

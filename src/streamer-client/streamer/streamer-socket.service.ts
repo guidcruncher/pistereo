@@ -1,4 +1,4 @@
-import { Injectable, Logger,OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as net from 'net';
 import * as util from 'util';
