@@ -45,7 +45,7 @@ export class TunerService extends ServiceBase {
 
   public async playStation(uuid: string): Promise<any> {
     const response: AxiosResponse<any> = await this.client('/api/radio').put(
-      '/tunein/' + uuid,
+      '/play/' + uuid,
     );
     usePlayerStore().setSource('streamer');
     emit('audio_changed', {

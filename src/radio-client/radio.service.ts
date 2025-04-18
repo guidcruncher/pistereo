@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
-
+import { StreamerService } from '../streamer-client/streamer/streamer.service';
 import { ServiceBase } from '@/service-base';
 
 import { MetadataService } from './metadata/metadata.service';
@@ -20,6 +20,7 @@ export class RadioService extends ServiceBase {
     private readonly config: ConfigService,
     private readonly userService: UserService,
     private readonly radioService: RadioServiceData,
+    private readonly streamerService: StreamerService,
     private readonly radioBrowserService: RadioBrowserService,
     private readonly tuneinService: TuneinService,
     private readonly metadataService: MetadataService,
@@ -29,11 +30,55 @@ export class RadioService extends ServiceBase {
 
   private readonly log = new Logger(RadioBrowserService.name);
 
+  async playStation(id: string, user: any) {
+    let uuid: string[] = id.split(':');
+
+    switch (uuid[0].toLowerCase()) {
+      case 'tunein':
+        await this.tuneinService.streamStation(user, uuid[1]);
+        break;
+      case 'user':
+        await this.playUserStream(user, id);
+        break;
+    }
+  }
+
+  private async playUserStream(user: any, id: string) {
+    const streamdata: any = await this.radioService.getStream(id);
+    const station: any = await this.getStation(id);
+    this.userService.updateLastPlayed(
+      user.id,
+      user.display_name,
+      'streamer',
+      streamdata.url_resolved,
+      {
+        source: 'streamer',
+        stationuuid: id,
+        uri: streamdata.url_resolved,
+        name: station.name,
+        description: '',
+        owner: station.name,
+        image: station.name,
+      },
+    );
+    await this.streamerService.play(streamdata.url_resolved);
+  }
+
   async getStation(id: string): Promise<RadioPreset> {
     const args = id.split(':');
     let sta: any = {} as any;
 
     switch (args[0]) {
+      case 'user':
+        sta = await this.radioService.getStream(id);
+        return {
+          id: '',
+          stationuuid: sta.stationuuid,
+          name: sta.name,
+          image: sta.favicon,
+          info: sta,
+          database: 'user',
+        };
       case 'tunein':
         sta = await this.tuneinService.getStation(args[1]);
         return {
