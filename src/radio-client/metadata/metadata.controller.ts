@@ -15,6 +15,7 @@ import {
   Param,
   Put,
   Post,
+  Header,
   Query,
   Res,
   Controller,
@@ -32,14 +33,9 @@ export class MetadataController {
   @Get('/icon')
   @ApiOperation({ summary: 'Get station icon' })
   @ApiQuery({ name: 'query' })
-  public async getStationIcon(@Query('query') query: string, @Res() res) {
-    let url: string = await this.metadataService.getMediaIconUrl(query);
-
-    if (url === '') {
-      return res.status(404);
-    }
-
-    return res.redirect(302, url);
+  @Header('content-type', 'image/png')
+  public async getStationIcon(@Query('query') query: string) {
+    return await this.metadataService.getMediaIcon(query);
   }
 
   @Get('/icon/url')

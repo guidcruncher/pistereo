@@ -1,8 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import * as htmlparser2 from 'htmlparser2';
+import { Readable } from 'node:stream';
 
 @Injectable()
 export class MetadataService {
+  public async getMediaIcon(name: string) {
+    let url: string = await this.getMediaIconUrl(name);
+
+    if (url === '') {
+      throw new NotFoundException();
+    }
+
+    const result = await fetch(url, { method: 'GET' });
+
+    if (!result.ok) {
+      throw new NotFoundException();
+    }
+
+    return result.body;
+  }
+
   public async getMediaIconUrl(name: string): Promise<string> {
     let id: string = name.replaceAll(' ', '-').toLowerCase();
     let url: string = 'https://media.info/radio/stations/' + id;
