@@ -90,7 +90,7 @@ export class RadioService extends ServiceBase {
           item.database = 'user';
           item.name = ch.name as string;
           this.metadataService
-            .getMediaIconUrl(ch.name)
+            .getMediaIconApiUrl(ch.name)
             .then((icon) => {
               item.favicon = icon;
               this.radioService
