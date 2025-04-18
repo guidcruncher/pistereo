@@ -16,8 +16,8 @@ export class JackEqualiserService extends ServiceBase {
   resetControls(level: number): Promise<any[]> {
     return new Promise<any[]>((resolve, reject) => {
       this.scontents().then((ctrls) => {
-        let p: Promise<any>[] = [];
-        for (var i = 0; i < ctrls.length; i++) {
+        const p: Promise<any>[] = [];
+        for (let i = 0; i < ctrls.length; i++) {
           p.push(this.sset(ctrls[i].name, level, level));
         }
 
@@ -44,13 +44,13 @@ export class JackEqualiserService extends ServiceBase {
     this.log.log(this.__caller() + ' => setControl');
     return new Promise<any[]>((resolve, reject) => {
       this.getControls().then((controls) => {
-        let ctrl: any = controls.find((c) => {
+        const ctrl: any = controls.find((c) => {
           return c.num == index;
         });
         if (ctrl) {
           this.sset(ctrl.name, left, right)
             .then(async (res) => {
-              let state = await this.getControls();
+              const state = await this.getControls();
               resolve(state);
             })
             .catch((err) => {
@@ -171,14 +171,14 @@ export class JackEqualiserService extends ServiceBase {
 
   public getPresets(source: string): any[] {
     let results: any[] = [];
-    let filename = path.join(
+    const filename = path.join(
       process.env.NODE_CONFIG_DIR as string,
       'equaliser.json',
     );
 
     if (fs.existsSync(filename)) {
-      let rawJS: string = fs.readFileSync(filename, 'utf8');
-      let json: any = JSON.parse(rawJS);
+      const rawJS: string = fs.readFileSync(filename, 'utf8');
+      const json: any = JSON.parse(rawJS);
 
       if (json && json['presets-' + source]) {
         results = json['presets-' + source];

@@ -5,7 +5,7 @@ import { Readable } from 'node:stream';
 @Injectable()
 export class MetadataService {
   public async getMediaIcon(name: string) {
-    let url: string = await this.getMediaIconUrl(name);
+    const url: string = await this.getMediaIconUrl(name);
 
     if (url === '') {
       throw new NotFoundException();
@@ -21,8 +21,8 @@ export class MetadataService {
   }
 
   public async getMediaIconUrl(name: string): Promise<string> {
-    let id: string = name.replaceAll(' ', '-').toLowerCase();
-    let url: string = 'https://media.info/radio/stations/' + id;
+    const id: string = name.replaceAll(' ', '-').toLowerCase();
+    const url: string = 'https://media.info/radio/stations/' + id;
     let iconurl: string = '';
     const result = await fetch(url, { method: 'GET' });
 

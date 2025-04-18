@@ -120,7 +120,7 @@ export class RadioBrowserService extends ServiceBase {
         method: 'GET',
       },
     );
-    let json: any = await result.json();
+    const json: any = await result.json();
 
     for (let i = 0; i < json.length; i++) {
       json[i].stationuuid = 'radiobrowser:' + json[i].stationuuid;

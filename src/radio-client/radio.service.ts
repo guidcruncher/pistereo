@@ -28,7 +28,7 @@ export class RadioService extends ServiceBase {
   private readonly log = new Logger(RadioBrowserService.name);
 
   async getStation(id: string): Promise<RadioPreset> {
-    let args = id.split(':');
+    const args = id.split(':');
     let sta: any = {} as any;
 
     switch (args[0]) {
@@ -43,7 +43,7 @@ export class RadioService extends ServiceBase {
           database: 'tunein',
         };
       case 'radiobrowser':
-        let res = await this.radioBrowserService.searchByUuid([args[1]]);
+        const res = await this.radioBrowserService.searchByUuid([args[1]]);
         sta = res ? res[0] : {};
         return {
           id: '',
@@ -70,14 +70,14 @@ export class RadioService extends ServiceBase {
   }
 
   async importPlaylist(user: any, m3u: string): Promise<Stream[]> {
-    let result: Stream[] = [] as Stream[];
+    const result: Stream[] = [] as Stream[];
     const playlist: M3uPlaylist = parseM3U(m3u);
     const promises: Promise<any>[] = [];
 
     return new Promise<Stream[]>((resolve, reject) => {
       const creator = (ch) => {
         return new Promise<Stream>((res, rej) => {
-          let item: Stream = {} as Stream;
+          const item: Stream = {} as Stream;
           item.stationuuid =
             'user:' +
             crypto
@@ -126,7 +126,7 @@ export class RadioService extends ServiceBase {
       };
 
       for (let i = 0; i < playlist.channels.length; i++) {
-        let ch: any = playlist.channels[i] as any;
+        const ch: any = playlist.channels[i] as any;
         promises.push(creator(ch));
       }
 

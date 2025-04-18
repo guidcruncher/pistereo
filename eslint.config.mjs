@@ -1,51 +1,54 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
+import tsParser from "@typescript-eslint/parser";
 import tseslint from 'typescript-eslint';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import eslint from "@eslint/js";
+import { FlatCompat } from "@eslint/eslintrc";
 import unusedImports from "eslint-plugin-unused-imports";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
-export default tseslint.config(
-  {
-    ignores: ['eslint.config.mjs'],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
+// const simpleImportSort = pkg;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: eslint.configs.recommended,
+    allConfig: eslint.configs.all
+});
+
+export default [ ...compat.extends("plugin:@typescript-eslint/strict"), {
+ plugins: {
+      "unused-imports": unusedImports,
+      "simple-import-sort":simpleImportSort,
+    },
     languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      ecmaVersion: 5,
-      sourceType: 'module',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
+        parser: tsParser,
     },
-  },
-  plugins: {
-        "unused-imports": unusedImports,
-  },
-  {
+
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": [
-         "warn",
-         {
-             "vars": "all",
-             "varsIgnorePattern": "^_",
-             "args": "after-used",
-             "argsIgnorePattern": "^_",
-         },
-     ]
+        "@typescript-eslint/no-this-alias": "off",
+        "@typescript-eslint/no-dynamic-delete": "off",
+        "@typescript-eslint/no-empty-function": "warn",
+        "@typescript-eslint/adjacent-overload-signatures": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-extraneous-class": "off",
+	"lines-between-class-members": "warn",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_",
+            },
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
     },
-  },
-);
+}, ...tseslint.configs.stylistic];

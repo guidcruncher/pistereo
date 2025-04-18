@@ -26,11 +26,11 @@ export class TuneinService extends ServiceBase {
   }
 
   public async getStation(guideId: string) {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('render', 'json');
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
     params.append('partnerId', 'RadioTime');
-    let url =
+    const url =
       'https://api.radiotime.com/profiles/' +
       this.parseId(guideId) +
       '?' +
@@ -42,7 +42,7 @@ export class TuneinService extends ServiceBase {
   }
 
   public async getStreamUrl(guideId: string) {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('id', this.parseId(guideId));
     params.append('render', 'json');
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
@@ -50,7 +50,7 @@ export class TuneinService extends ServiceBase {
     params.append('version', '4.4601');
     params.append('itemUrlScheme', 'secure');
     params.append('reqAttempt', '1');
-    let url = 'https://opml.radiotime.com/Tune.ashx?' + params.toString();
+    const url = 'https://opml.radiotime.com/Tune.ashx?' + params.toString();
     const result = await fetch(url, { method: 'GET' });
 
     const obj = await result.json();
@@ -58,8 +58,8 @@ export class TuneinService extends ServiceBase {
   }
 
   public async streamStation(user: any, guideId: string) {
-    let streamdata = await this.getStreamUrl(guideId);
-    let station = await this.getStation(guideId);
+    const streamdata = await this.getStreamUrl(guideId);
+    const station = await this.getStation(guideId);
     this.log.log(this.__caller() + ' =>streamStatiom');
     this.userService.updateLastPlayed(
       user.id,
@@ -84,26 +84,26 @@ export class TuneinService extends ServiceBase {
     offset: number,
     limit: number,
   ): Promise<PagedList<Station>> {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append('fullTextSearch', 'true');
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma');
     params.append('partnerId', 'RadioTime');
     params.append('itemUrlScheme', 'secure');
     params.append('reqAttempt', '1');
     params.append('query', query);
-    let url = 'https://api.tunein.com/profiles?' + params.toString();
+    const url = 'https://api.tunein.com/profiles?' + params.toString();
 
     const result = await fetch(url, { method: 'GET' });
 
     const obj = await result.json();
 
-    let view: Station[] = [];
+    const view: Station[] = [];
 
     for (const item of obj.Items) {
       switch (item.ContainerType) {
         case 'Stations':
           item.Children.forEach((c) => {
-            let st: Station = {} as Station;
+            const st: Station = {} as Station;
             st.stationuuid = 'tunein:' + c.GuideId;
             st.radioUrl = '';
             st.guideId = c.GuideId;
