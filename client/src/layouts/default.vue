@@ -92,11 +92,11 @@
             text="Explore"
             @click.stop="goto('/explore', 3)"
           />
- <v-tab
- prepend-icon="mdi-tools"
- text="Tools"
- @click.stops="goto('/tools', 3)"
- />
+          <v-tab
+            prepend-icon="mdi-tools"
+            text="Tools"
+            @click.stops="goto('/tools', 3)"
+          />
         </v-tabs>
         <router-view />
       </v-container>

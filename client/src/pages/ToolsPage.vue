@@ -6,8 +6,7 @@ import { on, emit, off } from '../composables/useeventbus';
 export default {
   name: 'ToelsPage',
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {},
   beforeUnmount() {},

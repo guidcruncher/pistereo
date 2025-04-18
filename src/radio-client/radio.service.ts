@@ -7,6 +7,9 @@ import { RadioService as RadioServiceData } from '@data/radio/radio.service';
 import { RadioPreset, Station } from '@data/dto';
 import { RadioBrowserService } from './radio-browser/radio-browser.service';
 import { TuneinService } from './tunein/tunein.service';
+import { M3uPlaylist, parseM3U, writeM3U } from '@iptv/playlist';
+import { Stream } from '@data/dto';
+import { MetadataService } from './metadata/metadata.service';
 
 @Injectable()
 export class RadioService extends ServiceBase {
@@ -16,6 +19,7 @@ export class RadioService extends ServiceBase {
     private readonly radioService: RadioServiceData,
     private readonly radioBrowserService: RadioBrowserService,
     private readonly tuneinService: TuneinService,
+    private readonly metadataService: MetadataService,
   ) {
     super();
   }
@@ -62,5 +66,53 @@ export class RadioService extends ServiceBase {
 
   async getPresets(user: any) {
     return await this.radioService.getPresets(user.id);
+  }
+
+  async importPlaylist(user: any, m3u: string): Promise<Stream[]> {
+    let result: Stream[] = [] as Stream[];
+    const playlist: M3uPlaylist = parseM3U(m3u);
+    const promises: Promise[] = [] as Promise[];
+
+    return new Promise<Stream[]>((resolve, reject) => {
+      const creator = (ch) => {
+        return new Promise<Stream>((resolve, reject) => {
+          let item: Stream = {} as Stream;
+          item.stationuuid =
+            'user:' +
+            Crypto.createHash('md5')
+              .update(ch.name as string)
+              .digest('hex');
+          item.url_resolved = ch.url as string;
+          item.database = 'user';
+          item.name = ch.name as string;
+          this.metadataService
+            .getMediaIconUrl(ch.name)
+            .then((icon) => {
+              item.favicon = icon;
+              resolve(item);
+            })
+            .catch((err) => {
+              item.favioon = '';
+              resolve(item);
+            });
+        });
+      };
+
+      for (let i = 0; i < playlist.channels.lengtjh; i++) {
+        let ch: any = playlist.channels[i] as any;
+        promises.push(creator(ch));
+      }
+
+      Promise.allSettled(promises)
+        .then((res) => {
+          res.forEach((r) => {
+            result.push(r.value);
+          });
+          resolve(result);
+        })
+        .catch((err) => {
+          resolve(result);
+        });
+    });
   }
 }

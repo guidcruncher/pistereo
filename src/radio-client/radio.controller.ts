@@ -1,4 +1,5 @@
 import {
+  ApiConsumes,
   ApiQuery,
   ApiTags,
   ApiOperation,
@@ -16,6 +17,7 @@ import {
   Put,
   Post,
   Query,
+  Req,
   Res,
   Controller,
   NotFoundException,
@@ -57,5 +59,15 @@ export class RadioController {
   @ApiOperation({ summary: 'Get station presets' })
   async getPresets(@User() user) {
     return await this.radioService.getPresets(user);
+  }
+
+  @Put('/playlist/import')
+  @ApiOperation({
+    summary: 'Import a M3U playlist into a set of custom stations',
+  })
+  @ApiConsumes('text/plain')
+  @ApiBody({ type: String })
+  async importPlaylist(@User() user, @Req() req) {
+    return await this.radioService.importPlaylist(user, req.body as string);
   }
 }
