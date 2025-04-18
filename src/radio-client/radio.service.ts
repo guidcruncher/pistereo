@@ -72,7 +72,7 @@ export class RadioService extends ServiceBase {
   async importPlaylist(user: any, m3u: string): Promise<Stream[]> {
     let result: Stream[] = [] as Stream[];
     const playlist: M3uPlaylist = parseM3U(m3u);
-    const promises: Promise[] = [];
+    const promises: Promise<any>[] = [];
 
     return new Promise<Stream[]>((resolve, reject) => {
       const creator = (ch) => {
@@ -108,8 +108,18 @@ export class RadioService extends ServiceBase {
       Promise.allSettled(promises)
         .then((res) => {
           res.forEach((r) => {
-            result.push(r.value);
+            if (r.status == 'fulfilled') {
+              await this.radioService.updateStream(
+                r.stationuuid,
+                r.name,
+                r.url_resolved,
+                r.favicon,
+                r.database,
+              );
+              result.push(r.value);
+            }
           });
+
           resolve(result);
         })
         .catch((err) => {

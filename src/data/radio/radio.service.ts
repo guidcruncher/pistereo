@@ -149,6 +149,7 @@ export class RadioService {
     name: string,
     resolvedurl: string,
     favicon: string,
+    database: string,
   ) {
     return await this.streamModel.findOneAndUpdate(
       { stationuuid: stationuuid },
@@ -156,8 +157,8 @@ export class RadioService {
         stationuuid: stationuuid,
         name: name,
         resolved_url: resolvedurl,
-        database: 'local',
-        faviconz: favicon,
+        database: database,
+        favicon: favicon,
       },
       {
         upsert: true,
