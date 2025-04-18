@@ -58,7 +58,7 @@ export class RadioService extends ServiceBase {
         name: station.name,
         description: '',
         owner: station.name,
-        image: station.name,
+        image: station.image,
       },
     );
     await this.streamerService.play(streamdata.url_resolved);

@@ -38,7 +38,7 @@ export class TunerService extends ServiceBase {
 
   public async getStation(uuid: string): Promise<Station> {
     const response: AxiosResponse<any> = await this.client('/api/radio').get(
-      '/tunein/' + uuid,
+      '/station/' + uuid,
     );
     return response.data as Station;
   }

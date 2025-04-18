@@ -93,11 +93,11 @@ export default {
 <template>
   <v-container v-if="hasData">
     <v-container v-if="hasData">
-      <v-row v-if="station.Image">
+      <v-row v-if="station.image">
         <v-col cols="12">
           <div class="centre">
             <div class="albumimgbig">
-              <img :src="station.Image" />
+              <img :src="station.image" />
             </div>
           </div>
         </v-col>
@@ -105,13 +105,8 @@ export default {
       <v-row>
         <v-col cols="12">
           <div class="centre">
-            <h2>{{ station.Title }}</h2>
-            <h3>{{ station.Subtitle }}</h3>
-            <h4>
-              <a :href="station.Actions.Share.ShareUrl">{{
-                station.Actions.Share.ShareUrl
-              }}</a>
-            </h4>
+            <h2>{{ station.name }}</h2>
+            <h3>{{ station.description }}</h3>
             <h5 v-if="nowplaying && nowplaying.metadata">
               Now playing - {{ nowplaying.metadata['icy-title'] }} ({{
                 nowplaying.metadata['icy-genre']

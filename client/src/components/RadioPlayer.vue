@@ -139,11 +139,11 @@ export default {
 </script>
 <template>
   <v-container v-if="hasData">
-    <v-row v-if="station.Image">
+    <v-row v-if="station.image">
       <v-col cols="12">
         <div class="centre">
           <div class="albumimg">
-            <img :src="station.Image" />
+            <img :src="station.image" />
           </div>
         </div>
       </v-col>
@@ -151,7 +151,7 @@ export default {
     <v-row>
       <v-col cols="12">
         <div class="centre">
-          <h4>{{ station.Title }}</h4>
+          <h4>{{ station.name }}</h4>
         </div>
       </v-col>
     </v-row>

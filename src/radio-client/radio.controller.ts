@@ -48,6 +48,13 @@ export class RadioController {
     return await this.radioService.playStation(uuid, user);
   }
 
+  @Get('/station/:uuid')
+  @ApiOperation({ summary: 'Get a stream' })
+  @ApiParam({ name: 'uuid' })
+  async playStation(@Param('uuid') uuid: string, @User() user) {
+    return await this.radioService.getStation(uuid);
+  }
+
   @Put('/presets/:uuid')
   @ApiOperation({ summary: 'Save a station preset' })
   @ApiParam({ name: 'uuid' })
