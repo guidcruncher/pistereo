@@ -14,6 +14,7 @@ import ExplorePage from '../pages/ExplorePage.vue';
 import LibraryPage from '../pages/LibraryPage.vue';
 import NowPlayingPage from '../pages/NowPlayingPage.vue';
 import AboutPage from '../pages/AboutPage.vue';
+import ToolsPage from '../pages/ToolsPage.vue';
 
 const routes = [
   {
@@ -26,7 +27,7 @@ const routes = [
     path: '/nowplaying',
     component: NowPlayingPage,
   },
-  {m
+  {
     name: 'library',
     path: '/library',
     component: LibraryPage,
