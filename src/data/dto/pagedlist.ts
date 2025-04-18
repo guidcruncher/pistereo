@@ -13,16 +13,18 @@ export class PagedList<T> {
 
   static fromArray<U>(items: U[], offset: number, limit: number): PagedList<U> {
     const l = new PagedList<U>();
-    const pagesize = limit - offset;
     l.paging = {} as Pager;
-    l.paging.offset = offset;
-    l.paging.limit = limit;
+    l.paging.offset = parseInt(offset);
+    l.paging.limit = parseInt(limit);
     l.paging.total = items.length;
     l.paging.page = 0;
-    l.paging.pageCount = Math.ceil(items.length / pagesize);
-    l.paging.page = (offset == 0 ? 0 : offset / pagesize) + 1;
-    const end = offset + limit > items.length ? items.length : offset + limit;
-    l.items = items.slice(offset, end);
+    l.paging.pageCount = Math.ceil(items.length / l.paging.limit);
+    l.paging.page = (offset == 0 ? 0 : l.paging.offset / l.paging.limit) + 1;
+    const end: number = l.paging.offset + l.paging.limit;
+    l.items = [];
+    for (let i = offset; i < end; i++) {
+      l.items.push(items[i]);
+    }
     return l;
   }
 }
