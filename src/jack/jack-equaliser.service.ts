@@ -1,8 +1,9 @@
-import { Logger, Injectable } from '@nestjs/common';
+import { Injectable,Logger } from '@nestjs/common';
 import * as cp from 'child_process';
-import { ServiceBase } from '@/service-base';
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
+
+import { ServiceBase } from '@/service-base';
 
 @Injectable()
 export class JackEqualiserService extends ServiceBase {

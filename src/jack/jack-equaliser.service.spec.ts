@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { JackEqualiserService } from './jack-equaliser.service';
 
 describe('JackEqualiserService', () => {

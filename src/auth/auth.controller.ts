@@ -1,26 +1,23 @@
-import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-} from '@nestjs/swagger';
+import { UserService } from '@data/user/user.service';
 import {
   Body,
-  Session,
-  Post,
+  Controller,
   Get,
+  Post,
   Query,
   Res,
-  Controller,
+  Session,
 } from '@nestjs/common';
 import { Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
+
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
-import { UserService } from '@data/user/user.service';
 
 @Public()
 @Controller('/api/auth')

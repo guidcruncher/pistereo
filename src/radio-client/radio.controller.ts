@@ -1,29 +1,22 @@
+import { User } from '@auth/auth-token.decorator';
 import {
-  ApiConsumes,
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import {
-  Body,
-  Session,
+  Controller,
   Get,
+  NotFoundException,
   Param,
   Put,
-  Post,
   Query,
   Req,
-  Res,
-  Controller,
-  NotFoundException,
 } from '@nestjs/common';
-import { Public, Private } from '@auth/public.decorator';
-import { User } from '@auth/auth-token.decorator';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+
 import { EpgService } from './epg/epg.service';
 import { RadioService } from './radio.service';
 

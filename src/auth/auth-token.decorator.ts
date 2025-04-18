@@ -1,6 +1,6 @@
-import { Logger, SetMetadata } from '@nestjs/common';
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { UserProfile } from '@data/dto/userprofile.dto';
+import { Logger } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const AuthToken = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {

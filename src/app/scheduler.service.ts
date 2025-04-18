@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import { CronJob } from 'cron';
+
 import { EpgSchedulerService } from '../radio-client/epg/epg-scheduler.service';
 import { StreamerService } from '../streamer-client/streamer/streamer.service';
-import { CronJob } from 'cron';
 
 @Injectable()
 export class SchedulerService {

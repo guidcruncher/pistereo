@@ -1,10 +1,10 @@
+import { UserService } from '@data/user/user.service';
+import { Injectable, Logger } from '@nestjs/common';
+
+import { ServiceBase } from '@/service-base';
+
 import { LibrespotService } from '../spotify-client/librespot/librespot.service';
 import { StreamerService } from '../streamer-client/streamer/streamer.service';
-import { Injectable, MessageEvent, Logger } from '@nestjs/common';
-import { OnEvent, EventEmitter2 } from '@nestjs/event-emitter';
-import { Observable, fromEvent, map } from 'rxjs';
-import { UserService } from '@data/user/user.service';
-import { ServiceBase } from '@/service-base';
 
 @Injectable()
 export class JackService extends ServiceBase {

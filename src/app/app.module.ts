@@ -1,23 +1,22 @@
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Global, Module } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ScheduleModule } from '@nestjs/schedule';
-import { MongooseModule } from '@nestjs/mongoose';
-import * as path from 'path';
-import { SpotifyClientModule } from '../spotify-client/spotify-client.module';
-import configuration from '../config/configuration';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { StreamerClientModule } from '../streamer-client/streamer-client.module';
-import { JackModule } from '../jack/jack.module';
-import { RadioClientModule } from '../radio-client/radio-client.module';
-import { EpgService } from '../radio-client/epg/epg.service';
-import { DataModule } from '../data/data.module';
 import { AuthModule } from '@auth/auth.module';
+import { Global, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
+
+import configuration from '../config/configuration';
+import { DataModule } from '../data/data.module';
+import { JackModule } from '../jack/jack.module';
 import { JackService } from '../jack/jack.service';
-import { SchedulerService } from './scheduler.service';
-import { SchedulerController } from './scheduler.controller';
+import { EpgService } from '../radio-client/epg/epg.service';
+import { RadioClientModule } from '../radio-client/radio-client.module';
+import { SpotifyClientModule } from '../spotify-client/spotify-client.module';
+import { StreamerClientModule } from '../streamer-client/streamer-client.module';
+import { AppService } from './app.service';
 import { ContentModule } from './content/content.module';
+import { SchedulerController } from './scheduler.controller';
+import { SchedulerService } from './scheduler.service';
 
 @Global()
 @Module({

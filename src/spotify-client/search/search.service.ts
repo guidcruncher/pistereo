@@ -1,9 +1,9 @@
-import { SpotifyBaseService } from '../spotify-base.service';
-import { SearchResults } from '../spotify-client.d';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PagedList } from '../spotify-client.d';
+
+import { SpotifyBaseService } from '../spotify-base.service';
+import { SearchResults } from '../spotify-client.d';
 
 @Injectable()
 export class SearchService extends SpotifyBaseService {

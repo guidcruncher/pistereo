@@ -1,28 +1,21 @@
-import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import { Spotify } from '../spotify.decorator';
-import {
-  Body,
-  Post,
-  Session,
-  Get,
-  Query,
-  Param,
-  Res,
-  Controller,
-} from '@nestjs/common';
-import { Logger, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PlaylistService } from './playlist.service';
 import { AuthToken } from '@auth/auth-token.decorator';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+
+import { Spotify } from '../spotify.decorator';
+import { PlaylistService } from './playlist.service';
 
 @Spotify()
 @ApiOAuth2(['playlist-read-private'], 'Api')
@@ -41,8 +34,8 @@ export class PlaylistController {
   @ApiQuery({ name: 'offset', type: Number, required: true, default: 0 })
   async getMyPlaylists(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
   ) {
     return await this.playlistService.getMyPlaylists(token, limit, offset);
   }

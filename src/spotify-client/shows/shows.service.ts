@@ -1,15 +1,11 @@
-import { SpotifyBaseService } from '../spotify-base.service';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
+import { SpotifyBaseService } from '../spotify-base.service';
 import {
-  Track,
-  Album,
-  Show,
-  Episode,
-  Artist,
   ApiResult,
-  PublicUser,
+  Episode,
   PagedList,
 } from '../spotify-client.d';
 

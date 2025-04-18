@@ -1,10 +1,11 @@
-import { SpotifyBaseService } from '../spotify-client/spotify-base.service';
+import { UserService } from '@data/user/user.service';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
+
+import { SpotifyBaseService } from '../spotify-client/spotify-base.service';
 import { scopes } from './scopes';
-import { UserService } from '@data/user/user.service';
 
 @Injectable()
 export class AuthService extends SpotifyBaseService {
@@ -45,8 +46,8 @@ export class AuthService extends SpotifyBaseService {
     clientSecret: string,
     code: string,
     verifier: string,
-    grantType: string = 'authorization_code',
-    redirectUri: string = '',
+    grantType = 'authorization_code',
+    redirectUri = '',
   ): Promise<any> {
     this.log.log(this.__caller() + ' =>getAccessToken');
     const params = new URLSearchParams();
@@ -119,7 +120,7 @@ export class AuthService extends SpotifyBaseService {
   private async postAuthTokenProcesses(
     token: string,
     refreshToken: string,
-    oldtoken: string = '',
+    oldtoken = '',
   ) {
     this.log.log(this.__caller() + ' =>PostAuthTokenProcesses');
     if (!token || token == '') {

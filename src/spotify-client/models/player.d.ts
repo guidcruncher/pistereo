@@ -1,6 +1,6 @@
-import { SimplifiedTrack, Track } from './track';
 import { Episode } from './episode';
-import { ErrorResponse, ExternalUrl, Cursor, SpotifyType } from './global';
+import { Cursor, ErrorResponse, ExternalUrl, SpotifyType } from './global';
+import { SimplifiedTrack, Track } from './track';
 
 /**
  * The repeat state of the context.

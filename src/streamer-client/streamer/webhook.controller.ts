@@ -1,18 +1,14 @@
+import { Public } from '@auth/public.decorator';
 import {
   Controller,
-  Sse,
-  MessageEvent,
-  Get,
   Logger,
-  Post,
-  Body,
-  Req,
-  Res,
+  MessageEvent,
+  Sse,
 } from '@nestjs/common';
-import { StreamerService } from './streamer.service';
-import { Public } from '@auth/public.decorator';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Observable, fromEvent, map } from 'rxjs';
+import { fromEvent, map,Observable } from 'rxjs';
+
+import { StreamerService } from './streamer.service';
 
 @Public()
 @Controller('/api/streamer')

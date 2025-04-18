@@ -1,10 +1,11 @@
+import { UserService } from '@data/user/user.service';
 import { Injectable, Logger } from '@nestjs/common';
-import * as util from 'util';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import * as util from 'util';
+
 import { SpotifyBaseService } from '../spotify-base.service';
 import { GetStatusResponse, Play } from '../spotify-client.d';
-import { UserService } from '@data/user/user.service';
 
 const exec = util.promisify(require('node:child_process').exec);
 

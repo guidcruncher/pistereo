@@ -1,22 +1,22 @@
-import { LogLevel, ConsoleLogger } from '@nestjs/common';
+import { getScopes } from '@auth/scopes';
+import compression from '@fastify/compress';
+import fastifyCookie from '@fastify/cookie';
+import secureSession from '@fastify/secure-session';
+import { ConsoleLogger,LogLevel } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
-import { AppService } from './app/app.service';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import {
-  SwaggerCustomOptions,
-  SwaggerModule,
   DocumentBuilder,
+  SwaggerModule,
 } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
-import secureSession from '@fastify/secure-session';
-import fastifyCookie from '@fastify/cookie';
-import compression from '@fastify/compress';
-import { scopes, getScopes } from '@auth/scopes';
+
+import { AppModule } from './app/app.module';
+import { AppService } from './app/app.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

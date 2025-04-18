@@ -1,10 +1,10 @@
-import { Artist } from './artist';
-import { Track } from './track';
 import { SimplifiedAlbum } from './album';
-import { SimplifiedEpisode } from './episode';
-import { SimplifiedShow } from './show';
-import { SimplifiedPlaylist } from './playlist';
+import { Artist } from './artist';
 import { SimplifiedAudiobook } from './audiobook';
+import { SimplifiedEpisode } from './episode';
+import { SimplifiedPlaylist } from './playlist';
+import { SimplifiedShow } from './show';
+import { Track } from './track';
 
 /**
  * All the spotify element types

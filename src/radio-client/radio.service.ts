@@ -1,16 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { RadioPreset } from '@data/dto';
+import { Stream } from '@data/dto';
+import { RadioService as RadioServiceData } from '@data/radio/radio.service';
+import { UserService } from '@data/user/user.service';
+import { M3uPlaylist, parseM3U } from '@iptv/playlist';
+import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from '@data/user/user.service';
+import * as crypto from 'crypto';
+
 import { ServiceBase } from '@/service-base';
-import { RadioService as RadioServiceData } from '@data/radio/radio.service';
-import { RadioPreset, Station } from '@data/dto';
+
+import { MetadataService } from './metadata/metadata.service';
 import { RadioBrowserService } from './radio-browser/radio-browser.service';
 import { TuneinService } from './tunein/tunein.service';
-import { M3uPlaylist, parseM3U, writeM3U } from '@iptv/playlist';
-import { Stream } from '@data/dto';
-import { MetadataService } from './metadata/metadata.service';
-import * as crypto from 'crypto';
 
 @Injectable()
 export class RadioService extends ServiceBase {

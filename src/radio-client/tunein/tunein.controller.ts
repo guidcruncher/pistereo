@@ -1,28 +1,19 @@
+import { User } from '@auth/auth-token.decorator';
 import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import {
-  Body,
-  Session,
+  Controller,
   Get,
   Param,
   Put,
-  Post,
   Query,
-  Res,
-  Controller,
-  NotFoundException,
 } from '@nestjs/common';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+
 import { TuneinService } from './tunein.service';
-import { Public, Private } from '@auth/public.decorator';
-import { User } from '@auth/auth-token.decorator';
 
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/tunein')
@@ -57,8 +48,8 @@ export class TuneinController {
   @ApiQuery({ name: 'offset', type: Number, required: true, default: 0 })
   public async search(
     @Query('query') query: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
   ) {
     return await this.tuneinService.search(query, offset, limit);
   }

@@ -1,26 +1,18 @@
-import { JackService } from './jack.service';
 import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import {
-  Body,
-  Post,
-  Session,
-  Get,
-  Put,
-  Param,
-  Query,
-  Res,
   Controller,
+  Get,
+  Param,
+  Put,
+  Query,
 } from '@nestjs/common';
-import { Public } from '@auth/public.decorator';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+
+import { JackService } from './jack.service';
 import { JackEqualiserService } from './jack-equaliser.service';
 
 @ApiOAuth2(['streaming'], 'Api')

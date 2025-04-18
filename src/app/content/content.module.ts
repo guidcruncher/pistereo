@@ -1,6 +1,7 @@
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { ContentController } from './content.controller';
 import { DynamicModule } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { ContentController } from './content.controller';
 
 export class ContentModule {
   static async forRootAsync(): Promise<DynamicModule> {

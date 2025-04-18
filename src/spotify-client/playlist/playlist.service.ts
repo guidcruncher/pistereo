@@ -1,8 +1,9 @@
-import { SpotifyBaseService } from '../spotify-base.service';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiResult, Playlist, Track, PagedList } from '../spotify-client.d';
+
+import { SpotifyBaseService } from '../spotify-base.service';
+import { ApiResult, PagedList,Playlist, Track } from '../spotify-client.d';
 
 @Injectable()
 export class PlaylistService extends SpotifyBaseService {

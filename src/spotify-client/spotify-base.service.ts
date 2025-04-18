@@ -1,6 +1,8 @@
-import { ApiError, ApiResult, PagedList } from './spotify-client.d';
 import { Logger } from '@nestjs/common';
+
 import { ServiceBase } from '@/service-base';
+
+import { ApiError, ApiResult, PagedList } from './spotify-client.d';
 
 export class SpotifyBaseService extends ServiceBase {
   private readonly logger = new Logger(SpotifyBaseService.name);
@@ -49,7 +51,7 @@ export class SpotifyBaseService extends ServiceBase {
 
   public async createPagedResponse<T>(
     response,
-    propName: string = '',
+    propName = '',
   ): Promise<ApiResult<any>> {
     if (!response.ok) {
       return await this.createError(response);

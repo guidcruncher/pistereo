@@ -1,15 +1,17 @@
-import { Controller, Get, Logger, Post, Body, Req, Res } from '@nestjs/common';
-import { AppService } from './app.service';
-import * as path from 'path';
-import * as fs from 'fs';
 import { Public } from '@auth/public.decorator';
-import { MimeType } from 'mime-type';
+import { Controller, Get, Logger, Req, Res } from '@nestjs/common';
+import * as fs from 'fs';
 import db from 'mime-db';
+import { MimeType } from 'mime-type';
+import * as path from 'path';
+
+import { AppService } from './app.service';
 
 @Public()
 @Controller('*')
 export class AppController {
   private readonly log = new Logger(AppController.name);
+
   private readonly mimeType: MimeType = new MimeType(db);
 
   constructor(private readonly appService: AppService) {}

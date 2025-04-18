@@ -1,32 +1,21 @@
 import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import { Spotify } from '../spotify.decorator';
-import {
-  Body,
-  Post,
-  Session,
-  Get,
-  Put,
-  Param,
-  Query,
-  Res,
   Controller,
+  Get,
   NotFoundException,
+  Param,
+  Put,
+  Query,
 } from '@nestjs/common';
-import { Public } from '@auth/public.decorator';
-import { Logger, UnauthorizedException } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiQuery,
+} from '@nestjs/swagger';
+
+import { Play } from '../spotify-client.d';
 import { LibrespotService } from './librespot.service';
-import { AuthToken } from '@auth/auth-token.decorator';
-import { GetStatusResponse, Play } from '../spotify-client.d';
 
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/librespot')

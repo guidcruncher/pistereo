@@ -8,6 +8,7 @@ export interface Pager {
 
 export class PagedList<T> {
   paging: Pager;
+
   items: T[];
 
   static fromArray<U>(items: U[], offset: number, limit: number): PagedList<U> {

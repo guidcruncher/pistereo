@@ -1,35 +1,32 @@
-import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import {
-  Body,
-  Session,
-  Get,
-  Put,
-  Post,
-  Query,
-  Res,
-  Controller,
-  NotFoundException,
-} from '@nestjs/common';
-import { Logger, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PlayerService } from './player.service';
 import { AuthToken } from '@auth/auth-token.decorator';
 import { Public } from '@auth/public.decorator';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Post,
+  Put,
+  Query,
+  Res,
+  Session,
+} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
+
 import { Spotify } from '../spotify.decorator';
 import {
+  DefaultPlaybackRequest,
   DeviceTransferRequest,
   PlaybackRequest,
-  DefaultPlaybackRequest,
 } from '../spotify-client.d';
+import { PlayerService } from './player.service';
 
 @Spotify()
 @ApiOAuth2(
@@ -310,9 +307,9 @@ export class PlayerController {
   @ApiQuery({ name: 'before', type: Number, required: false })
   async getRecentlyPlayed(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('after') after: number = 0,
-    @Query('before') before: number = 0,
+    @Query('limit') limit = 20,
+    @Query('after') after = 0,
+    @Query('before') before = 0,
   ) {
     return await this.playerService.getRecentlyPlayed(
       token,

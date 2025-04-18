@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { PlayerController } from './player.controller';
-import * as dto from '../dto';
 
 describe('PlayerController', () => {
   let controller: PlayerController;

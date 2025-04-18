@@ -1,7 +1,8 @@
-import { Injectable, OnModuleDestroy, Logger } from '@nestjs/common';
-import * as util from 'util';
-import * as net from 'net';
+import { Injectable, Logger,OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import * as net from 'net';
+import * as util from 'util';
+
 import { ServiceBase } from '@/service-base';
 
 const exec = util.promisify(require('node:child_process').exec);
@@ -18,6 +19,7 @@ export class StreamerSocketService
   implements OnModuleDestroy
 {
   private readonly log = new Logger(StreamerSocketService.name);
+
   private static socket: net.Socket;
 
   constructor(private readonly eventEmitter: EventEmitter2) {

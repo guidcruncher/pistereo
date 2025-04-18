@@ -1,5 +1,5 @@
-import { SimplifiedShow } from './show';
 import { ExternalUrl, Image, Restriction, Saved } from './global';
+import { SimplifiedShow } from './show';
 
 /**
  * The saved episode object.

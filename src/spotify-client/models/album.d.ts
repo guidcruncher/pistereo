@@ -1,14 +1,14 @@
 import { Artist, SimplifiedArtist } from './artist';
-import { SimplifiedTrack } from './track';
 import {
   Copyright,
   ExternalID,
   ExternalUrl,
   Image,
+  Paging,
   Restriction,
   Saved,
-  Paging,
 } from './global';
+import { SimplifiedTrack } from './track';
 
 /**
  * The types of album.

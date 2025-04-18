@@ -4,13 +4,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Connection } from 'mongoose';
+
 import {
-  Stream,
-  RadioPreset,
-  Station,
-  EpgData,
-  Epg,
   Channel,
+  Epg,
+  EpgData,
+  RadioPreset,
+  Stream,
   XmlTvRadioLink,
 } from '../dto';
 
@@ -171,7 +171,7 @@ export class RadioService {
     stationuuid: string,
     name: string,
     epgname: string,
-    automap: boolean = true,
+    automap = true,
   ) {
     return await this.xmlTvRadioLinkModel.findOneAndUpdate(
       { $and: [{ xmltv_id: xmltvid }, { stationuuid: stationuuid }] },

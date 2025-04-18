@@ -1,7 +1,7 @@
-import { Followers, PublicUser } from './user';
-import { Track } from './track';
 import { Episode } from './episode';
 import { ExternalUrl, Image, Paging } from './global';
+import { Track } from './track';
+import { Followers, PublicUser } from './user';
 
 /**
  * The structure containing the reference for the tracks of the playlist..

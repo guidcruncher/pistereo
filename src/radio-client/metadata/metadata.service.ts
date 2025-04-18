@@ -1,6 +1,6 @@
-import { NotFoundException, Injectable } from '@nestjs/common';
+
+import { Injectable,NotFoundException } from '@nestjs/common';
 import * as htmlparser2 from 'htmlparser2';
-import { Readable } from 'node:stream';
 
 @Injectable()
 export class MetadataService {
@@ -23,7 +23,7 @@ export class MetadataService {
   public async getMediaIconUrl(name: string): Promise<string> {
     const id: string = name.replaceAll(' ', '-').toLowerCase();
     const url: string = 'https://media.info/radio/stations/' + id;
-    let iconurl: string = '';
+    let iconurl = '';
     const result = await fetch(url, { method: 'GET' });
 
     if (!result.ok) {

@@ -15,7 +15,7 @@ export interface Track {
   /**
    * Artists name
    */
-  artist_names?: Array<unknown>;
+  artist_names?: unknown[];
   /**
    * Album name
    */
@@ -53,50 +53,62 @@ export class GetStatusResponse {
    * Currently active account's username
    */
   username?: string;
+
   /**
    * The player device ID
    */
   device_id?: string;
+
   /**
    * The player device name
    */
   device_name?: string;
+
   /**
    * Who started the playback, "go-librespot" identifies the API as the play origin, everything else is Spotify own stuff
    */
   play_origin?: string;
+
   /**
    * Whether the player is stopped
    */
   stopped?: boolean;
+
   /**
    * Whether the player is paused
    */
   paused?: boolean;
+
   /**
    * Whether the player is buffering
    */
   buffering?: boolean;
+
   /**
    * The player current volume from 0 to max
    */
   volume?: number;
+
   /**
    * The player max volume value
    */
   volume_steps?: number;
+
   /**
    * Whether the repeat context feature is enabled
    */
   repeat_context?: boolean;
+
   /**
    * Whether the repeat track feature is enabled
    */
   repeat_track?: boolean;
+
   /**
    * Whether the shuffle context feature is enabled
    */
   shuffle_context?: boolean;
+
   track?: Track;
 }
 

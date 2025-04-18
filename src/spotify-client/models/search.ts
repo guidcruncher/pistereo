@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUrl, IsString, IsEmail } from 'class-validator';
+
 import { PagedList } from './core';
 
 export interface SearchResults {

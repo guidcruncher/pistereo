@@ -1,29 +1,23 @@
-import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
+import { User } from '@auth/auth-token.decorator';
 import {
   Body,
-  Session,
-  Get,
-  Param,
-  Put,
-  Post,
-  Query,
-  Res,
   Controller,
+  Get,
   NotFoundException,
+  Param,
+  Post,
+  Put,
+  Query,
 } from '@nestjs/common';
-import { RadioBrowserService } from './radio-browser.service';
-import { Public, Private } from '@auth/public.decorator';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+
 import { SearchRequest } from './models';
-import { User } from '@auth/auth-token.decorator';
+import { RadioBrowserService } from './radio-browser.service';
 
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/radiobrowser/')
@@ -36,8 +30,8 @@ export class RadioBrowserController {
   @ApiQuery({ name: 'offset', type: Number, required: true, default: 0 })
   async search(
     @Body() formData: SearchRequest,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
   ) {
     return await this.radioBrowserService.search(formData, offset, limit);
   }

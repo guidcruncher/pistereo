@@ -1,5 +1,6 @@
-import { Controller, Get, Logger, Post, Body, Req, Res } from '@nestjs/common';
 import { Public } from '@auth/public.decorator';
+import { Controller, Get } from '@nestjs/common';
+
 import { SchedulerService } from './scheduler.service';
 
 @Public()

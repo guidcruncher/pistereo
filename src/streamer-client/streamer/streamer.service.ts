@@ -1,8 +1,8 @@
-import { Injectable, OnModuleDestroy, Logger } from '@nestjs/common';
-import * as util from 'util';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as net from 'net';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import * as util from 'util';
+
 import { ServiceBase } from '@/service-base';
 
 const execFile = util.promisify(require('node:child_process').execFile);

@@ -1,17 +1,17 @@
+import { UserService } from '@data/user/user.service';
 import {
-  UnauthorizedException,
-  Logger,
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
-import { Public, PublicKey } from './public.decorator';
-import { UserService } from '@data/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+
 import { AuthService } from './auth.service';
+import { PublicKey } from './public.decorator';
 
 @Injectable()
 export class TokenGuard implements CanActivate {

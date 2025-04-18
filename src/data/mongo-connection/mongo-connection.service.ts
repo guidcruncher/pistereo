@@ -1,17 +1,13 @@
-import { DynamicModule, Injectable, Logger } from '@nestjs/common';
+import * as dto from '@data/dto';
+import { Injectable } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { ClientSession, Connection } from 'mongoose';
-import * as dto from '@data/dto';
-import { LastPlayed, LastPlayedSchema } from '../dto/lastplayed.dto';
-import { User, UserSchema } from '../dto/user.dto';
-import { RadioPreset, RadioPresetSchema } from '../dto/radio.dto';
-import {
-  XmlTvRadioLink,
-  XmlTvRadioLinkSchema,
-} from '../dto/xmltvradiolink.dto';
+
+
+
 
 const mongoose = require('mongoose');
 

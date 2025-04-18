@@ -1,8 +1,9 @@
-import { SpotifyBaseService } from '../spotify-base.service';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Track, Album, ApiResult, PagedList } from '../spotify-client.d';
+
+import { SpotifyBaseService } from '../spotify-base.service';
+import { ApiResult,Track } from '../spotify-client.d';
 
 @Injectable()
 export class PlayerService extends SpotifyBaseService {
@@ -214,9 +215,9 @@ export class PlayerService extends SpotifyBaseService {
 
   public async getRecentlyPlayed(
     token: string,
-    limit: number = 20,
-    after: number = 0,
-    before: number = 0,
+    limit = 20,
+    after = 0,
+    before = 0,
   ): Promise<ApiResult<any>> {
     this.log.log(this.__caller() + ' =>getRecentlyPlayed');
     const params = new URLSearchParams();

@@ -1,27 +1,17 @@
 import {
-  ApiQuery,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import {
-  Body,
-  Post,
-  Session,
+  Controller,
   Get,
   Put,
-  Param,
   Query,
-  Res,
-  Controller,
 } from '@nestjs/common';
-import { Public } from '@auth/public.decorator';
-import { Logger, UnauthorizedException } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiQuery,
+} from '@nestjs/swagger';
+
 import { StreamerService } from './streamer.service';
 
 @ApiOAuth2(['streaming'], 'Api')

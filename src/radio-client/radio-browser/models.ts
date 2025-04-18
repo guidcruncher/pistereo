@@ -16,20 +16,28 @@ export interface PagedList<T> {
 export class SearchRequest {
   @ApiProperty({ required: true })
   name: string;
+
   @ApiProperty({ required: false })
   nameExact?: boolean = undefined;
+
   @ApiProperty({ required: false })
   country?: string = undefined;
+
   @ApiProperty({ required: false })
   countrycode?: string = undefined;
+
   @ApiProperty({ required: false })
   language?: string = undefined;
+
   @ApiProperty({ required: false })
   tagList?: string[] = undefined;
+
   @ApiProperty({ required: false })
   codec?: string = undefined;
+
   @ApiProperty({ required: false })
   bitrateMin?: number = undefined;
+
   @ApiProperty({ required: false })
   bitrateMax?: number = undefined;
 }

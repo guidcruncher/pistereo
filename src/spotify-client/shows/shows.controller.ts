@@ -1,20 +1,16 @@
-import { PublicUser } from '../spotify-client.d';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiQuery,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import { Spotify } from '../spotify.decorator';
-import { Param, Session, Get, Query, Res, Controller } from '@nestjs/common';
-import { Logger, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ShowsService } from './shows.service';
 import { AuthToken } from '@auth/auth-token.decorator';
+import { Controller,Get, Param, Query } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+
+import { Spotify } from '../spotify.decorator';
+import { ShowsService } from './shows.service';
 
 @Spotify()
 @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
@@ -34,9 +30,9 @@ export class ShowsController {
   @ApiParam({ name: 'id' })
   async getShowEpisodes(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
-    @Param('id') id: string = '',
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
+    @Param('id') id = '',
   ) {
     return await this.showsService.getShowEpisodes(token, id, offset, limit);
   }

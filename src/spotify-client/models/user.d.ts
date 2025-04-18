@@ -1,5 +1,5 @@
 import { Artist } from './artist';
-import { Image, ExternalUrl } from './global';
+import { ExternalUrl,Image } from './global';
 
 /**
  * The product type in the User object.

@@ -1,15 +1,16 @@
-import { SpotifyBaseService } from '../spotify-base.service';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
+import { SpotifyBaseService } from '../spotify-base.service';
 import {
-  Track,
   Album,
-  Show,
-  Artist,
   ApiResult,
-  PublicUser,
+  Artist,
   PagedList,
+  PublicUser,
+  Show,
+  Track,
 } from '../spotify-client.d';
 
 @Injectable()
@@ -83,8 +84,8 @@ export class ProfileService extends SpotifyBaseService {
   public async getSavedAlbums(
     token: string,
     market: string,
-    offset: number = 0,
-    limit: number = 20,
+    offset = 0,
+    limit = 20,
   ): Promise<ApiResult<PagedList<Album>>> {
     this.log.log(this.__caller() + ' =>getSavedAlbums');
     const params = new URLSearchParams();
@@ -108,8 +109,8 @@ export class ProfileService extends SpotifyBaseService {
   public async getSavedShows(
     token: string,
     market: string,
-    offset: number = 0,
-    limit: number = 20,
+    offset = 0,
+    limit = 20,
   ): Promise<ApiResult<PagedList<Show>>> {
     this.log.log(this.__caller() + ' =>getSavedShows');
     const params = new URLSearchParams();

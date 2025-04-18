@@ -1,6 +1,7 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+
 import { UserProfile } from './userprofile.dto';
 
 @Schema()

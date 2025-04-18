@@ -4,10 +4,15 @@ import { HydratedDocument } from 'mongoose';
 
 export class TrackView {
   source: string;
+
   uri: string;
+
   name: string;
+
   description: string;
+
   owner: string;
+
   image: string;
 }
 

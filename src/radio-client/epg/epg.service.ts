@@ -1,18 +1,16 @@
-import {
-  lookupLanguage,
-  PagedList,
-  SearchRequest,
-} from '../radio-browser/models';
 import { Station } from '@data/dto';
+import { Channel } from '@data/dto/xmltvradiolink.dto';
+import { RadioService } from '@data/radio/radio.service';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Channel } from '@data/dto/xmltvradiolink.dto';
 import parser from 'epg-parser';
-import * as path from 'path';
 import * as fs from 'fs';
-import { SchedulerRegistry } from '@nestjs/schedule';
-import { RadioService } from '@data/radio/radio.service';
+import * as path from 'path';
+
+import {
+  SearchRequest,
+} from '../radio-browser/models';
 import { RadioBrowserService } from '../radio-browser/radio-browser.service';
 
 @Injectable()

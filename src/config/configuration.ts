@@ -1,7 +1,7 @@
+import { Logger } from '@nestjs/common';
+import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
-import * as fs from 'fs';
-import { Logger } from '@nestjs/common';
 
 const YAML_CONFIG_FILENAME = 'config.yaml';
 

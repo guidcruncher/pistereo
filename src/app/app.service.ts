@@ -1,12 +1,13 @@
 import {
-  OnApplicationBootstrap,
-  OnApplicationShutdown,
   INestApplication,
   Injectable,
   Logger,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
+
 import { JackService } from '../jack/jack.service';
 import { SchedulerService } from './scheduler.service';
 
@@ -15,6 +16,7 @@ export class AppService
   implements OnApplicationShutdown, OnApplicationBootstrap
 {
   private readonly log = new Logger(AppService.name);
+
   private app: INestApplication;
 
   constructor(

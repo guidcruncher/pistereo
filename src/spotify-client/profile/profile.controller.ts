@@ -1,20 +1,17 @@
-import { PublicUser } from '../spotify-client.d';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiQuery,
-  ApiParam,
-  ApiBody,
-  ApiHeader,
-  ApiOAuth2,
-} from '@nestjs/swagger';
-import { Spotify } from '../spotify.decorator';
-import { Param, Session, Get, Query, Res, Controller } from '@nestjs/common';
-import { Logger, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ProfileService } from './profile.service';
 import { AuthToken } from '@auth/auth-token.decorator';
+import { Controller,Get, Param, Query } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import {
+  ApiOAuth2,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
+
+import { Spotify } from '../spotify.decorator';
+import { ProfileService } from './profile.service';
 
 @Spotify()
 @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
@@ -60,8 +57,8 @@ export class ProfileController {
   })
   async getTopArtistsItems(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
   ) {
     return await this.profileService.getTopArtists(token, offset, limit);
   }
@@ -75,8 +72,8 @@ export class ProfileController {
   })
   async getTopTrackItems(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
   ) {
     return await this.profileService.getTopTracks(token, offset, limit);
   }
@@ -88,9 +85,9 @@ export class ProfileController {
   @ApiQuery({ name: 'market', type: String, required: false, default: '' })
   async getSavedAlbums(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
-    @Query('market') market: string = '',
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
+    @Query('market') market = '',
   ) {
     return await this.profileService.getSavedAlbums(
       token,
@@ -107,9 +104,9 @@ export class ProfileController {
   @ApiQuery({ name: 'market', type: String, required: false, default: '' })
   async getSavedShows(
     @AuthToken() token: string,
-    @Query('limit') limit: number = 20,
-    @Query('offset') offset: number = 0,
-    @Query('market') market: string = '',
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0,
+    @Query('market') market = '',
   ) {
     return await this.profileService.getSavedShows(
       token,

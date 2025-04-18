@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
+
 import { EpgService } from './epg.service';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EpgSchedulerService {

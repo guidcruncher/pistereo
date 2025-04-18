@@ -1,19 +1,19 @@
+import { UserService } from '@data/user/user.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { WebSocket } from 'ws';
-import * as util from 'util';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { WebSocket } from 'ws';
+
 import { SpotifyBaseService } from '../spotify-base.service';
-import { GetStatusResponse, Play } from '../spotify-client.d';
-import { UserService } from '@data/user/user.service';
 import { LibrespotService } from './librespot.service';
 
 @Injectable()
 export class LibrespotSocketService extends SpotifyBaseService {
   private static socket: WebSocket;
+
   private readonly log = new Logger(LibrespotSocketService.name);
 
-  private lastMessage: string = '';
+  private lastMessage = '';
 
   constructor(
     private readonly config: ConfigService,
