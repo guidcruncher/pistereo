@@ -29,6 +29,7 @@
     "core-js": "^3.37.1",
     "mitt": "^3.0.1",
     "roboto-fontface": "*",
+    "uninstall": "^0.0.0",
     "vue": "^3.4.31",
     "vue-sse": "^2.5.2",
     "vuetify": "^3.8.1"

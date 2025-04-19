@@ -3,7 +3,6 @@ import { JackService } from '../services/jack.service';
 import { TunerService } from '../services/tuner.service';
 import { on, emit, off } from '../composables/useeventbus';
 import { ref } from 'vue';
-
 export default {
   name: 'Radiopresets',
   data() {
@@ -44,7 +43,6 @@ export default {
   },
 };
 </script>
-
 <template>
   <v-card>
     <v-slide-group show-arrows>
@@ -61,6 +59,7 @@ export default {
       </v-slide-group-item>
     </v-slide-group>
   </v-card>
+  <canvas id="c"></canvas>
 </template>
 
 <style>

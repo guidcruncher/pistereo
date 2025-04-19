@@ -19,7 +19,7 @@ import {
 
 import { EpgService } from './epg/epg.service';
 import { RadioService } from './radio.service';
-    
+
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/')
 export class RadioController {

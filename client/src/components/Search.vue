@@ -205,19 +205,9 @@ export default {
     <v-list v-if="hasMusicData" nav>
       <v-list-item v-for="item in results.items" :key="item" :value="item">
         <template #prepend>
-          <div style="width: 64px; height: 64px; margin-right: 16px">
-            <img
-              v-if="item.images"
-              :src="item.images[0].url"
-              width="64"
-              height="64"
-            />
-            <img
-              v-if="item.album"
-              :src="item.album.images[0].url"
-              width="64"
-              height="64"
-            />
+          <div class="iconimg">
+            <img v-if="item.images" :src="item.images[0].url" />
+            <img v-if="item.album" :src="item.album.images[0].url" />
           </div>
         </template>
         <v-list-item-title v-text="item.name" />
@@ -256,9 +246,10 @@ export default {
     <v-list>
       <v-list-item v-for="item in results" :key="item" :value="item">
         <template #prepend>
-          <div style="width: 64px; height: 64px; margin-right: 16px">
-            <img v-if="item.image" :src="item.image" width="64" height="64" />
+          <div class="iconimg">
+            <img v-if="item.image" :src="item.image" />
           </div>
+          <div style="margin-right: 16px">&nbsp;</div>
         </template>
         <v-list-item-title v-text="item.title" />
         <v-list-item-subtitle>
@@ -302,3 +293,21 @@ export default {
     />
   </template>
 </template>
+<style>
+.iconimg {
+  margin: 0 auto;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  background-color: white;
+}
+.iconimg img {
+  max-width: 100%;
+  max-height: 100%;
+  background-color: white;
+}
+.centre {
+  text-align: center;
+  margin: 0 auto;
+}
+</style>

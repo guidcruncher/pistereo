@@ -32,7 +32,11 @@ export class MetadataService {
       const res = await fetch(url);
       const destination = fileName;
       const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
-      await finished(stream.Readable.fromWeb(res.body  as ReadableStream<Uint8Array>).pipe(fileStream));
+      await finished(
+        stream.Readable.fromWeb(res.body as ReadableStream<Uint8Array>).pipe(
+          fileStream,
+        ),
+      );
     };
 
     let url: string = await this.getMediaIconUrl(id);
