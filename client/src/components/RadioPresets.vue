@@ -59,7 +59,6 @@ export default {
       </v-slide-group-item>
     </v-slide-group>
   </v-card>
-  <canvas id="c"></canvas>
 </template>
 
 <style>
