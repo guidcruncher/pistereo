@@ -3,7 +3,8 @@ import * as htmlparser2 from 'htmlparser2';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Readable } from 'stream';
+import { default as stream } from 'node:stream';
+import type { ReadableStream } from 'node:stream/web';
 import { finished } from 'stream/promises';
 
 @Injectable()
@@ -31,7 +32,7 @@ export class MetadataService {
       const res = await fetch(url);
       const destination = fileName;
       const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
-      await finished(Readable.fromWeb(res.body).pipe(fileStream));
+      await finished(stream.Readable.fromWeb(res.body  as ReadableStream<Uint8Array>).pipe(fileStream));
     };
 
     let url: string = await this.getMediaIconUrl(id);

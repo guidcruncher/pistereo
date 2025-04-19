@@ -20,7 +20,7 @@ export class TunerService extends ServiceBase {
   public async getEpg(uuid: string) {
     return [];
     const response: AxiosResponse<any> = await this.client().get(
-      '/epg/' + uuid,
+      '/epg/' + encodeURIComponent(uuid),
     );
     return response.data;
   }
@@ -38,14 +38,14 @@ export class TunerService extends ServiceBase {
 
   public async getStation(uuid: string): Promise<Station> {
     const response: AxiosResponse<any> = await this.client('/api/radio').get(
-      '/station/' + uuid,
+      '/station/' + encodeURIComponent(uuid),
     );
     return response.data as Station;
   }
 
   public async playStation(uuid: string): Promise<any> {
     const response: AxiosResponse<any> = await this.client('/api/radio').put(
-      '/play/' + uuid,
+      '/play/' + encodeURIComponent(uuid),
     );
     usePlayerStore().setSource('streamer');
     emit('audio_changed', {
@@ -59,7 +59,7 @@ export class TunerService extends ServiceBase {
 
   public async saveStationPreset(uuid: string): Promise<any> {
     const response: AxiosResponse<any> = await this.client('/api/radio').put(
-      '/presets/' + uuid,
+      '/presets/' + encodeURIComponent(uuid),
     );
     return response.data;
   }

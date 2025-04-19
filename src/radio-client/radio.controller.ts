@@ -19,7 +19,7 @@ import {
 
 import { EpgService } from './epg/epg.service';
 import { RadioService } from './radio.service';
-
+    
 @ApiOAuth2(['streaming'], 'Api')
 @Controller('/api/radio/')
 export class RadioController {
@@ -41,21 +41,21 @@ export class RadioController {
     return res;
   }
 
-  @Put('/play/:uuid')
+  @Put('play/:uuid')
   @ApiOperation({ summary: 'Play a stream' })
   @ApiParam({ name: 'uuid' })
   async playStation(@Param('uuid') uuid: string, @User() user) {
     return await this.radioService.playStation(uuid, user);
   }
 
-  @Get('/station/:uuid')
+  @Get('station/:uuid')
   @ApiOperation({ summary: 'Get a stream' })
   @ApiParam({ name: 'uuid' })
-  async playStation(@Param('uuid') uuid: string, @User() user) {
+  async getStation(@Param('uuid') uuid: string, @User() user) {
     return await this.radioService.getStation(uuid);
   }
 
-  @Put('/presets/:uuid')
+  @Put('presets/:uuid')
   @ApiOperation({ summary: 'Save a station preset' })
   @ApiParam({ name: 'uuid' })
   async savePreset(@Param('uuid') uuid: string, @User() user) {
@@ -68,7 +68,7 @@ export class RadioController {
     return await this.radioService.getPresets(user);
   }
 
-  @Put('/playlist/import')
+  @Put('playlist/import')
   @ApiOperation({
     summary: 'Import a M3U playlist into a set of custom stations',
   })
