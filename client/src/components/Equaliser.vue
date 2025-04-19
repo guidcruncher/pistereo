@@ -101,7 +101,7 @@ export default {
     resetEqualiser() {
       const jackService = new JackService();
       jackService
-        .resetEqualiser(60)
+        .resetEqualiser(50)
         .then(() => {
           this.preset = '';
           this.getLevels();
